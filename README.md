@@ -1,45 +1,27 @@
-# Plantilla para juegos en Phaser
+TITLE: ISHIMONDO
 
-## Instalación
+Context: A game where a criature (Ishi) will hunt a beast that caught its attention. Ishi will travel across different world, cross obstacles and fight other creatures in its way.
 
-Clonar el repositorio:
+Concept: 
 
-```
-git clone https://github.com/cleongh/plantillaphaser
-```
+Core-loop: Parkour, new movements, character descovery, learn skills, timer, colectables.
 
-Podemos modificar el archivo `package.json` para configurar nuestro proyecto (nombre, autor...)
+Lore: Ishi dormía plácidamente sin saber muy bien donde estaba ni hacia donde ir, hasta que algo perturbo su sueño, Sus orejas de gato captaban un sonido fuerte. Salió de su temporal guarida y miró al cielo en dirección del ruido. De la nada la bestia voló a ras de los árboles, dandole una clara vista de lo que era. Era bestia alada enorme y Ishi quedó fascinad@. Trepó el árbol más grande que había para ver hacidonde se dirigía. Su rastro llevaba más allá de las montañas, así que no perdió ni un momento más y inició si viaje para cazar a la criatura. 
 
-Para iniciar el proyecto (sólo 1 vez) instalamos las dependencias (`parcel`, `phaser`):
+Mecánicas:
+  -Andar: anda en una dirección seleccionada por el jugador. A izquierda, D derecha.
+  -Esprintar: al andar si les a SHIFT correrá a 4 patas.
+  -Salto: salta 4x64 pixeles. Barra espaciadora.
+  -Interactuar:interactua con el entorno. E
+  -Trepar: en el aire, si vas andando y te pegas a una pared específica puedes treparla.
+  -Agacharse: se agacha, reduciendo su hitbox. S
 
-```
-npm install
-```
+World: 2D world. Fantasy.
 
-## Uso
+Genre: game like Shovel Knight.
 
-Cada vez que queramos usarlo, tenemos que arrancar el servidor de desarrollo que monitorizará los cambios, procesará el contenido y cambiará la página. Usa [Parcel](https://parceljs.org/).
+Age renger: Familiar
 
-Para arrancar el servidor de desarrollo:
+PEGI Info: PEGI 7
 
-```
-npm start
-```
-
-Con esto, solo tenemos que programar y guardar los archivos, Parcel se encargará del resto.
-
-## Distribución
-
-Cuando queramos publicar el juego, podemos crear una *build* de *release*. Parcel optimizará los archivos y, con la configuración que hay en `package.json`, generará en la carpeta `docs/` una versión "pública" de nuestro proyecto.
-
-```
-npm run build
-```
-
-### En GitHub
-
-Está todo configurado para que se active "GitHub Pages", y se use, en la rama principal (se suele llamar `main`), la carpeta `docs/`. Simplemente hay que activarlo en "Settings" → "Pages" → "Build and deployment".
-
-## VSCode
-
-En la carpeta `.vscode/` hay una configuración para usar Visual Studio Code, tanto para construir el *release* (`npm run build`) como para ejecutar y depurar. Simplemente hay que ejecutar "Run" → "Start debugging..." (or presionar `F5`).
+Target audience: Boys and girls.
