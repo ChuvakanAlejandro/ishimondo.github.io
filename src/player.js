@@ -25,6 +25,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.jumpSpeed = -400;
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
+    this.scene.add.image(100,300,'hud_vida'); 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.updateScore();
   }
