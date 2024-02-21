@@ -6,7 +6,7 @@ import base from '../assets/sprites/base.png'
 import star from '../assets/sprites/star.png'
 import player from '../assets/sprites/Ishi.png'
 import hud_vida from '../assets/sprites/hud_vida.png'
-
+import hud_skill_bar from '../assets/sprites/hud_skill_bar.png'
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
  * Esta escena se puede mejorar añadiendo una imagen del juego y una 
@@ -33,6 +33,7 @@ export default class Boot extends Phaser.Scene {
     this.load.image('star', star);
     this.load.image('player', player);
     this.load.image('hud_vida', hud_vida ); 
+    this.load.image('hud_skil_bar', hud_skill_bar ); 
   }
 
   /**

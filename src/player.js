@@ -25,9 +25,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.jumpSpeed = -400;
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
-    this.scene.add.image(100,300,'hud_vida'); 
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
+    this.mapeoTeclas(); 
+
+
+    //Interface de vida 
+    this.scene.add.image(900,450,'hud_vida'); 
+    //Inteface de habilidad
+    this.scene.add.image(950,450,'hud_skill_bar'); 
+
     this.updateScore();
+    
   }
 
   /**
@@ -46,6 +53,26 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.label.text = 'Score: ' + this.score;
   }
 
+
+  mapeoTeclas() {
+
+    /*Tecla para ir hacia la derecha*/ 
+    this.keyD= this.scene.input.keyboard.addKey('D'); 
+  
+    /*Tecla para ir hacia la izquierda*/ 
+
+    this.keyA= this.scene.input.keyboard.addKey('A'); 
+
+    /*Tecla de salto*/ 
+
+    this.keySpace= this.scene.input.keyboard.addKey('SPACE'); 
+
+
+    /*Tecla cambio patas*/
+    this.keyShift= this.scene.input.keyboard.addKey('SHIFT'); 
+  }
+
+
   /**
    * Métodos preUpdate de Phaser. En este caso solo se encarga del movimiento del jugador.
    * Como se puede ver, no se tratan las colisiones con las estrellas, ya que estas colisiones 
@@ -54,13 +81,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
    */
   preUpdate(t,dt) {
     super.preUpdate(t,dt);
-    if (this.cursors.up.isDown && this.body.onFloor()) {
+
+    if (this.keySpace.isDown && this.body.onFloor()) {
       this.body.setVelocityY(this.jumpSpeed);
     }
-    if (this.cursors.left.isDown) {
+    if (this.keyA.isDown) {
       this.body.setVelocityX(-this.speed);
     }
-    else if (this.cursors.right.isDown) {
+    else if (this.keyD.isDown) {
       this.body.setVelocityX(this.speed);
     }
     else {
