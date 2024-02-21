@@ -4,12 +4,8 @@ import Phaser from 'phaser'
 import platform from '../assets/sprites/platform.png'
 import base from '../assets/sprites/base.png'
 import star from '../assets/sprites/star.png'
-<<<<<<< HEAD
 import player from '../assets/sprites/Ishi.png'
-=======
-import player from '../assets/sprites/player.png'
 import hud_vida from '../assets/sprites/hud_vida.png'
->>>>>>> 20dbc50a9e4b83ef000e06547df679c1852172c3
 
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
