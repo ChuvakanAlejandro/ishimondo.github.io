@@ -33,7 +33,7 @@ export default class Boot extends Phaser.Scene {
     this.load.image('star', star);
     this.load.image('player', player);
     this.load.image('hud_vida', hud_vida ); 
-    this.load.image('hud_skil_bar', hud_skill_bar ); 
+    this.load.image('hud_skill_bar', hud_skill_bar ); 
   }
 
   /**

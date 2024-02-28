@@ -28,7 +28,7 @@ export default class Level extends Phaser.Scene {
         this.player = new Player(this, 200, 300);
 
         new Platform(this, this.player, this.bases, 150, 350);
-        new Platform(this, this.player, this.bases, 850, 350);
+       
         new Platform(this, this.player, this.bases, 500, 200);
         
         this.spawn();
@@ -50,14 +50,6 @@ export default class Level extends Phaser.Scene {
      * @param {Base} base La base sobre la que estaba la estrella que se ha cogido
      */
     starPickt(base) {
-        this.player.point();
-        if (this.player.score == this.stars) {
-            this.scene.start('end');
-        }
-        else {
-            let s = this.bases.children.entries;
-            this.spawn(s.filter(o => o !== base));
-
-        }
+      
     }
 }

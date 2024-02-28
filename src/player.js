@@ -23,6 +23,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.setSize(40, 110, true);
     this.speed = 300;
     this.jumpSpeed = -400;
+    this.modo= "LEVANTADO"; 
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
     this.mapeoTeclas(); 
@@ -31,26 +32,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
     //Interface de vida 
     this.scene.add.image(900,450,'hud_vida'); 
     //Inteface de habilidad
-    this.scene.add.image(950,450,'hud_skill_bar'); 
+    this.scene.add.image(950,430,'hud_skill_bar'); 
 
-    this.updateScore();
+    this.cambioVelocidad();
     
   }
 
-  /**
-   * El jugador ha recogido una estrella por lo que este método añade un punto y
-   * actualiza la UI con la puntuación actual.
-   */
-  point() {
-    this.score++;
-    this.updateScore();
-  }
   
   /**
    * Actualiza la UI con la puntuación actual
    */
-  updateScore() {
-    this.label.text = 'Score: ' + this.score;
+  cambioVelocidad() {
+    this.label.text= 'Velocidad actual: ' + this.speed; 
   }
 
 
@@ -58,7 +51,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     /*Tecla para ir hacia la derecha*/ 
     this.keyD= this.scene.input.keyboard.addKey('D'); 
-  
+   
     /*Tecla para ir hacia la izquierda*/ 
 
     this.keyA= this.scene.input.keyboard.addKey('A'); 
@@ -68,8 +61,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.keySpace= this.scene.input.keyboard.addKey('SPACE'); 
 
 
-    /*Tecla cambio patas*/
+    /*Tecla cambio a 4 patas*/
     this.keyShift= this.scene.input.keyboard.addKey('SHIFT'); 
+
+    //Impide que al pulsar ciertas teclas, el navegador interrumpa el gameplay
+    this.scene.input.keyboard.addCapture([this.keyD, this.keyA, this.keySpace, this.keyShift]); 
   }
 
 
@@ -85,15 +81,47 @@ export default class Player extends Phaser.GameObjects.Sprite {
     if (this.keySpace.isDown && this.body.onFloor()) {
       this.body.setVelocityY(this.jumpSpeed);
     }
+
     if (this.keyA.isDown) {
+      console.log("Se pulso la tecla A"); 
+      this.setFlip(true,false); 
       this.body.setVelocityX(-this.speed);
     }
+
     else if (this.keyD.isDown) {
+      console.log("Se pulso la tecla D");
+      this.setFlip(false,false);  
       this.body.setVelocityX(this.speed);
+      
     }
+
+    else if(Phaser.Input.Keyboard.JustDown(this.keyShift) && this.body.onFloor()) { 
+        console.log("Se pulso la tecla shift"); 
+
+        switch(this.modo) {
+
+            case "AGACHADO": 
+              this.speed= 300; 
+              this.modo= 'LEVANTADO'; 
+              this.cambioVelocidad(); 
+              /*Cambio de animacion*/ 
+              break; 
+            
+            case "LEVANTADO": 
+              this.speed= 500;
+              this.modo= 'AGACHADO'; 
+              this.cambioVelocidad(); 
+              /*Cambio de animacion*/ 
+              break; 
+        }
+         
+    }
+
     else {
       this.body.setVelocityX(0);
     }
+
+
   }
   
 }
