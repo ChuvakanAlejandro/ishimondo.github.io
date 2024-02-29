@@ -14,13 +14,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
    * @param {number} y Coordenada Y
    */
   constructor(scene, x, y) {
-    super(scene, x, y, 'player');
+    super(scene, x, y, 'ishi');
     this.score = 0;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     // Queremos que el jugador no se salga de los límites del mundo
     this.body.setCollideWorldBounds();
-
+    this.anims.create({
+        key: 'idle_ishi',
+        frames: this.anims.generateFrameNumbers('ishi', {start: 0, end: 5}),
+        frameRate: 2,
+        repeat: 1 
+    });
   
 
     this.body.setSize(40, 110, true);
@@ -84,6 +89,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
    */
   preUpdate(t,dt) {
     super.preUpdate(t,dt);
+    this.play('idle_ishi');
 
     if (this.keySpace.isDown && this.body.onFloor()) {
       this.body.setVelocityY(this.jumpSpeed);
