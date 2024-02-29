@@ -1,7 +1,7 @@
 import Platform from './platform.js';
 import Player from './player.js';
 import Phaser from 'phaser'
-
+import Wall from './wall.js'; 
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -25,12 +25,14 @@ export default class Level extends Phaser.Scene {
     create() {
         this.stars = 10;
         this.bases = this.add.group();
-        this.player = new Player(this, 200, 300);
+        this.player = new Player(this, 500, 500);
 
         new Platform(this, this.player, this.bases, 150, 350);
        
         new Platform(this, this.player, this.bases, 500, 200);
         
+        new Wall (this, this.player,  900, 550); 
+
         this.spawn();
 
     }

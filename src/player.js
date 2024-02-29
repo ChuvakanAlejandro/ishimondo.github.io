@@ -20,19 +20,26 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.scene.physics.add.existing(this);
     // Queremos que el jugador no se salga de los límites del mundo
     this.body.setCollideWorldBounds();
+
+  
+
     this.body.setSize(40, 110, true);
     this.speed = 300;
     this.jumpSpeed = -400;
     this.modo= "LEVANTADO"; 
+    
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
     this.mapeoTeclas(); 
 
 
     //Interface de vida 
-    this.scene.add.image(900,450,'hud_vida'); 
+    const vida= this.scene.add.image(900,450,'hud_vida'); 
+    vida.setDepth(1000); 
     //Inteface de habilidad
-    this.scene.add.image(950,430,'hud_skill_bar'); 
+    const barra= this.scene.add.image(950,430,'hud_skill_bar'); 
+
+    barra.setDepth(1000); 
 
     this.cambioVelocidad();
     
@@ -95,7 +102,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       
     }
 
-    else if(Phaser.Input.Keyboard.JustDown(this.keyShift) && this.body.onFloor()) { 
+    else if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { 
         console.log("Se pulso la tecla shift"); 
 
         switch(this.modo) {

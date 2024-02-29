@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 
-
+import wall from '../assets/sprites/wall.png'
 import platform from '../assets/sprites/platform.png'
 import base from '../assets/sprites/base.png'
 import star from '../assets/sprites/star.png'
@@ -32,6 +32,7 @@ export default class Boot extends Phaser.Scene {
     this.load.image('base', base);
     this.load.image('star', star);
     this.load.image('player', player);
+    this.load.image('wall', wall)
     this.load.image('hud_vida', hud_vida ); 
     this.load.image('hud_skill_bar', hud_skill_bar ); 
   }
