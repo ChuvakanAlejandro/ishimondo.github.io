@@ -8,7 +8,6 @@ import player from '../assets/sprites/Ishi.png'
 import hud_vida from '../assets/sprites/hud_vida.png'
 import hud_skill_bar from '../assets/sprites/hud_skill_bar.png'
 import ishi from '../assets/animations/Ishi_sprites.png'
-
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
  * Esta escena se puede mejorar añadiendo una imagen del juego y una 
@@ -29,16 +28,15 @@ export default class Boot extends Phaser.Scene {
    */
   preload() {
     // Con setPath podemos establecer el prefijo que se añadirá a todos los load que aparecen a continuación
-    this.load.setPath('assets/');
-    this.load.image('sprites/platform', platform);
-    this.load.image('sprites/base', base);
-    this.load.image('sprites/star', star);
-    this.load.image('sprites/player', player);
-    this.load.image('sprites/wall', wall)
-    this.load.image('sprites/hud_vida', hud_vida ); 
-    this.load.image('sprites/hud_skill_bar', hud_skill_bar ); 
-    this.load.spritesheet('animations/shi', ishi,{frameWidth:256,frameHeight:256});
-
+    this.load.setPath('assets/sprites/');
+    this.load.image('platform', platform);
+    this.load.image('base', base);
+    this.load.image('star', star);
+    this.load.image('player', player);
+    this.load.image('wall', wall)
+    this.load.image('hud_vida', hud_vida ); 
+    this.load.image('hud_skill_bar', hud_skill_bar ); 
+    this.load.spritesheet('ishi', ishi,{frameWidth:128,frameHeight:128});
   }
 
   /**
