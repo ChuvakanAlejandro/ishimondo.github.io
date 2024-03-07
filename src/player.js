@@ -1,6 +1,6 @@
 import Star from './star.js';
 import Phaser from 'phaser'
-
+import game from './game.js'; 
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
@@ -70,21 +70,28 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   
   //Por defecto se ejecuta la animación de idle
-   this.play('idle_ishi', true);
+    this.play('idle_ishi', true);
 
     this.body.setSize(40, 110, true);
-    this.speed = 300;
-    this.jumpSpeed = -400;
-    this.modo= "LEVANTADO"; 
+
+    /*Declaracion e inicializacion de parametros*/ 
+    this.vida= 4;  //Vida
+    this.speed = 300; //Velocidad (en modo Levantado por defecto)
+    this.jumpSpeed = -400; //Velocidad del salto
+    this.modo= "LEVANTADO"; //Modo del personaje (Levantado por defecto)
     
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
+
+
+    //Mapeo de controles
     this.mapeoTeclas(); 
-    
+
 
     //Interface de vida 
     const vida= this.scene.add.image(900,450,'hud_vida'); 
-    vida.setDepth(1000); 
+    vida.setDepth(1000);
+
     //Inteface de habilidad
     const barra= this.scene.add.image(950,430,'hud_skill_bar'); 
 
@@ -105,24 +112,33 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   mapeoTeclas() {
 
+    /*Tecla para el ataque básico*/ 
+    this.keyP= this.scene.input.keyboard.addKey('P'); 
+
+    /*Tecla para trepar paredes especiales*/ 
+    this.keyW= this.scene.input.keyboard.addKey('W'); 
+
     /*Tecla para ir hacia la derecha*/ 
     this.keyD= this.scene.input.keyboard.addKey('D'); 
    
     /*Tecla para ir hacia la izquierda*/ 
 
     this.keyA= this.scene.input.keyboard.addKey('A'); 
-
+  
     /*Tecla de salto*/ 
 
     this.keySpace= this.scene.input.keyboard.addKey('SPACE'); 
-    this.keySpace.on('down', event=> {this.play('ishi_jumping')}); 
+   
 
     /*Tecla cambio a 4 patas*/
     this.keyShift= this.scene.input.keyboard.addKey('SHIFT'); 
 
     //Impide que al pulsar ciertas teclas, el navegador interrumpa el gameplay
-    this.scene.input.keyboard.addCapture([this.keyD, this.keyA, this.keySpace, this.keyShift]); 
+    this.scene.input.keyboard.addCapture([this.keyD, this.keyA, this.keySpace, this.keyShift, this.keyW, this.keyP]); 
   }
+
+
+
 
 
   /**
@@ -133,16 +149,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
    */
   preUpdate(t,dt) {
     super.preUpdate(t,dt);
-    
-    
+
     if (Phaser.Input.Keyboard.JustDown(this.keySpace) && this.body.onFloor()) {
       this.body.setVelocityY(this.jumpSpeed);
       this.play('ishi_jumping'); 
-
     }
 
     if (this.keyA.isDown) {
-      console.log("Se pulso la tecla A"); 
 
       if(this.body.onFloor())
         this.play('ishi_running', true);
@@ -162,7 +175,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
       else this.play('ishi_jumping', true); 
 
-      console.log("Se pulso la tecla D");
       this.setFlip(false);  
       this.body.setVelocityX(this.speed);
       
@@ -170,8 +182,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     else {
       this.body.setVelocityX(0);
-
-
 
       if(this.body.onFloor()){
         switch(this.modo) {
@@ -184,20 +194,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
               this.play('idle_ishi', true);
               break; 
         }
-
-       
       }
        else this.play('ishi_jumping', true); 
     }
 
     if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { 
-        console.log("Se pulso la tecla shift"); 
 
         switch(this.modo) {
 
             case "AGACHADO": 
               this.speed= 300; 
               this.modo= 'LEVANTADO'; 
+              this.setSize(40,110, true); 
 
               this.cambioVelocidad(); 
               /*Cambio de animacion*/ 
@@ -206,20 +214,30 @@ export default class Player extends Phaser.GameObjects.Sprite {
             
             case "LEVANTADO": 
               this.speed= 500;
-              this.modo= 'AGACHADO'; 
+              this.modo= 'AGACHADO';
               this.cambioVelocidad(); 
 
               /*Cambio de animacion*/ 
               this.play('ishi_crouch');
               break; 
         }
-        
     }
 
-
-   
-
-
+  if(Phaser.Input.Keyboard.JustDown(this.keyP)){
+     this.logica_ataque(); 
   }
-  
+}
+
+
+  /*
+    Este metodo se encarga de comprobar si hay enemigos cercanos, y en caso de ser asi les quita daño 
+  */
+  logica_ataque(){
+       let position_ishi= [0,0]; 
+       /*
+        Comprobar distancia de Ishi con amigos
+
+       */
+  }
+
 }

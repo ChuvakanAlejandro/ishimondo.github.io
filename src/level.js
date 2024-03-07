@@ -27,12 +27,13 @@ export default class Level extends Phaser.Scene {
         this.bases = this.add.group();
         this.player = new Player(this, 500, 500);
 
-        new Platform(this, this.player, this.bases, 150, 350);
-       
-        new Platform(this, this.player, this.bases, 500, 200);
+        this.plataforms = this.physics.add.staticGroup(); 
+        this.plataforms.addMultiple([new Platform(this, this.player, this.bases, 700, 200)]); 
         
-        new Wall (this, this.player,  900, 550); 
+        this.walls= this.physics.add.staticGroup(); 
+        this.walls.addMultiple([new Wall (this, this.player,  900, 550), new Wall(this,this.player, 200,350)]); 
 
+        this.physics.add.collider(this.player, this.walls); 
         this.spawn();
 
     }
@@ -54,4 +55,16 @@ export default class Level extends Phaser.Scene {
     starPickt(base) {
       
     }
+
+    /*
+      Metodo que se encarga de reducir la gravedad simulando que el personaje sube por la pared 
+      Solo funcionara si se pulsa la tecla W estando pegado a una pared 
+    */
+    climbWall(){
+        if((this.player.body.blocked.right || this.player.body.blocked.left) && (this.player.keyW.isDown)){
+            this.player.body.setVelocityY(this.player.jumpSpeed/2); 
+        }
+        
+    }
+
 }
