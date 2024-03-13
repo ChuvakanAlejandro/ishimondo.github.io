@@ -1,5 +1,6 @@
 import Platform from './platform.js';
 import Player from './player.js';
+import Poison_Seta  from './poison_seta.js';
 import Phaser from 'phaser'
 import Wall from './wall.js'; 
 
@@ -23,19 +24,34 @@ export default class Level extends Phaser.Scene {
      * Creación de los elementos de la escena principal de juego
      */
     create() {
+        this.add.image(1000,1000,'background');
         this.stars = 10;
         this.bases = this.add.group();
-        this.player = new Player(this, 500, 500);
-
-        this.plataforms = this.physics.add.staticGroup(); 
-        this.plataforms.addMultiple([new Platform(this, this.player, this.bases, 700, 200)]); 
+        this.player = new Player(this, 150, 200);
+        this.seta1= new Poison_Seta(this, 200,100); 
+        new Platform(this, this.player, this.seta1, this.bases, 150, 350);
+        new Wall (this, this.player, 500,350);
+        new Wall (this, this.player, 500,250); 
+        new Platform(this, this.player, this.seta1, this.bases, 700, 150);
+        new Platform(this, this.player, this.seta1, this.bases, 1500, 150);
+        this.cameras.main.startFollow(this.player);
         
-        this.walls= this.physics.add.staticGroup(); 
-        this.walls.addMultiple([new Wall (this, this.player,  900, 550), new Wall(this,this.player, 200,350)]); 
-
-        this.physics.add.collider(this.player, this.walls); 
-        this.spawn();
-
+    }
+    /*
+    climbWall(wall){
+        this.player.cambiaModo("COLGADO")
+    }
+    */
+    
+    climbWall(wall){
+        if((this.player.body.blocked.left || this.player.body.blocked.right)){
+            if(this.player.keyW.isDown){ this.player.body.setVelocityY(this.player.jumpSpeed/3);}
+            else if(Phaser.Input.Keyboard.JustDown(this.player.keySpace)){ 
+                this.player.body.setVelocityY(this.player.jumpSpeed/2);
+                this.player.body.setVelocityX(-this.player.jumpSpeed/2);
+            }
+            else{this.player.body.setVelocityY(0);}
+        }
     }
 
     /**
