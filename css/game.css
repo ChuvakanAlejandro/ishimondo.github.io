@@ -1,3 +1,16 @@
 h1 {
   text-align: center;
+  color: rgba(62, 55, 55, 0.842); 
+}
+
+header.cabecera{
+    background-color: green;
+    width: Chrome 1;
+    height: 50px;
+}
+
+div.Opcion1 {
+    width: 50px;
+    height: 25px;
+    background-color: blue;
 }
