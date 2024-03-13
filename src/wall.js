@@ -17,7 +17,7 @@ export default class Wall extends Phaser.GameObjects.Sprite {
    * @param {number} y Coordenada Y
    */
 
-    constructor(scene, player, x, y, ) {
+    constructor(scene, player, x, y) {
         super(scene, x, y, 'wall'); 
         this.scene.add.existing(this); 
         this.scene.physics.add.existing(this, true); 
@@ -25,6 +25,7 @@ export default class Wall extends Phaser.GameObjects.Sprite {
         //La pared no se saldrá de los límites del mundo
          
      
+        this.scene.physics.add.existing(this,true); 
 
         //Colisionador entre la pared y el personaje 
         this.scene.physics.add.collider(this, player, () => {this.scene.climbWall()}); 
