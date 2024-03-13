@@ -19,7 +19,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     // Queremos que el jugador no se salga de los límites del mundo
-    this.body.setCollideWorldBounds();
+    this.body.setCollideWorldBounds(false);
 
 
     /*
@@ -64,7 +64,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   this.anims.create({
       key: 'ishi_jumping',
       frames: this.anims.generateFrameNumbers('ishi', {start: 27, end: 30}),
-      frameRate: 15,
+      frameRate: 20,
       repeat: -1 
   });
 
@@ -72,13 +72,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
   //Por defecto se ejecuta la animación de idle
     this.play('idle_ishi', true);
 
-    this.body.setSize(40, 110, true);
-
-    /*Declaracion e inicializacion de parametros*/ 
-    this.vida= 4;  //Vida
-    this.speed = 300; //Velocidad (en modo Levantado por defecto)
-    this.jumpSpeed = -400; //Velocidad del salto
-    this.modo= "LEVANTADO"; //Modo del personaje (Levantado por defecto)
+    this.body.setSize(35, 90);
+    this.body.setOffset(46, 30);
+    this.speed = 300;
+    this.speed_actual = 0;
+    this.jumpSpeed = -600;
+    this.modo= "LEVANTADO";
+    this.modo_ant= "LEVANTADO"; 
     
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
@@ -96,6 +96,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     const barra= this.scene.add.image(950,430,'hud_skill_bar'); 
 
     barra.setDepth(1000); 
+    this.trepable = false;
+    this.bloqueadoIz = false;
+    this.bloqueadoDr = false;
     
     this.cambioVelocidad();
     
@@ -124,22 +127,51 @@ export default class Player extends Phaser.GameObjects.Sprite {
     /*Tecla para ir hacia la izquierda*/ 
 
     this.keyA= this.scene.input.keyboard.addKey('A'); 
-  
+
+    /*Tecla para ir hacia arriba*/ 
+
+    this.keyW= this.scene.input.keyboard.addKey('W'); 
+
+    /*Tecla para ir hacia abajo*/ 
+
+    this.keyS= this.scene.input.keyboard.addKey('S'); 
+
     /*Tecla de salto*/ 
 
     this.keySpace= this.scene.input.keyboard.addKey('SPACE'); 
-   
+    this.keySpace.on('down', event=> {
+    }); 
 
     /*Tecla cambio a 4 patas*/
     this.keyShift= this.scene.input.keyboard.addKey('SHIFT'); 
 
     //Impide que al pulsar ciertas teclas, el navegador interrumpa el gameplay
-    this.scene.input.keyboard.addCapture([this.keyD, this.keyA, this.keySpace, this.keyShift, this.keyW, this.keyP]); 
+    this.scene.input.keyboard.addCapture([this.keyD, this.keyA, this.keyW, this.keyS, this.keySpace, this.keyShift]); 
   }
 
-
-
-
+  paredTrepable(trepable){
+    this.trepable = trepable;
+  }
+  cambiaModo(actual){
+    switch(actual) {
+      case "AGACHADO": 
+        this.speed= 300; 
+        this.modo= 'LEVANTADO'; 
+        this.body.setSize(35, 90);
+        this.body.setOffset(46, 30);
+        this.cambioVelocidad(); 
+        this.play('idle_ishi',true); 
+        break; 
+      case "LEVANTADO": 
+        this.speed= 500;
+        this.modo= 'AGACHADO'; 
+        this.cambioVelocidad(); 
+        this.body.setSize(45, 60);
+        this.body.setOffset(42, 60);
+        this.play('ishi_crouch',true);
+        break;    
+    }
+  }
 
   /**
    * Métodos preUpdate de Phaser. En este caso solo se encarga del movimiento del jugador.
@@ -149,7 +181,179 @@ export default class Player extends Phaser.GameObjects.Sprite {
    */
   preUpdate(t,dt) {
     super.preUpdate(t,dt);
-
+    if(this.body.onFloor() && (this.modo=="LEVANTADO" || this.modo=="AGACHADO")){
+      if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { //De base, SHIFT cambiara de modo
+        if(this.trepable && (this.bloqueadoDr || this.bloqueadoIz)){//CAMBIANDO A MODO COLGANDO si encuentro una pared trepable y estoy bloqueado por ella
+          this.modo = "COLGANDO";
+          this.body.setAllowGravity(false);//Con esto ya no estare tocando el suelo (al parecer)
+        
+        }else{
+          console.log("Se pulso la tecla shift"); 
+          this.modo_ant = this.modo;
+          this.cambiaModo(this.modo);
+        }
+      }else if (Phaser.Input.Keyboard.JustDown(this.keySpace)) {//Cambiando a SALTANDO
+        this.body.setVelocityY(this.jumpSpeed);
+        this.modo_ant = this.modo;
+        this.modo = "SALTANDO";
+      }
+      if (this.keyA.isDown && !this.bloqueadoIz) { //Moviendo me a la izquierda
+        console.log("Se pulso la tecla A"); 
+        this.bloqueadoDr = false;
+        if(this.body.blocked.left){//Estoy bloqueado
+          this.bloqueadoIz = true;
+        }else{
+          this.play('ishi_running', true);
+          this.setFlip(true); 
+          this.body.setVelocityX(-this.speed);
+          this.speed_actual = -this.speed;
+        }
+      }
+      else if (this.keyD.isDown && !this.bloqueadoDr) {//Moviendome a la derecha
+        console.log("Se pulso la tecla D");
+        this.bloqueadoIz = false;
+        if(this.body.blocked.right){//Estoy bloqueado
+          this.bloqueadoDr = true;
+        }else{//No estoy bloqueado
+          this.play('ishi_running', true);
+          this.setFlip(false);  
+          this.body.setVelocityX(this.speed);
+          this.speed_actual = this.speed;
+        }
+      }
+      else {//Estoy quieto
+        this.body.setVelocityX(0);
+        this.speed_actual = 0;
+        switch(this.modo) {
+          case 'AGACHADO': 
+            this.play('ishi_crouch', true);
+            break; 
+          case 'LEVANTADO': 
+              this.play('idle_ishi', true);
+              break; 
+        }
+      }
+    }else if(!this.body.onFloor() && this.modo=="SALTANDO"){//HE SALTADO Y ESTOY EN EL AIRE
+      this.play('ishi_jumping', true); 
+      if(Phaser.Input.Keyboard.JustDown(this.keyShift) && (this.bloqueadoDr || this.bloqueadoIz) && this.trepable){//CAMBIANDO A MODO COLGANDO si encuentro una pared trepable
+        this.modo = "COLGANDO";
+        this.body.setAllowGravity(false);//Con esto ya no estare tocando la pared (al parecer)
+      }
+      if (this.keyA.isDown) {
+        console.log("Se pulso la tecla A en el aire");
+        this.bloqueadoDr = false;
+        if(this.body.blocked.left){//Estoy bloqueado
+          this.bloqueadoIz = true;
+        }else{
+            if(this.speed_actual > -this.speed){
+            this.speed_actual = this.speed_actual-50;
+            if(this.speed_actual < -this.speed)
+              this.speed_actual = this.speed_actual + 10;
+          }
+        }
+      }
+      else if (this.keyD.isDown) {
+        console.log("Se pulso la tecla D en el aire");
+        this.bloqueadoIz = false;
+        if(this.body.blocked.right){//Estoy bloqueado
+          this.bloqueadoDr = true;
+        }else{
+          if(this.speed_actual < this.speed){
+            this.speed_actual = this.speed_actual+50;
+            if(this.speed_actual > this.speed)
+              this.speed_actual = this.speed_actual - 10;
+          }
+        }
+      }
+      else{
+        if(this.speed_actual > 0)
+          this.speed_actual = this.speed_actual-10; 
+        else if(this.speed_actual < 0)
+          this.speed_actual = this.speed_actual+10; 
+      }
+      this.body.setVelocityX(this.speed_actual);
+    }else if(this.body.onFloor() && this.modo=="SALTANDO"){//Si, en mi salto, toco el suelo, vuelvo a mi modo anterior
+      if(this.modo_ant == "LEVANTADO"){
+        this.cambiaModo("AGACHADO");
+      }else if(this.modo_ant == "AGACHADO"){
+        this.cambiaModo("LEVANTADO");
+      }else{
+        this.cambiaModo("AGACHADO");
+      }
+    }else if(!this.body.onFloor() && this.modo=="COLGANDO"){
+      console.log('Trepando');
+      if(Phaser.Input.Keyboard.JustDown(this.keyShift)){
+        this.cambiaModo("AGACHADO");
+        this.modo_ant = "LEVANTADO";
+        this.bloqueadoDr = false;
+        this.bloqueadoIz = false;
+        this.body.setAllowGravity(true);
+      }
+      if(this.keyW.isDown){
+        console.log('Arriba voy');
+        this.body.setVelocityY(this.jumpSpeed/3);
+      }else if(this.keyS.isDown){
+        let aux = this.body.onFloor();
+        //TRATAR S CUANDO SE LLEGA AL SUELO
+        console.log('Abajo voy');
+        this.body.setVelocityY(-this.jumpSpeed/2);
+      }else {//Estoy quieto trepando la pared.
+        this.body.setVelocityY(0);
+        this.speed_actual = 0;
+      }if(Phaser.Input.Keyboard.JustDown(this.keySpace)){
+        if(this.bloqueadoDr){
+          this.bloqueadoDr = false;
+          this.modo="SALTANDO";
+          this.modo_ant = "COLGANDO";
+          this.speed = 600;
+          this.body.setVelocityX(-this.speed);
+          this.body.setVelocityY(-700);
+          this.body.setAllowGravity(true);
+        }
+        else if(this.bloqueadoIz){
+          this.bloqueadoIz = false;
+          this.modo="SALTANDO";
+          this.modo_ant = "COLGANDO";
+          this.speed = 600;
+          this.body.setVelocityX(this.speed);
+          this.body.setVelocityY(-700);
+          this.body.setAllowGravity(true);
+        }
+      }
+    }else{
+      this.play('idle_ishi', true);
+      if (this.keyA.isDown) {
+        console.log("Se pulso la tecla A en el aire");
+        if(this.body.blocked.left && Phaser.Input.Keyboard.JustDown(this.keyShift) && this.trepable){//Estoy bloqueado
+          this.bloqueadoIz = true;
+          this.modo = "COLGANDO";
+          this.body.setAllowGravity(false);//Con esto ya no estare tocando el suelo (al parecer)
+        }else{
+            this.speed_actual = -100;
+        }
+      }else if (this.keyD.isDown) {
+        console.log("Se pulso la tecla D en el aire");
+        if(this.body.blocked.right && Phaser.Input.Keyboard.JustDown(this.keyShift) && this.trepable){//Estoy bloqueado
+          this.bloqueadoDr = true;
+          this.modo = "COLGANDO";
+          this.body.setAllowGravity(false);//Con esto ya no estare tocando el suelo (al parecer)
+        }else{
+          if(this.speed_actual < this.speed){
+            this.speed_actual = 100;
+          }
+        }
+      }else{
+        this.speed_actual = 0;
+      }
+      this.body.setVelocityX(this.speed_actual);
+    }
+  }
+}
+/**
+  preUpdate(t,dt) {
+    super.preUpdate(t,dt);
+    
+    
     if (Phaser.Input.Keyboard.JustDown(this.keySpace) && this.body.onFloor()) {
       this.body.setVelocityY(this.jumpSpeed);
       this.play('ishi_jumping'); 
@@ -160,7 +364,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if(this.body.onFloor())
         this.play('ishi_running', true);
       
-      else this.play('ishi_jumping', true); 
+      else {
+        this.play('ishi_jumping', true); 
+      }
 
       
       this.setFlip(true); 
@@ -205,10 +411,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
             case "AGACHADO": 
               this.speed= 300; 
               this.modo= 'LEVANTADO'; 
-              this.setSize(40,110, true); 
-
+              this.body.setSize(35, 90);
+              this.body.setOffset(46, 30);
               this.cambioVelocidad(); 
-              /*Cambio de animacion*/ 
               this.play('idle_ishi'); 
               break; 
             
@@ -216,28 +421,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
               this.speed= 500;
               this.modo= 'AGACHADO';
               this.cambioVelocidad(); 
-
-              /*Cambio de animacion*/ 
+              this.body.setSize(45, 60);
+              this.body.setOffset(42, 60);
               this.play('ishi_crouch');
               break; 
+              
         }
-    }
+        
+      }
+   
 
-  if(Phaser.Input.Keyboard.JustDown(this.keyP)){
-     this.logica_ataque(); 
+
   }
-}
-
-
-  /*
-    Este metodo se encarga de comprobar si hay enemigos cercanos, y en caso de ser asi les quita daño 
-  */
-  logica_ataque(){
-       let position_ishi= [0,0]; 
-       /*
-        Comprobar distancia de Ishi con amigos
-
-       */
-  }
-
-}
+*/

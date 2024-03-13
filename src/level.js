@@ -25,18 +25,25 @@ export default class Level extends Phaser.Scene {
     create() {
         this.stars = 10;
         this.bases = this.add.group();
-        this.player = new Player(this, 500, 500);
+        this.player = new Player(this, 1000, 1000);
 
-        this.plataforms = this.physics.add.staticGroup(); 
-        this.plataforms.addMultiple([new Platform(this, this.player, this.bases, 700, 200)]); 
+
+        new Platform(this, this.player, this.bases, 1000, 1250);
+        new Platform(this, this.player, this.bases, 1250, 1250);
+        new Platform(this, this.player, this.bases, 1500, 1250);
+        new Platform(this, this.player, this.bases, 1750, 1250);
+        new Wall(this,this.player,1900,1150);
+        new Wall(this,this.player,1600,950);
+       
+
+        this.cameras.main.startFollow(this.player);
         
-        this.walls= this.physics.add.staticGroup(); 
-        this.walls.addMultiple([new Wall (this, this.player,  900, 550), new Wall(this,this.player, 200,350)]); 
-
-        this.physics.add.collider(this.player, this.walls); 
-        this.spawn();
-
     }
+    
+    canClimbWall(){
+        this.player.paredTrepable(true);
+    }
+    
 
     /**
      * Genera una estrella en una de las bases del escenario
