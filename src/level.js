@@ -72,6 +72,11 @@ export default class Level extends Phaser.Scene {
       
     }
 
+    recibirGolpe(){
+        console.log("Recibiendo daño"); 
+    }
+
+
     /*
       Metodo que se encarga de reducir la gravedad simulando que el personaje sube por la pared 
       Solo funcionara si se pulsa la tecla W estando pegado a una pared 

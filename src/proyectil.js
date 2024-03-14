@@ -14,7 +14,7 @@ export default class Proyectil_Seta extends Phaser.GameObjects.Sprite{
         super(scene,x,y,'proyectil_seta');
         this.direccion= direction; 
         this.scene.add.existing(this); 
-        
+
         switch (this.direccion){
             case 'Izquierda': 
                 this.setFlipX(true);
@@ -39,6 +39,11 @@ export default class Proyectil_Seta extends Phaser.GameObjects.Sprite{
         super.preUpdate(t,dt); 
         this.x+= this.velocity; 
         this.play('mov_bala', true); 
+
+        if(this.body.physics.overlap(this.scene.player, this)){
+            this.scene.
+        }
+
     }
 
 }
