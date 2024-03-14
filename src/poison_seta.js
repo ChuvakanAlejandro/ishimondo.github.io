@@ -2,8 +2,8 @@ import Phaser from 'phaser'
 import game from './game.js'
 import Player from './player.js';
 import Proyectil_Seta from './proyectil.js';
-
-export default class Poison_Seta extends Phaser.GameObjects.Sprite{
+import Enemigo from './Enemigo.js';
+export default class Poison_Seta extends Enemigo{
     /**
    * Constructor de la seta 
    * @param {Phaser.Scene} scene Escena a la que pertenece la seta 
@@ -14,10 +14,8 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
     constructor(scene, x, y) {
         
         super(scene,x,y,'seta_bosque');
-        this.scene.add.existing(this); 
-        this.scene.physics.add.existing(this); 
-        this.body.setCollideWorldBounds(); 
-
+        this.in_delay= false; 
+       
         //Animacion por defecto
         this.anims.create({
             key: 'idle_seta',
@@ -38,7 +36,7 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
 
         this.play('idle_seta', true); 
 
-        
+        //dthis.morir(); 
         this.on("animationcomplete-seta_dispara", ()=>{this.dispara()}, this); 
     }
 
@@ -46,7 +44,12 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
     preUpdate(t,dt){
         super.preUpdate(t,dt);   
         if(Phaser.Math.Distance.Between(this.body.x, this.scene.player.body.y, this.scene.player.body.x, this.body.y) < 350){
-            this.play('seta_dispara',true); 
+            
+            if(!this.in_delay){
+                this.playAfterDelay('seta_dispara',1500); 
+                this.in_delay=true;
+            }  
+            
         }
     }
 
@@ -61,7 +64,13 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
                 new Proyectil_Seta(this.scene, this.x, this.y+ 23, 'Izquierda');    
             }
             else new Proyectil_Seta(this.scene, this.x, this.y+ 23, 'Derecha'); 
-        
+        this.in_delay= false; 
+    } 
+
+    morir(){
+        /*
+            -Falta animacion de muerte 
+        */
     }
 
 }
