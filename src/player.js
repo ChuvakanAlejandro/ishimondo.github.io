@@ -14,8 +14,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
    * @param {number} y Coordenada Y
    */
   constructor(scene, x, y) {
+
     super(scene, x, y, 'ishi');
     this.score = 0;
+    this.vida= 4; 
+    console.log("Vida actual:  " + this.vida); 
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     // Queremos que el jugador no se salga de los límites del mundo
@@ -100,9 +103,21 @@ export default class Player extends Phaser.GameObjects.Sprite {
     barra.setDepth(1000); 
     
     this.cambioVelocidad();
-    
+ 
   }
 
+  /*
+    PROVISIONAL
+  */
+
+  restarVida(){
+     this.vida--;
+     console.log("Vida actual " + this.vida); 
+     this.x-= 75; 
+     if(this.vida== 0){ //PANTALLA DE GAMEOVER
+     }
+
+  }
   
   /**
    * Actualiza la UI con la puntuación actual
@@ -265,6 +280,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
 }
+
+
+
 
 /*Si esta en el aire*/ 
 

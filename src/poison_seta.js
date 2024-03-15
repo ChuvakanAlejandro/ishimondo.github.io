@@ -3,19 +3,29 @@ import game from './game.js'
 import Player from './player.js';
 import Proyectil_Seta from './proyectil.js';
 import Enemigo from './Enemigo.js';
+
+
+
 export default class Poison_Seta extends Enemigo{
     /**
    * Constructor de la seta 
    * @param {Phaser.Scene} scene Escena a la que pertenece la seta 
    * @param {number} x Coordenada X
    * @param {number} y Coordenada Y
+   * @param {boolean} aplastable Indica si es posible matar al enemigo saltando encima de el 
    */
 
-    constructor(scene, x, y) {
+    constructor(scene, x, y, aplastable= false ) {
         
         super(scene,x,y,'seta_bosque');
+        
         this.in_delay= false; 
-       
+        this.aplastable= aplastable; 
+
+        this.scene.add.existing(this);
+        this.scene.physics.add.existing(this);
+        this.body.setCollideWorldBounds(false); 
+        this.body.pushable= false;
         //Animacion por defecto
         this.anims.create({
             key: 'idle_seta',
@@ -26,17 +36,20 @@ export default class Poison_Seta extends Enemigo{
 
         this.anims.create({
             key: "seta_dispara",
-            frames: this.anims.generateFrameNames('seta_bosque', {start: 0, end: 7}),
+            frames: this.anims.generateFrameNames('seta_bosque', {start: 0, end: 6}),
             frameRate: 8,
             repeat: 0
         }); 
 
+        this.scene.physics.add.collider(this, this.scene.player, () => {
+            console.log("Recibiendo daño"); 
+            this.scene.recibirDanyo(); 
+          }); 
         this.body.setSize(32, 32);
         this.body.setOffset(34, 55);
 
         this.play('idle_seta', true); 
 
-        //dthis.morir(); 
         this.on("animationcomplete-seta_dispara", ()=>{this.dispara()}, this); 
     }
 
@@ -51,6 +64,14 @@ export default class Poison_Seta extends Enemigo{
             }  
             
         }
+        
+        else {
+            this.stop(); 
+            this.play('idle_seta'); 
+            this.in_delay= false;
+        }
+
+
     }
 
     /*
@@ -58,12 +79,11 @@ export default class Poison_Seta extends Enemigo{
     */
 
     dispara(){
-        console.log("Esta disparando");
-       
-            if(this.flipX){
-                new Proyectil_Seta(this.scene, this.x, this.y+ 23, 'Izquierda');    
-            }
-            else new Proyectil_Seta(this.scene, this.x, this.y+ 23, 'Derecha'); 
+        if(this.flipX){
+            new Proyectil_Seta(this.scene, this.x - 5 , this.y+ 26, 'Izquierda');    
+         }
+        else new Proyectil_Seta(this.scene, this.x - 5, this.y+ 26, 'Derecha');
+
         this.in_delay= false; 
     } 
 

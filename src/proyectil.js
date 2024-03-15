@@ -33,7 +33,7 @@ export default class Proyectil_Seta extends Phaser.GameObjects.Sprite{
         this.anims.create({
             key: "mov_bala",
             frames: this.anims.generateFrameNames('proyectil_seta', {start: 0, end: 3 }),
-            frameRate: 4,
+            frameRate: 6 ,
             repeat: -1
         }); 
     }
@@ -43,7 +43,7 @@ export default class Proyectil_Seta extends Phaser.GameObjects.Sprite{
         this.x+= this.velocity; 
         this.play('mov_bala', true); 
         if(this.scene.physics.overlap(this.scene.player, this)){
-            console.log("Golpeando al jugador");
+            this.scene.recibirDanyo(); 
             this.destroy(); 
         }
 

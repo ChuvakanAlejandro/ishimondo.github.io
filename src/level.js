@@ -28,14 +28,26 @@ export default class Level extends Phaser.Scene {
         this.stars = 10;
         this.bases = this.add.group();
         this.player = new Player(this, 150, 200);
-        this.seta1= new Poison_Seta(this, 200,100); 
+        this.seta1= new Poison_Seta(this, 200,100, true);
+
+
+        this.enemies= this.physics.add.staticGroup(); 
+        this.enemies.add(this.seta1); 
+
         new Platform(this, this.player, this.seta1, this.bases, 150, 350);
         new Wall (this, this.player, 500,350);
         new Wall (this, this.player, 500,250); 
         new Platform(this, this.player, this.seta1, this.bases, 700, 150);
         new Platform(this, this.player, this.seta1, this.bases, 1500, 150);
+
+        //Sirve para que la camara siga al jugador 
         this.cameras.main.startFollow(this.player);
         
+
+
+        this.physics.add.collider(this.player, this.enemies, () => {
+            console.log("Chocando contra enemigo"); 
+        }); 
     }
     /*
     climbWall(wall){
@@ -88,4 +100,8 @@ export default class Level extends Phaser.Scene {
         
     }
 
+
+    recibirDanyo(){
+        this.player.restarVida(); 
+    }
 }
