@@ -1,6 +1,7 @@
 import Star from './star.js';
 import Phaser from 'phaser'
 import game from './game.js'; 
+
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
@@ -25,56 +26,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.setCollideWorldBounds(false);
 
 
-    /*
-      Animacion de idle
-    */
-
-    this.anims.create({
-        key: 'idle_ishi',
-        frames: this.anims.generateFrameNumbers('ishi', {start: 0, end: 5}),
-        frameRate: 5,
-        repeat: -1 
-    });
-    
-    /*
-      Animacion de agacharse
-    */
-
-    this.anims.create({
-      key: 'ishi_crouch',
-      frames: this.anims.generateFrameNumbers('ishi', {start: 6, end: 11}),
-      frameRate: 10,
-      repeat: -1 
-  });
-
-  /*
-    Animacion de correr 
-  */
-
-
-  this.anims.create({
-    key: 'ishi_running',
-    frames: this.anims.generateFrameNumbers('ishi', {start: 43, end: 48}),
-    frameRate: 10,
-    repeat: -1 
-  });
-  
-  /*
-    Animacion de saltar 
-  */
-
-
-  this.anims.create({
-      key: 'ishi_jumping',
-      frames: this.anims.generateFrameNumbers('ishi', {start: 27, end: 30}),
-      frameRate: 20,
-      repeat: -1 
-  });
-
-  
-  //Por defecto se ejecuta la animación de idle
-    this.play('idle_ishi', true);
-
     this.body.setSize(35, 90);
     this.body.setOffset(46, 30);
 
@@ -92,6 +43,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     //Mapeo de controles
     this.mapeoTeclas(); 
 
+    //Creamos las animaciones
+    this.setAnimaciones(); 
 
     //Interface de vida 
     const vida= this.scene.add.image(900,450,'hud_vida'); 
@@ -104,6 +57,59 @@ export default class Player extends Phaser.GameObjects.Sprite {
     
     this.cambioVelocidad();
  
+  }
+
+
+  /*
+    CREA LAS ANIMACIONES CORRESPONDIENTES DEL PERSONAJE 
+  */
+  
+  setAnimaciones(){
+      
+    /*
+      Animacion de idle
+    */
+
+    this.anims.create({
+      key: 'idle_ishi',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 0, end: 5}),
+      frameRate: 5,
+      repeat: -1 
+    });
+  
+  /*
+    Animacion de agacharse
+  */
+
+    this.anims.create({
+      key: 'ishi_crouch',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 6, end: 11}),
+      frameRate: 10,
+      repeat: -1 
+    });
+
+  /*
+    Animacion de correr 
+  */
+    this.anims.create({
+      key: 'ishi_running',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 43, end: 48}),
+      frameRate: 10,
+      repeat: -1  
+    });
+
+  /*
+    Animacion de saltar 
+  */
+    this.anims.create({
+      key: 'ishi_jumping',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 27, end: 30}),
+      frameRate: 20,
+      repeat: -1 
+  });
+
+  //Por defecto se ejecuta la animación de idle
+    this.play('idle_ishi', true);
   }
 
   /*
@@ -126,6 +132,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.label.text= 'Velocidad actual: ' + this.speed; 
   }
 
+  /*
+    SET DE LAS TECLAS DE MOVIMIENTO DEL PERSONAJE 
+  */
 
   mapeoTeclas() {
 
@@ -154,10 +163,34 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.scene.input.keyboard.addCapture([this.keyD, this.keyA, this.keyW, this.keySpace, this.keyShift, this.keyP]); 
   }
 
+
+  /*
+    METODO QUE CAMBIA EL MODO DE ISHI
+  */
+
   cambiaModoTrepando(modo){
     this.modo = modo;
   }
 
+
+  /*
+    LOGICA DEL ATAQUE DE ISHI 
+  */
+
+  logicaAtaque(){
+    //NUEVO MODO 
+    this.modo= "ATACANDO";
+
+    // TODO Insertar animacion de ataque     
+
+    /* TODO Detectar collider con enemigos 
+
+       1) Si hay algun collide con el grupo de enemigos 
+          1.2) Llamar al metodo de la scene que reste la vida a los enemigos 
+        
+    */
+
+  }
 
   /**
    * Métodos preUpdate de Phaser. En este caso solo se encarga del movimiento del jugador.
@@ -185,6 +218,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
               this.cambioVelocidad(); 
               this.play('idle_ishi',true); 
               break; 
+
             case "LEVANTADO": 
               this.speed= 500;
               this.modo= 'AGACHADO'; 
@@ -242,6 +276,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
         }
       }
 
+      //MECANICA DE ATAQUE 
+
+      if(Phaser.Input.Keyboard.JustDown(this.keyP)) {
+         this.logicaAtaque(); 
+         console.log("Ishi esta atacando"); 
+      }
+
     }
 
     /*Si no esta en el suelo y no esta colgado => Esta en proceso de salto*/
@@ -280,97 +321,3 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
 }
-
-
-
-
-/*Si esta en el aire*/ 
-
-
-
-/**
-  preUpdate(t,dt) {
-    super.preUpdate(t,dt);
-
-    if (Phaser.Input.Keyboard.JustDown(this.keySpace) && this.body.onFloor()) {
-      this.body.setVelocityY(this.jumpSpeed);
-      this.play('ishi_jumping'); 
-    }
-
-    if (this.keyA.isDown) {
-
-      if(this.body.onFloor())
-        this.play('ishi_running', true);
-      
-      else {
-        this.play('ishi_jumping', true); 
-      }
-
-      
-      this.setFlip(true); 
-      
-      this.body.setVelocityX(-this.speed);
-
-    }
-
-    else if (this.keyD.isDown) {
-      if(this.body.onFloor())
-        this.play('ishi_running', true);
-
-      else this.play('ishi_jumping', true); 
-
-      this.setFlip(false);  
-      this.body.setVelocityX(this.speed);
-      
-    }
-
-    else {
-      this.body.setVelocityX(0);
-
-      if(this.body.onFloor()){
-        switch(this.modo) {
-          case 'AGACHADO': 
-              this.play('ishi_crouch', true);
-            
-              break; 
-          
-          case 'LEVANTADO': 
-              this.play('idle_ishi', true);
-              break; 
-        }
-      }
-       else this.play('ishi_jumping', true); 
-    }
-
-    if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { 
-
-        switch(this.modo) {
-
-            case "AGACHADO": 
-              this.speed= 300; 
-              this.modo= 'LEVANTADO'; 
-              this.body.setSize(35, 90);
-              this.body.setOffset(46, 30);
-              this.cambioVelocidad(); 
-              this.play('idle_ishi'); 
-              break; 
-            
-            case "LEVANTADO": 
-              this.speed= 500;
-              this.modo= 'AGACHADO';
-              this.cambioVelocidad(); 
-              this.body.setSize(45, 60);
-              this.body.setOffset(42, 60);
-              this.play('ishi_crouch');
-              break; 
-              
-        }
-        
-    }
-
-
-   
-
-
-  }
-*/
