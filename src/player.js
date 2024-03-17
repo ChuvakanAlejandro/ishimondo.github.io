@@ -56,7 +56,15 @@ export default class Player extends Phaser.GameObjects.Sprite {
     barra.setDepth(1000); 
     
     this.cambioVelocidad();
- 
+    
+
+    /*TODO Collider con grupo de enemigos
+        this.scene.physics.add.collider(this, this.scene.enemies, (o1, o2) => {
+              if(o1.modo=== "ATACANDO") {
+                  o2.morir(); 
+              }          
+        })
+    */
   }
 
 
@@ -172,9 +180,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.modo = modo;
   }
 
-
   /*
-    LOGICA DEL ATAQUE DE ISHI 
+    LOGICA DEL ATAQUE DE ISHI (FALTAN COSAS)
   */
 
   logicaAtaque(){
@@ -182,14 +189,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.modo= "ATACANDO";
 
     // TODO Insertar animacion de ataque     
-
-    /* TODO Detectar collider con enemigos 
-
-       1) Si hay algun collide con el grupo de enemigos 
-          1.2) Llamar al metodo de la scene que reste la vida a los enemigos 
-        
-    */
-
   }
 
   /**
