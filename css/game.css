@@ -1,16 +1,35 @@
+body {
+  background-color: lightgreen;
+}
+
 h1 {
   text-align: center;
   color: rgba(62, 55, 55, 0.842); 
+  font-family: 'Courier';
+  font-style: italic;
 }
 
 header.cabecera{
-    background-color: green;
-    width: Chrome 1;
-    height: 50px;
+    background-image: url( ../img/fondo_cabecera.jpg);  
+    background-repeat: no-repeat;
+    background-size: cover; 
+    width: Edge 12;
+    height: 209px;
+    margin-bottom: 6em;
 }
 
-div.Opcion1 {
-    width: 50px;
-    height: 25px;
-    background-color: blue;
+div.menu_sup h1{
+   font-size: 200%;
+
+}
+
+
+header.cabecera div.opcion{
+  background-color: blue;
+  margin-left: 60px;
+  width: 150;
+  height: 75;
+  display: block;
+  
+  float:inline-start left;
 }
