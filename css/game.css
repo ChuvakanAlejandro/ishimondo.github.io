@@ -1,12 +1,8 @@
+
+
 body {
   background-color: lightgreen;
-}
-
-h1 {
-  text-align: center;
-  color: rgba(62, 55, 55, 0.842); 
-  font-family: 'Courier';
-  font-style: italic;
+  font-family: 'Silkscreen', cursive; 
 }
 
 header.cabecera{
@@ -18,18 +14,27 @@ header.cabecera{
     margin-bottom: 6em;
 }
 
-div.menu_sup h1{
-   font-size: 200%;
-
-}
-
-
 header.cabecera div.opcion{
   background-color: blue;
   margin-left: 60px;
   width: 150;
   height: 75;
   display: block;
-  
-  float:inline-start left;
+}
+
+
+div.menu_sup div.opcion h1{
+  font-size: 130%;
+  text-align: center;
+
+}
+
+section.descripcion{
+    display: flex;
+}
+
+article.parrafo {
+
+    font-size: 160%;
+    color: red; 
 }
