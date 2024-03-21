@@ -28,11 +28,23 @@ export default class Level extends Phaser.Scene {
         this.stars = 10;
         this.bases = this.add.group();
         this.player = new Player(this, 150, 200);
-        this.seta1= new Poison_Seta(this, 200,100, true);
+        this.seta1= new Poison_Seta(this, 200,100, false);
 
+      
+        
 
-        this.enemies= this.physics.add.staticGroup(); 
-        this.enemies.add(this.seta1); 
+        this.enemies= this.physics.add.group(); 
+        this.enemies.add(this.seta1);
+
+        this.physics.add.collider(this.enemies, this.player, recibirDanyo); 
+        function recibirDanyo(obj1, obj2) {
+            
+            //Comprobar que el personaje esta pisando al enemigo 
+            if((obj1.body.blocked.down|| obj2.body.blocked.up) && obj2.aplastable){
+                obj2.morir(); 
+            }
+            else obj1.restarVida();
+        }
 
         new Platform(this, this.player, this.seta1, this.bases, 150, 350);
         new Wall (this, this.player, 500,350);
@@ -42,19 +54,10 @@ export default class Level extends Phaser.Scene {
 
         //Sirve para que la camara siga al jugador 
         this.cameras.main.startFollow(this.player);
-        
-
-
-        this.physics.add.collider(this.player, this.enemies, () => {
-            console.log("Chocando contra enemigo"); 
-        }); 
-    }
-    /*
-    climbWall(wall){
-        this.player.cambiaModo("COLGADO")
-    }
-    */
     
+    }
+  
+
     climbWall(wall){
         if((this.player.body.blocked.left || this.player.body.blocked.right)){
             if(this.player.keyW.isDown){ this.player.body.setVelocityY(this.player.jumpSpeed/3);}
@@ -75,15 +78,6 @@ export default class Level extends Phaser.Scene {
         Phaser.Math.RND.pick(from || this.bases.children.entries).spawn();
     }
 
-    /**
-     * Método que se ejecuta al coger una estrella. Se pasa la base
-     * sobre la que estaba la estrella cogida para evitar repeticiones
-     * @param {Base} base La base sobre la que estaba la estrella que se ha cogido
-     */
-    starPickt(base) {
-      
-    }
-
     recibirGolpe(){
         console.log("Recibiendo daño"); 
     }
@@ -100,8 +94,7 @@ export default class Level extends Phaser.Scene {
         
     }
 
+    
 
-    recibirDanyo(){
-        this.player.restarVida(); 
-    }
+
 }

@@ -21,11 +21,12 @@ export default class Poison_Seta extends Enemigo{
         
         this.in_delay= false; 
         this.aplastable= aplastable; 
-
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.body.setCollideWorldBounds(false); 
         this.body.pushable= false;
+
+
         //Animacion por defecto
         this.anims.create({
             key: 'idle_seta',
@@ -41,10 +42,7 @@ export default class Poison_Seta extends Enemigo{
             repeat: 0
         }); 
 
-        this.scene.physics.add.collider(this, this.scene.player, () => {
-            console.log("Recibiendo daño"); 
-            this.scene.recibirDanyo(); 
-          }); 
+      
         this.body.setSize(32, 32);
         this.body.setOffset(34, 55);
 
@@ -71,7 +69,7 @@ export default class Poison_Seta extends Enemigo{
             this.in_delay= false;
         }
 
-
+        
     }
 
     /*
@@ -91,6 +89,7 @@ export default class Poison_Seta extends Enemigo{
         /*
             -Falta animacion de muerte 
         */
+       this.destroy(); 
     }
 
 }

@@ -116,8 +116,104 @@ export default class Player extends Phaser.GameObjects.Sprite {
       repeat: -1 
   });
 
+
+  /*
+    Animacion de ataque 
+  */
+    this.anims.create({
+       key: 'ishi_preparaGolpe1',
+       frames: this.anims.generateFrameNames('ishi', {start: 49, end:  50 }), //Principio 49, fin 65
+       frameRate: 20, 
+       repeat: 0
+    });
+    
+    this.anims.create({
+       key: 'ishi_Golpe1',
+       frames: this.anims.generateFrameNumbers('ishi', {start: 51, end: 55 }),
+       frameRate: 20,
+       repeat: 0
+    }); 
+
+
+    this.on('animationcomplete-ishi_Golpe1', () => {
+      switch(this.flipX){
+        case true: 
+          this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 20,40); 
+        break; 
+
+        case false: 
+          this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y-10, 20,40); 
+        break; 
+     }
+
+     this.scene.physics.add.existing(this.hitboxAttack, true); 
+     this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
+
+     function procesarAtaque(o1, o2){
+        o2.morir(); 
+     }
+    }, this); 
+
+
+    this.anims.create({
+      key: 'ishi_preparaGolpe2',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 56, end: 60 }),
+      frameRate: 20,
+      repeat: 0
+   }); 
+
+   this.on('animationcomplete-ishi_preparaGolpe2', () => {this.hitboxAttack.destroy()}, this); 
+
+
+   this.anims.create({
+    key: 'ishi_Golpe2',
+    frames: this.anims.generateFrameNumbers('ishi', {start: 61, end: 63 }),
+    frameRate: 20,
+    repeat: 0
+ }); 
+ 
+
+  //Callback para el segundo arañazo que hace ishi 
+
+   this.on('animationcomplete-ishi_Golpe2', ()=> {
+ 
+     switch(this.flipX){
+        case true: 
+          this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 20,40); 
+        break; 
+
+        case false: 
+          this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y+15, 20,40); 
+        break; 
+     }
+
+     this.scene.physics.add.existing(this.hitboxAttack, true); 
+     this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
+
+     function procesarAtaque(o1, o2){
+        o2.morir(); 
+     }
+
+   }, this); 
+
+
+
+  this.anims.create({
+    key: 'ishi_finAtaque',
+    frames: this.anims.generateFrameNumbers('ishi', {start: 64, end: 65 }),
+    frameRate: 20,
+    repeat: 0
+  }); 
+
+  //Callback para cuando Ishi termina de atacar 
+  this.on('animationcomplete-ishi_finAtaque', ()=> {
+     this.atacando= false;
+     this.hitboxAttack.destroy(); 
+  }, this); 
+
   //Por defecto se ejecuta la animación de idle
     this.play('idle_ishi', true);
+    
   }
 
   /*
@@ -172,6 +268,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
 
+  redimensiona(size1, size2, offset1, offset2){
+      this.body.setSize(size1,size2); 
+      this.body.setOffset(offset1, offset2); 
+  }
+
+
   /*
     METODO QUE CAMBIA EL MODO DE ISHI
   */
@@ -185,10 +287,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
   */
 
   logicaAtaque(){
-    //NUEVO MODO 
-    this.modo= "ATACANDO";
-
+    //Flag de ataque 
+    this.atacando= true; 
+    this.body.setVelocityX(0); 
     // TODO Insertar animacion de ataque     
+   
+    this.play('ishi_preparaGolpe1').chain('ishi_Golpe1').chain('ishi_preparaGolpe2').chain('ishi_Golpe2').chain('ishi_finAtaque'); 
   }
 
   /**
@@ -204,11 +308,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if(this.body.onFloor()){
 
-      /*Cambio de modo*/ 
+      //Espera animacion de ataque 
+      /*Cambio de modo*/
+      if(!this.atacando){
 
-      if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { 
-        console.log("Se pulso la tecla shift"); 
-        switch(this.modo) {
+        if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { 
+          console.log("Se pulso la tecla shift"); 
+         switch(this.modo) {
             case "AGACHADO": 
               this.speed= 300; 
               this.modo= 'LEVANTADO'; 
@@ -278,12 +384,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
       //MECANICA DE ATAQUE 
 
       if(Phaser.Input.Keyboard.JustDown(this.keyP)) {
-         this.logicaAtaque(); 
-         console.log("Ishi esta atacando"); 
+         this.logicaAtaque();
       }
 
     }
-
+  }
     /*Si no esta en el suelo y no esta colgado => Esta en proceso de salto*/
     else if(!this.body.onFloor() && this.modo != "COLGADO"){ 
 
@@ -319,4 +424,5 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
   }
+
 }

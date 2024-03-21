@@ -43,7 +43,7 @@ export default class Proyectil_Seta extends Phaser.GameObjects.Sprite{
         this.x+= this.velocity; 
         this.play('mov_bala', true); 
         if(this.scene.physics.overlap(this.scene.player, this)){
-            this.scene.recibirDanyo(); 
+            this.scene.player.restarVida(); 
             this.destroy(); 
         }
 
