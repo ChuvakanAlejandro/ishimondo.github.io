@@ -8,33 +8,27 @@ body {
 header.cabecera{
     background-image: url( ../img/fondo_cabecera.jpg);  
     background-repeat: no-repeat;
-    background-size: cover; 
+    background-size: contain; 
+    display: flex; 
+    flex-direction: row;
     width: Edge 12;
     height: 209px;
     margin-bottom: 6em;
+    min-width: 100vh; 
 }
 
 header.cabecera div.opcion{
   background-color: blue;
+  font-size: 60%;
+  text-align: center;
   margin-left: 60px;
   width: 150;
   height: 75;
-  display: block;
-}
-
-
-div.menu_sup div.opcion h1{
-  font-size: 130%;
-  text-align: center;
-
 }
 
 section.descripcion{
     display: flex;
+    font-size: 130%;
+    text-align: center;
 }
 
-article.parrafo {
-
-    font-size: 160%;
-    color: red; 
-}
