@@ -1,0 +1,90 @@
+import Phaser from 'phaser'
+
+
+export default class Main_Menu extends Phaser.Scene {
+
+    /** 
+      Constructor de la escena 
+    */
+
+    constructor() {
+        super({key: 'main'});
+    }
+
+    init(){
+      
+        this.cursors= this.input.keyboard.createCursorKeys(); 
+        this.indiceBotonAct= 0; 
+    }
+
+
+
+    create() {
+
+        const {width, height} = this.scale; 
+
+        const playOption= this.add.image(width* 0.3, height*0.7, 'playButton').setDisplaySize(100,100); 
+        const galeryOption= this.add.image( width - (width * 0.3)  ,playOption.y, 'playButton').setDisplaySize(100,100); 
+
+
+        playOption.on('pulsado', () => {
+            this.scene.start('level'); 
+        }); 
+
+        this.buttons = [
+            playOption,
+            galeryOption
+        ]; 
+
+
+        this.seleccionarBoton(0); 
+    }
+
+    update() {
+        if(Phaser.Input.Keyboard.JustDown(this.cursors.left)){
+            this.siguienteBoton(); 
+        }
+
+        else if(Phaser.Input.Keyboard.JustDown(this.cursors.right)){
+            this.siguienteBoton();
+        }
+
+        else if(Phaser.Input.Keyboard.JustDown(this.cursors.space)){ //El jugador presiona un boton 
+            this.escoger(); 
+        }
+
+    }
+
+    siguienteBoton(c = 1) {
+        let index= this.indiceBotonAct + c;
+
+        if(index >= this.buttons.length){
+            index= 0; 
+        }
+
+        else if(index < 0){
+            index= this.buttons.length - 1; 
+        }
+
+        this.seleccionarBoton(index); 
+
+    }
+
+    seleccionarBoton(indice) {
+        const botonAct= this.buttons[this.indiceBotonAct]; 
+        
+        botonAct.setTint(0xffffff); 
+
+        const boton= this.buttons[indice]; 
+
+        boton.setTint(0x66ff7f); 
+
+
+        this.indiceBotonAct= indice; 
+    }
+
+    escoger() {
+        const boton= this.buttons[this.indiceBotonAct]; 
+        boton.emit('pulsado'); 
+    }
+}

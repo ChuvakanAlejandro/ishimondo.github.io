@@ -11,6 +11,8 @@ import ishi from '../assets/animations/Ishi_sprites.png'
 import background from '../assets/sprites/background.jpg'
 import seta_poison from '../assets/animations/seta_venenosa.png'
 import proyectil from '../assets/animations/proyectil.png'
+import playButton from '../assets/sprites/playButton.jpg'
+
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
  * Esta escena se puede mejorar añadiendo una imagen del juego y una 
@@ -33,6 +35,7 @@ export default class Boot extends Phaser.Scene {
     // Con setPath podemos establecer el prefijo que se añadirá a todos los load que aparecen a continuación
     this.load.setPath('assets/sprites/');
     this.load.image('background', background);
+    this.load.image('playButton', playButton); 
     this.load.image('platform', platform);
     this.load.image('base', base);
     this.load.image('star', star);
@@ -51,6 +54,6 @@ export default class Boot extends Phaser.Scene {
    * nivel del juego
    */
   create() {
-    this.scene.start('level');
+    this.scene.start('main');
   }
 }

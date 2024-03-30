@@ -5,7 +5,6 @@ import Proyectil_Seta from './proyectil.js';
 import Enemigo from './Enemigo.js';
 
 
-
 export default class Poison_Seta extends Enemigo{
     /**
    * Constructor de la seta 

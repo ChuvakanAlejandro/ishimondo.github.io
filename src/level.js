@@ -28,7 +28,7 @@ export default class Level extends Phaser.Scene {
         this.stars = 10;
         this.bases = this.add.group();
         this.player = new Player(this, 150, 200);
-        this.seta1= new Poison_Seta(this, 200,100, false);
+        this.seta1= new Poison_Seta(this, 200,100, true);
 
       
         
