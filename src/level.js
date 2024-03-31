@@ -12,6 +12,7 @@ import Wall from './wall.js';
  * El juego termina cuando el jugador ha recogido 10 estrellas.
  * @extends Phaser.Scene
  */
+
 export default class Level extends Phaser.Scene {
     /**
      * Constructor de la escena
@@ -24,6 +25,8 @@ export default class Level extends Phaser.Scene {
      * Creación de los elementos de la escena principal de juego
      */
     create() {
+        this.enter_key= this.input.keyboard.addKey('Enter'); 
+
         this.add.image(1000,1000,'background');
         this.stars = 10;
         this.bases = this.add.group();
@@ -94,7 +97,13 @@ export default class Level extends Phaser.Scene {
         
     }
 
-    
+    update(t,dt){
+        super.update(t,dt);
+        
+        if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter 
+            this.scene.stop(); 
+        }
+    }
 
 
 }
