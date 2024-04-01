@@ -1,5 +1,7 @@
 import Star from './star.js';
 import Phaser from 'phaser'
+import game from './game.js'; 
+
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
@@ -13,55 +15,102 @@ export default class Player extends Phaser.GameObjects.Sprite {
    * @param {number} y Coordenada Y
    */
   constructor(scene, x, y) {
+
     super(scene, x, y, 'ishi');
     this.setOrigin(0,0.5);
     this.score = 0;
+    this.vida= 4; 
+    console.log("Vida actual:  " + this.vida); 
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     // Queremos que el jugador no se salga de los límites del mundo
     this.body.setCollideWorldBounds(true);
 
 
+    this.body.setSize(35, 90);
+    this.body.setOffset(46, 30);
+
+    /*Declaracion e inicializacion de parametros*/ 
+    this.vida= 4;  //Vida
+    this.speed = 300; //Velocidad (en modo Levantado por defecto)
+    this.speed_actual = 0;
+    this.jumpSpeed = -600; //Velocidad del salto
+    this.modo= "LEVANTADO"; //Modo del personaje (Levantado por defecto)
+    
+    // Esta label es la UI en la que pondremos la puntuación del jugador
+    this.label = this.scene.add.text(10, 10, "");
+
+
+    //Mapeo de controles
+    this.mapeoTeclas(); 
+
+    //Creamos las animaciones
+    this.setAnimaciones(); 
+
+    //Interface de vida 
+    const vida= this.scene.add.image(900,450,'hud_vida'); 
+    vida.setDepth(1000);
+
+    //Inteface de habilidad
+    const barra= this.scene.add.image(950,430,'hud_skill_bar'); 
+
+    barra.setDepth(1000); 
+    
+    this.cambioVelocidad();
+    
+
+    /*TODO Collider con grupo de enemigos
+        this.scene.physics.add.collider(this, this.scene.enemies, (o1, o2) => {
+              if(o1.modo=== "ATACANDO") {
+                  o2.morir(); 
+              }          
+        })
+    */
+  }
+
+
+  /*
+    CREA LAS ANIMACIONES CORRESPONDIENTES DEL PERSONAJE 
+  */
+  
+  setAnimaciones(){
+      
     /*
       Animacion de idle
     */
 
     this.anims.create({
-        key: 'idle_ishi',
-        frames: this.anims.generateFrameNumbers('ishi', {start: 0, end: 5}),
-        frameRate: 5,
-        repeat: -1 
+      key: 'idle_ishi',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 0, end: 5}),
+      frameRate: 5,
+      repeat: -1 
     });
-    
-    /*
-      Animacion de agacharse
-    */
+  
+  /*
+    Animacion de agacharse
+  */
 
     this.anims.create({
       key: 'ishi_crouch',
       frames: this.anims.generateFrameNumbers('ishi', {start: 6, end: 11}),
       frameRate: 10,
       repeat: -1 
-  });
+    });
 
   /*
     Animacion de correr 
   */
+    this.anims.create({
+      key: 'ishi_running',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 43, end: 48}),
+      frameRate: 10,
+      repeat: -1  
+    });
 
-
-  this.anims.create({
-    key: 'ishi_running',
-    frames: this.anims.generateFrameNumbers('ishi', {start: 43, end: 48}),
-    frameRate: 10,
-    repeat: -1 
-  });
-  
   /*
     Animacion de saltar 
   */
-
-
-  this.anims.create({
+    this.anims.create({
       key: 'ishi_jumping',
       frames: this.anims.generateFrameNumbers('ishi', {start: 27, end: 30}),
       frameRate: 20,
@@ -144,8 +193,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.label.text= 'Velocidad actual: ' + this.speed; 
   }
 
+  /*
+    SET DE LAS TECLAS DE MOVIMIENTO DEL PERSONAJE 
+  */
 
   mapeoTeclas() {
+
+    /*Tecla para el ataque básico*/ 
+    this.keyP= this.scene.input.keyboard.addKey('P'); 
+
+    /*Tecla para trepar paredes especiales*/ 
+    this.keyW= this.scene.input.keyboard.addKey('W'); 
 
     /*Tecla para ir hacia la derecha*/ 
     this.keyD= this.scene.input.keyboard.addKey('D'); 
