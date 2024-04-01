@@ -25,23 +25,26 @@ export default class Level extends Phaser.Scene {
     create() {
         this.stars = 10;
         this.bases = this.add.group();
-        this.player = new Player(this, 1000, 1000);
+        this.climbableWalls = this.add.group();
+        this.player = new Player(this, 1000, 0);
+        this.cameras.main.setBounds(0, 0, 2000, 2000);
+        this.physics.world.setBounds(0, 0, 2000, 2000);
 
-
+        new Platform(this, this.player, this.bases, 0, 1250);
+        new Platform(this, this.player, this.bases, 250, 1250);
+        new Platform(this, this.player, this.bases, 500, 1250);
+        new Platform(this, this.player, this.bases, 750, 1250);
         new Platform(this, this.player, this.bases, 1000, 1250);
         new Platform(this, this.player, this.bases, 1250, 1250);
         new Platform(this, this.player, this.bases, 1500, 1250);
         new Platform(this, this.player, this.bases, 1750, 1250);
-        new Wall(this,this.player,1900,1150);
-        new Wall(this,this.player,1600,950);
+        new Wall(this, this.player, 1850, 1050, true);
+        new Platform(this, this.player, this.bases, 1750, 50);
+        new Platform(this, this.player, this.bases, 2050, 150);
        
 
-        this.cameras.main.startFollow(this.player);
+        this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
         
-    }
-    
-    canClimbWall(){
-        this.player.paredTrepable(true);
     }
     
 
