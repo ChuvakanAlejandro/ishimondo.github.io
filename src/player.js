@@ -607,24 +607,26 @@ export default class Player extends Phaser.GameObjects.Sprite {
   preUpdate(t,dt) {
     super.preUpdate(t,dt);
     if(this.body.onFloor() && (this.modo=="LEVANTADO" || this.modo=="AGACHADO")){
-      if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { //De base, SHIFT cambiara de modo
-        console.log("Se pulso la tecla shift"); 
-        if(this.trepable && (this.bloqueadoDr || this.bloqueadoIz)){//CAMBIANDO A MODO COLGANDO si encuentro una pared trepable y estoy bloqueado por ella
-          this.meAgarroPared();
-        
-        }else if(! (this.bloqueadoDr || this.bloqueadoIz)){
+      if(!this.atacando){
+        if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { //De base, SHIFT cambiara de modo
+          console.log("Se pulso la tecla shift"); 
+          if(this.trepable && (this.bloqueadoDr || this.bloqueadoIz)){//CAMBIANDO A MODO COLGANDO si encuentro una pared trepable y estoy bloqueado por ella
+            this.meAgarroPared();
+          
+          }else if(! (this.bloqueadoDr || this.bloqueadoIz)){
+            this.modo_ant = this.modo;
+            this.cambiaModo(this.modo);
+          }
+        }else if (Phaser.Input.Keyboard.JustDown(this.keySpace)) {//Cambiando a SALTANDO
+          this.body.setVelocityY(this.jumpSpeed);
           this.modo_ant = this.modo;
-          this.cambiaModo(this.modo);
+          this.modo = "SALTANDO";
         }
-      }else if (Phaser.Input.Keyboard.JustDown(this.keySpace)) {//Cambiando a SALTANDO
-        this.body.setVelocityY(this.jumpSpeed);
-        this.modo_ant = this.modo;
-        this.modo = "SALTANDO";
+        this.movimientoSuelo();
+        if(Phaser.Input.Keyboard.JustDown(this.keyP)) {
+          this.logicaAtaque();
+        }
       }
-      this.movimientoSuelo();
-      if(Phaser.Input.Keyboard.JustDown(this.keyP)) {
-        this.logicaAtaque();
-     }
     }else if(!this.body.onFloor() && this.modo=="SALTANDO"){//HE SALTADO Y ESTOY EN EL AIRE
       this.body.setSize(35, 60);
       this.body.setOffset(46, 60);

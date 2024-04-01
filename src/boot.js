@@ -1,5 +1,4 @@
 import Phaser from 'phaser'
-
 import wall from '../assets/sprites/wall.png'
 import platform from '../assets/sprites/platform.png'
 import base from '../assets/sprites/base.png'
@@ -8,9 +7,9 @@ import player from '../assets/sprites/Ishi.png'
 import hud_vida from '../assets/sprites/hud_vida.png'
 import hud_skill_bar from '../assets/sprites/hud_skill_bar.png'
 import ishi from '../assets/animations/Ishi_sprites.png'
-import background from '../assets/sprites/background.jpg'
 import seta_poison from '../assets/animations/seta_venenosa.png'
 import proyectil from '../assets/animations/proyectil.png'
+import background from '../assets/sprites/background.jpg'
 import Button from '../assets/sprites/button.png'
 
 /**

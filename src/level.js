@@ -32,10 +32,10 @@ export default class Level extends Phaser.Scene {
         this.bases = this.add.group();
         this.climbableWalls = this.add.group();
         this.player = new Player(this, 1000, 0);
+        this.seta1= new Poison_Seta(this, 600, 1000, true);
         this.cameras.main.setBounds(0, 0, 2000, 2000);
         this.physics.world.setBounds(0, 0, 2000, 2000);
 
-        this.seta1= new Poison_Seta(this, 200,100, true);
         this.enemies= this.physics.add.group(); 
         this.enemies.add(this.seta1);
 
@@ -49,17 +49,17 @@ export default class Level extends Phaser.Scene {
             else obj1.restarVida();
         }
 
-        new Platform(this, this.player, this.bases, 0, 1250);
-        new Platform(this, this.player, this.bases, 250, 1250);
-        new Platform(this, this.player, this.bases, 500, 1250);
-        new Platform(this, this.player, this.bases, 750, 1250);
-        new Platform(this, this.player, this.bases, 1000, 1250);
-        new Platform(this, this.player, this.bases, 1250, 1250);
-        new Platform(this, this.player, this.bases, 1500, 1250);
-        new Platform(this, this.player, this.bases, 1750, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 0, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 250, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 500, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 750, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 1000, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 1250, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 1500, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 1750, 1250);
         new Wall(this, this.player, 1850, 1050, true);
-        new Platform(this, this.player, this.bases, 1750, 50);
-        new Platform(this, this.player, this.bases, 2050, 150);
+        new Platform(this, this.player, this.seta1, this.bases, 1750, 50);
+        new Platform(this, this.player, this.seta1, this.bases, 2050, 150);
        
 
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
