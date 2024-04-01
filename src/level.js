@@ -21,13 +21,24 @@ export default class Level extends Phaser.Scene {
         super({ key: 'level' });
     }
     preload(){
-        this.load.tilemapTiledJSON('prueba', mapa_prueba); 
-        this.load.image('patronesPrueba', patrones_prueba);
+        this.load.image('tileset', '../assets/maps/patrones_prueba.png');
+        this.load.tilemapTiledJSON('prueba', '../assets/maps/nivelPrueba.json'); 
     }
     /**
      * Creación de los elementos de la escena principal de juego
      */
     create() {
+    
+        this.mapa= this.make.tilemap({
+            key: 'prueba',
+            tileWidth: 16,
+            tileHeight: 16
+        }); 
+
+        const tileset= this.mapa.addTilesetImage('tileset', 'tileset'); 
+        this.groundLayer= this.mapa.create('Ground', tileset); 
+
+        /*
         this.enter_key= this.input.keyboard.addKey('Enter'); 
 
         this.add.image(1000,1000,'background');
@@ -35,9 +46,6 @@ export default class Level extends Phaser.Scene {
         this.bases = this.add.group();
         this.player = new Player(this, 150, 200);
         this.seta1= new Poison_Seta(this, 200,100, true);
-
-      
-        
 
         this.enemies= this.physics.add.group(); 
         this.enemies.add(this.seta1);
@@ -60,7 +68,7 @@ export default class Level extends Phaser.Scene {
 
         //Sirve para que la camara siga al jugador 
         this.cameras.main.startFollow(this.player);
-    
+        */
     }
   
 
