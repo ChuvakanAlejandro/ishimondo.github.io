@@ -20,7 +20,10 @@ export default class Level extends Phaser.Scene {
     constructor() {
         super({ key: 'level' });
     }
-
+    preload(){
+        this.load.tilemapTiledJSON('prueba', mapa_prueba); 
+        this.load.image('patronesPrueba', patrones_prueba);
+    }
     /**
      * Creación de los elementos de la escena principal de juego
      */

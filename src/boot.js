@@ -12,6 +12,8 @@ import background from '../assets/sprites/background.jpg'
 import seta_poison from '../assets/animations/seta_venenosa.png'
 import proyectil from '../assets/animations/proyectil.png'
 import Button from '../assets/sprites/button.png'
+import mapa_prueba from '../assets/maps/mapa_prueba.json'
+import patrones_prueba from '../assets/maps/patrones_prueba.png'
 
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
@@ -63,6 +65,7 @@ export default class Boot extends Phaser.Scene {
     /*Carga de fuentes*/ 
 
     this.loadFont("Retro", "../assets/fonts/Retro_Computer.ttf"); 
+
   }
 
   /**
@@ -70,6 +73,12 @@ export default class Boot extends Phaser.Scene {
    * nivel del juego
    */
   create() {
+    this.map= this.make.tilemap({
+      key: 'prueba',
+      tileWidth: 16 ,
+      tileHeight: 16
+    }); 
+
     this.scene.start('main');
   }
 }
