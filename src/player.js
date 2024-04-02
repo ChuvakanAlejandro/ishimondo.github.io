@@ -47,25 +47,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     //Creamos las animaciones
     this.setAnimaciones(); 
 
-    //Interface de vida 
-    const vida= this.scene.add.image(900,450,'hud_vida'); 
-    vida.setDepth(1000);
-
-    //Inteface de habilidad
-    const barra= this.scene.add.image(950,430,'hud_skill_bar'); 
-
-    barra.setDepth(1000); 
-    
+  
     this.cambioVelocidad();
     
-
-    /*TODO Collider con grupo de enemigos
-        this.scene.physics.add.collider(this, this.scene.enemies, (o1, o2) => {
-              if(o1.modo=== "ATACANDO") {
-                  o2.morir(); 
-              }          
-        })
-    */
   }
 
 
@@ -283,10 +267,20 @@ export default class Player extends Phaser.GameObjects.Sprite {
  */
 
  restarVida(){
-  this.vida--;
+    this.vida--;
      console.log("Vida actual " + this.vida); 
-     this.x-= 75; 
+     switch(this.flipX){
+        case true: 
+          this.x+= 75; 
+        break; 
+
+        case false: 
+          this.x-= 75;
+        break; 
+     }
+     
      if(this.vida== 0){ //PANTALLA DE GAMEOVER
+        this.scene.scene.start('end'); 
      }
 
   }

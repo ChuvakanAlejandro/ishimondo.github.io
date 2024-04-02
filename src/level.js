@@ -63,7 +63,6 @@ export default class Level extends Phaser.Scene {
        
 
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
-        
     }
     
 
