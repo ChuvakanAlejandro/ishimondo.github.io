@@ -25,17 +25,30 @@ export default class Level extends Phaser.Scene {
      * Creación de los elementos de la escena principal de juego
      */
     create() {
+        const {width, height}= this.scale; 
+
         this.enter_key= this.input.keyboard.addKey('Enter'); 
 
         this.add.image(1000,1000,'background');
         this.stars = 10;
         this.bases = this.add.group();
         this.climbableWalls = this.add.group();
-        this.player = new Player(this, 1000, 0);
-        this.seta1= new Poison_Seta(this, 600, 1000, true);
+      
         this.cameras.main.setBounds(0, 0, 2000, 2000);
+
+
+
+        this.textoVida= this.add.text(width*0.5, height*0.5, "Vida actual: 4");  
+        this.textoVida.setScrollFactor(1,1); 
+        this.textoVida.setOrigin(0.5,0.5); 
+
+
+
         this.physics.world.setBounds(0, 0, 2000, 2000);
 
+
+        this.player = new Player(this, this.cameras.main.centerX, 600);
+        this.seta1= new Poison_Seta(this, 600, 1000, true);
         this.enemies= this.physics.add.group(); 
         this.enemies.add(this.seta1);
 
@@ -46,7 +59,10 @@ export default class Level extends Phaser.Scene {
             if((obj1.body.blocked.down|| obj2.body.blocked.up) && obj2.aplastable){
                 obj2.morir(); 
             }
-            else obj1.restarVida();
+            else{
+            
+                obj1.restarVida();
+            } 
         }
 
         new Platform(this, this.player, this.seta1, this.bases, 0, 1250);
@@ -63,6 +79,7 @@ export default class Level extends Phaser.Scene {
        
 
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
+      
     }
     
 

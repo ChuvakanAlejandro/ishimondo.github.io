@@ -156,11 +156,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
    this.on('animationcomplete-ishi_Golpe1', () => {
      switch(this.flipX){
        case true: 
-         this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 20,40); 
+         this.hitboxAttack= this.scene.add.zone(this.x - 10, this.y+15, 20,40); 
        break; 
 
        case false: 
-         this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y-10, 20,40); 
+         this.hitboxAttack= this.scene.add.zone(this.x + 125, this.y-10, 20,40); 
        break; 
     }
 
@@ -197,11 +197,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     switch(this.flipX){
        case true: 
-         this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 20,40); 
+         this.hitboxAttack= this.scene.add.zone(this.x - 10, this.y+15, 20,40); 
        break; 
 
        case false: 
-         this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y+15, 20,40); 
+         this.hitboxAttack= this.scene.add.zone(this.x +125, this.y+15, 20,40); 
        break; 
     }
 
@@ -290,7 +290,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
    * Actualiza la UI con la puntuación actual
    */
   cambioVelocidad() {
-    this.label.text= 'Velocidad actual: ' + this.speed; 
+    this.label.text= 'Velocidad actual: ' + this.speed;
   }
 
   /*

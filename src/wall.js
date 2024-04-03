@@ -31,6 +31,7 @@ export default class Wall extends Phaser.GameObjects.Sprite {
         }
         this.trepable = trepable;
         this.body.setSize(32, 500);
+        this.setTint= 0x66ff7f; 
         this.label = this.scene.add.text(this.x, this.y+this.altura, "BOTTOM WALL");
         this.label = this.scene.add.text(this.x, this.y-this.altura, "TOP WALL");
         //Colisionador entre la pared y el personaje 
