@@ -21,10 +21,29 @@ export default class Level extends Phaser.Scene {
         super({ key: 'level' });
     }
 
+
+    prelooad(){
+        this.load.tilemapTiledJSON('tilemap', '../assets/maps/nivel1.json'); //CARGA DEL ARCHIVO DEL TILEMAP (NO LO CREA) 
+        this.load.image('Terrain' , '../assets/maps/Terrain.png'); //CARGA DEL ATLAS DE PATRONES 
+    }
+
+
+
     /**
      * Creación de los elementos de la escena principal de juego
      */
     create() {
+        /*AHORA SI CREAMOS EL TILEMAP */
+
+        this.mapa= this.make.tilemap({ 
+            key: 'tilemap',
+            tileWidth: 16  ,
+            tileHeight: 16
+        }); 
+        
+        const tileset1= this.mapa.addTilesetImage()
+
+        /*
         const {width, height}= this.scale; 
 
         this.enter_key= this.input.keyboard.addKey('Enter'); 
@@ -79,7 +98,7 @@ export default class Level extends Phaser.Scene {
        
 
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
-      
+      */
     }
     
 
