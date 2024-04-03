@@ -20,33 +20,35 @@ export default class Level extends Phaser.Scene {
     constructor() {
         super({ key: 'level' });
     }
-    preload(){
-        this.load.image('tileset', '../assets/maps/patrones_prueba.png');
-        this.load.tilemapTiledJSON('prueba', '../assets/maps/nivelPrueba.json'); 
-    }
+
     /**
      * Creación de los elementos de la escena principal de juego
      */
     create() {
-    
-        this.mapa= this.make.tilemap({
-            key: 'prueba',
-            tileWidth: 16,
-            tileHeight: 16
-        }); 
+        const {width, height}= this.scale; 
 
-        const tileset= this.mapa.addTilesetImage('tileset', 'tileset'); 
-        this.groundLayer= this.mapa.create('Ground', tileset); 
-
-        /*
         this.enter_key= this.input.keyboard.addKey('Enter'); 
 
         this.add.image(1000,1000,'background');
         this.stars = 10;
         this.bases = this.add.group();
-        this.player = new Player(this, 150, 200);
-        this.seta1= new Poison_Seta(this, 200,100, true);
+        this.climbableWalls = this.add.group();
+      
+        this.cameras.main.setBounds(0, 0, 2000, 2000);
 
+
+
+        this.textoVida= this.add.text(width*0.5, height*0.5, "Vida actual: 4");  
+        this.textoVida.setScrollFactor(1,1); 
+        this.textoVida.setOrigin(0.5,0.5); 
+
+
+
+        this.physics.world.setBounds(0, 0, 2000, 2000);
+
+
+        this.player = new Player(this, this.cameras.main.centerX, 600);
+        this.seta1= new Poison_Seta(this, 600, 1000, true);
         this.enemies= this.physics.add.group(); 
         this.enemies.add(this.seta1);
 
@@ -57,31 +59,29 @@ export default class Level extends Phaser.Scene {
             if((obj1.body.blocked.down|| obj2.body.blocked.up) && obj2.aplastable){
                 obj2.morir(); 
             }
-            else obj1.restarVida();
+            else{
+            
+                obj1.restarVida();
+            } 
         }
 
-        new Platform(this, this.player, this.seta1, this.bases, 150, 350);
-        new Wall (this, this.player, 500,350);
-        new Wall (this, this.player, 500,250); 
-        new Platform(this, this.player, this.seta1, this.bases, 700, 150);
-        new Platform(this, this.player, this.seta1, this.bases, 1500, 150);
+        new Platform(this, this.player, this.seta1, this.bases, 0, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 250, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 500, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 750, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 1000, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 1250, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 1500, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 1750, 1250);
+        new Wall(this, this.player, 1850, 1050, true);
+        new Platform(this, this.player, this.seta1, this.bases, 1750, 50);
+        new Platform(this, this.player, this.seta1, this.bases, 2050, 150);
+       
 
-        //Sirve para que la camara siga al jugador 
-        this.cameras.main.startFollow(this.player);
-        */
+        this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
+      
     }
-  
-
-    climbWall(wall){
-        if((this.player.body.blocked.left || this.player.body.blocked.right)){
-            if(this.player.keyW.isDown){ this.player.body.setVelocityY(this.player.jumpSpeed/3);}
-            else if(Phaser.Input.Keyboard.JustDown(this.player.keySpace)){ 
-                this.player.body.setVelocityY(this.player.jumpSpeed/2);
-                this.player.body.setVelocityX(-this.player.jumpSpeed/2);
-            }
-            else{this.player.body.setVelocityY(0);}
-        }
-    }
+    
 
     /**
      * Genera una estrella en una de las bases del escenario

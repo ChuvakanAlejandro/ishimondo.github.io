@@ -1,17 +1,16 @@
 import Phaser from 'phaser'
-
 import wall from '../assets/sprites/wall.png'
 import platform from '../assets/sprites/platform.png'
 import base from '../assets/sprites/base.png'
 import star from '../assets/sprites/star.png'
 import player from '../assets/sprites/Ishi.png'
-import hud_vida from '../assets/sprites/hud_vida.png'
-import hud_skill_bar from '../assets/sprites/hud_skill_bar.png'
+import hud_player from '../assets/sprites/interfaz_player.png'
 import ishi from '../assets/animations/Ishi_sprites.png'
-import background from '../assets/sprites/background.jpg'
 import seta_poison from '../assets/animations/seta_venenosa.png'
 import proyectil from '../assets/animations/proyectil.png'
+import background from '../assets/sprites/background.jpg'
 import Button from '../assets/sprites/button.png'
+
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
  * Esta escena se puede mejorar añadiendo una imagen del juego y una 
@@ -51,8 +50,7 @@ export default class Boot extends Phaser.Scene {
     this.load.image('star', star);
     this.load.image('player', player);
     this.load.image('wall', wall)
-    this.load.image('hud_vida', hud_vida ); 
-    this.load.image('hud_skill_bar', hud_skill_bar ); 
+    this.load.image('hud_player', hud_player ); 
     this.load.image('bala_seta', proyectil);
     this.load.spritesheet('ishi', ishi,{frameWidth:128,frameHeight:128});
     this.load.spritesheet('seta_bosque', seta_poison, {frameWidth: 96 ,frameHeight: 96}); 
@@ -62,7 +60,6 @@ export default class Boot extends Phaser.Scene {
     /*Carga de fuentes*/ 
 
     this.loadFont("Retro", "../assets/fonts/Retro_Computer.ttf"); 
-
   }
 
   /**
@@ -70,7 +67,6 @@ export default class Boot extends Phaser.Scene {
    * nivel del juego
    */
   create() {
-
     this.scene.start('main');
   }
 }
