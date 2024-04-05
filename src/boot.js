@@ -10,6 +10,8 @@ import seta_poison from '../assets/animations/seta_venenosa.png'
 import proyectil from '../assets/animations/proyectil.png'
 import background from '../assets/sprites/background.jpg'
 import Button from '../assets/sprites/button.png'
+import Bosque from '../assets/maps/bosque.png'
+import tilemap from '../assets/maps/nivel1.json'
 
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
@@ -56,10 +58,12 @@ export default class Boot extends Phaser.Scene {
     this.load.spritesheet('seta_bosque', seta_poison, {frameWidth: 96 ,frameHeight: 96}); 
     this.load.spritesheet('proyectil_seta', proyectil, {frameWidth: 38  ,frameHeight: 14}); 
 
+    this.load.tilemapTiledJSON('tilemap', tilemap); //CARGA DEL ARCHIVO DEL TILEMAP (NO LO CREA) 
+    this.load.image('Bosque' , Bosque); //CARGA DEL ATLAS DE PATRONES 
 
     /*Carga de fuentes*/ 
 
-    this.loadFont("Retro", "../assets/fonts/Retro_Computer.ttf"); 
+    
   }
 
   /**
@@ -67,6 +71,6 @@ export default class Boot extends Phaser.Scene {
    * nivel del juego
    */
   create() {
-    this.scene.start('main');
+    this.scene.start('level');
   }
 }
