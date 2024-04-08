@@ -1,51 +1,62 @@
 import Phaser from 'phaser'
 
 
-export default class Main_Menu extends Phaser.Scene {
+export default class Pause_Menu extends Phaser.Scene {
 
     /** 
       Constructor de la escena 
     */
 
     constructor() {
-        super({key: 'main'});
+        super({key: 'pause'});
     }
 
-    init(){
-      
+
+    init(datos){
+        this.ant_escena= datos.nombre_escena;  
         this.cursors= this.input.keyboard.createCursorKeys(); 
+        this.enter_key= this.input.keyboard.addKey('Enter'); 
+
         this.indiceBotonAct= 0; 
     }
-
 
 
     create() {
 
         const {width, height} = this.scale;
+        this.labelPausa= this.add.text(width* 0.45, height*0.3, 'PAUSA',{fontFamily: "RetroFont", fontSize:50}); 
 
-        /*Texto con el nombre del juego */
-        this.add.text(width* 0.35, height*0.3, 'ISHIMONDO',{fontFamily: "RetroFont", fontSize:50}); 
+        const exitOption= this.add.image(width* 0.3, height*0.7, 'button').setDisplaySize(250,100); 
+        
+        this.add.text(exitOption.x, exitOption.y, 'SALIR DEL NIVEL', {fontFamily: "RetroFont", fontSize: 20}).setOrigin(0.5); 
 
-        /*Botones de opcion*/ 
-        const playOption= this.add.image(width* 0.3, height*0.7, 'button').setDisplaySize(250,100); 
-        const galeryOption= this.add.image( width - (width * 0.3)  ,playOption.y, 'button').setDisplaySize(250,100); 
-        this.add.text(playOption.x, playOption.y, 'JUGAR', {fontFamily: "RetroFont", fontSize: 30}).setOrigin(0.5); 
-        this.add.text(galeryOption.x,galeryOption.y, 'GALERIA', {fontFamily: "RetroFont", fontSize: 30 }).setOrigin(0.5); 
-
-        playOption.on('pulsado', () => {
-            this.scene.start('level'); 
+        exitOption.on('pulsado', () => {
+            this.scene.stop(this.ant_escena); 
+            this.scene.start('main'); 
         }); 
 
-        this.buttons = [
-            playOption,
-            galeryOption
-        ]; 
 
+        let timer = this.time.addEvent( {
+            delay: 750, 
+            callback: this.toggleText,
+            callbackScope: this,  
+            loop: true
+        });
+        
+        this.buttons= [
+            exitOption
+        ]; 
 
         this.seleccionarBoton(0); 
     }
 
     update() {
+        if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter 
+            this.scene.stop(); 
+            this.scene.resume(this.ant_escena); //Volvemos al gameplay
+        }
+
+
         if(Phaser.Input.Keyboard.JustDown(this.cursors.left)){
             this.siguienteBoton(); 
         }
@@ -58,6 +69,11 @@ export default class Main_Menu extends Phaser.Scene {
             this.escoger(); 
         }
 
+    }
+
+
+    toggleText(){
+        this.labelPausa.setVisible(!this.labelPausa.visible);
     }
 
     siguienteBoton(c = 1) {
@@ -92,4 +108,7 @@ export default class Main_Menu extends Phaser.Scene {
         const boton= this.buttons[this.indiceBotonAct]; 
         boton.emit('pulsado'); 
     }
+
+
+
 }

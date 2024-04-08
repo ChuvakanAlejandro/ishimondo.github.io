@@ -60,8 +60,8 @@ export default class Level extends Phaser.Scene {
             
             else if(objeto.type === 'Seta') {
                 let seta_aux= new Poison_Seta(this, objeto.x, objeto.y -100, true);
-                //seta_aux.setScale(0.5); 
-               // this.enemies.add(seta_aux);
+                seta_aux.setScale(0.5); 
+                this.enemies.add(seta_aux);
             }
 
             else if(objeto.type === 'Pared_escalable'){
@@ -90,11 +90,12 @@ export default class Level extends Phaser.Scene {
             } 
         }
 
+        this.enter_key= this.input.keyboard.addKey('Enter'); 
 
         /*
         const {width, height}= this.scale; 
 
-        this.enter_key= this.input.keyboard.addKey('Enter'); 
+        
 
         this.add.image(1000,1000,'background');
         this.stars = 10;
@@ -174,9 +175,11 @@ export default class Level extends Phaser.Scene {
         if(this.physics.collide(this.foregroundLayer, this.player)){
             this.foregroundLayer.destroy(); 
         }
-        /*if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter 
-            this.scene.stop(); 
-        }*/
+        if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter 
+            this.scene.pause();
+            this.scene.launch('pause', {nombre_escena: 'level'}).pause;  
+            this.scene.bringToTop('pause'); 
+        }
     }
 
 
