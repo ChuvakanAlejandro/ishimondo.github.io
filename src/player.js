@@ -32,11 +32,22 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     /*Declaracion e inicializacion de parametros*/ 
     this.vida= 4;  //Vida
+    this.energia = 8;
     this.speed = 300; //Velocidad (en modo Levantado por defecto)
+    this.dashSpeed = 700;
     this.speed_actual = 0;
-    this.jumpSpeed = -600; //Velocidad del salto
+    this.jumpSpeed = -600;
+    this.modo_ant= "LEVANTADO"; 
     this.modo= "LEVANTADO"; //Modo del personaje (Levantado por defecto)
-    
+    this.atacando = false;
+    this.dash = false;
+    this.trepable = false;
+    this.escalando = false;
+    this.bloqueadoIz = false;
+    this.bloqueadoDr = false;
+    this.yParedTop = 0;
+    this.yParedBottom = 0;
+
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
 
@@ -47,17 +58,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
     //Creamos las animaciones
     this.setAnimaciones(); 
 
-    //Interface de vida 
-    const vida= this.scene.add.image(900,450,'hud_vida'); 
-    vida.setDepth(1000);
+    this.play('idle_ishi', true);
 
-    //Inteface de habilidad
-    const barra= this.scene.add.image(950,430,'hud_skill_bar'); 
-
-    barra.setDepth(1000); 
+    this.body.setSize(35, 90);
+    this.body.setOffset(46, 30);
+    this.setOrigin(0.5,0.5);
+    
+    // Esta label es la UI en la que pondremos la puntuación del jugador
+    this.label = this.scene.add.text(this.x, this.y, "");
+    this.mapeoTeclas(); 
     
     this.cambioVelocidad();
-    
 
     /*TODO Collider con grupo de enemigos
         this.scene.physics.add.collider(this, this.scene.enemies, (o1, o2) => {
@@ -107,6 +118,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
       repeat: -1  
     });
 
+   /*
+    Animacion de andar 
+  */
+    this.anims.create({
+      key: 'ishi_walking',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 86, end: 91}),
+      frameRate: 6,
+      repeat: -1  
+    });
+
   /*
     Animacion de saltar 
   */
@@ -128,7 +149,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       frameRate: 15,
       repeat: -1 
   });
-    /*
+  /*
     Animacion de idle trepar
   */
 
@@ -138,19 +159,71 @@ export default class Player extends Phaser.GameObjects.Sprite {
       frames: this.anims.generateFrameNumbers('ishi', {start: 78, end: 81}),
       frameRate: 5,
       repeat: -1 
-  });
+    });
 
-  /*
-    Animacion de caer
-  */
+    /*
+      Animacion de bajar el muro
+    */
+
+
+    this.anims.create({
+      key: 'ishi_climb_down',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 82, end: 85}),
+      frameRate: 5,
+      repeat: -1 
+    });
+
+    //Ishi termina de subir la pared
+    /*this.anims.create({
+      key: 'ishi_wall_grip',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 97, end: 98 }),
+      frameRate: 5,
+      repeat: 0
+    });
+
+    this.on('animationcomplete-ishi_wall_grip', () => {
+      moveTo(this, this.x, this.yParedTop-this.height, 500, 1);
+    }, this);
+    
+    this.anims.create({
+      key: 'ishi_getting_up',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 99, end: 101 }),
+      frameRate: 10,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'ishi_wall_finish',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 102, end: 102 }),
+      frameRate: 5,
+      repeat: 0
+    });*/
+    this.anims.create({
+      key: 'ishi_wall_finish',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 97, end: 102 }),
+      frameRate: 5,
+      repeat: 0
+    }); 
+ 
+    this.on('animationcomplete-ishi_wall_finish', () => {
+      this.body.setAllowGravity(true);
+      this.escalando = false;
+      this.cambiaModo("LEVANTADO");
+      this.bloqueadoDr = false;
+      this.bloqueadoIz = false;
+    }, this);
+
+    /*
+      Animacion de caer
+    */
 
 
     this.anims.create({
       key: 'ishi_falling',
-      frames: this.anims.generateFrameNumbers('ishi', {start: 68, end: 71}),
-      frameRate: 10,
+      frames: this.anims.generateFrameNumbers('ishi', {start: 66, end: 69}),
+      frameRate: 4,
       repeat: 0 
-  });
+    });
   /*
     Animacion de ataque 
   */
@@ -169,112 +242,103 @@ export default class Player extends Phaser.GameObjects.Sprite {
    }); 
 
 
-   this.on('animationcomplete-ishi_Golpe1', () => {
+   this.on('animationcomplete-ishi_preparaGolpe1', () => {
      switch(this.flipX){
        case true: 
-         this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 20,40); 
+         this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 30,60); 
        break; 
 
        case false: 
-         this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y-10, 20,40); 
+         this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y+15, 30,60); 
        break; 
     }
+
+    this.hitboxAttack.setOrigin(0.5,0.5);
 
     this.scene.physics.add.existing(this.hitboxAttack, true); 
     this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
 
     function procesarAtaque(o1, o2){
-       o2.morir(); 
+        o2.morir(); 
     }
-   }, this); 
+    }, this); 
+
+    this.on('animationcomplete-ishi_Golpe1', () => {this.hitboxAttack.destroy()}, this); 
 
 
-   this.anims.create({
-     key: 'ishi_preparaGolpe2',
-     frames: this.anims.generateFrameNumbers('ishi', {start: 56, end: 60 }),
-     frameRate: 20,
-     repeat: 0
+    this.anims.create({
+      key: 'ishi_preparaGolpe2',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 56, end: 60 }),
+      frameRate: 20,
+      repeat: 0
   }); 
-
-  this.on('animationcomplete-ishi_preparaGolpe2', () => {this.hitboxAttack.destroy()}, this); 
 
 
   this.anims.create({
-   key: 'ishi_Golpe2',
-   frames: this.anims.generateFrameNumbers('ishi', {start: 61, end: 63 }),
-   frameRate: 20,
-   repeat: 0
-}); 
+    key: 'ishi_Golpe2',
+    frames: this.anims.generateFrameNumbers('ishi', {start: 61, end: 63 }),
+    frameRate: 20,
+    repeat: 0
+  }); 
 
 
- //Callback para el segundo arañazo que hace ishi 
+  //Callback para el segundo arañazo que hace ishi 
 
-  this.on('animationcomplete-ishi_Golpe2', ()=> {
+  this.on('animationcomplete-ishi_preparaGolpe2', ()=> {
 
     switch(this.flipX){
-       case true: 
-         this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 20,40); 
-       break; 
+        case true: 
+          this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 30,60); 
+        break; 
 
-       case false: 
-         this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y+15, 20,40); 
-       break; 
+        case false: 
+          this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y+15, 30,60); 
+        break; 
     }
+
+    this.hitboxAttack.setOrigin(0.5,0.5);
 
     this.scene.physics.add.existing(this.hitboxAttack, true); 
     this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
 
     function procesarAtaque(o1, o2){
-       o2.morir(); 
+        o2.morir(); 
     }
 
   }, this); 
 
+  this.on('animationcomplete-ishi_Golpe2', () => {this.hitboxAttack.destroy()}, this); 
 
 
- this.anims.create({
-   key: 'ishi_finAtaque',
-   frames: this.anims.generateFrameNumbers('ishi', {start: 64, end: 65 }),
-   frameRate: 20,
-   repeat: 0
- }); 
 
- //Callback para cuando Ishi termina de atacar 
- this.on('animationcomplete-ishi_finAtaque', ()=> {
-    this.atacando= false;
-    this.hitboxAttack.destroy(); 
- }, this); 
-  
-  //Por defecto se ejecuta la animación de idle
-   this.play('idle_ishi', true);
+  this.anims.create({
+    key: 'ishi_finAtaque',
+    frames: this.anims.generateFrameNumbers('ishi', {start: 64, end: 65 }),
+    frameRate: 20,
+    repeat: 0
+  }); 
 
+  //Callback para cuando Ishi termina de atacar 
+  this.on('animationcomplete-ishi_finAtaque', ()=> {this.atacando= false;}, this); 
+
+  //Ishi Dash
+  this.anims.create({
+    key: 'ishi_dash',
+    frames: this.anims.generateFrameNumbers('ishi', {start: 92, end: 96 }),
+    frameRate: 15,
+    repeat: 0
+  }); 
+
+  this.on('animationcomplete-ishi_dash', () => {
+    this.body.setAllowGravity(true);
+    this.dash = false;
+    this.modo = "LEVANTADO";
     this.body.setSize(35, 90);
     this.body.setOffset(46, 30);
-    this.speed = 300;
-    this.speed_actual = 0;
-    this.jumpSpeed = -600;
-    this.modo= "LEVANTADO";
-    this.modo_ant= "LEVANTADO"; 
-    
-    // Esta label es la UI en la que pondremos la puntuación del jugador
-    this.label = this.scene.add.text(this.x, this.y, "");
-    this.mapeoTeclas(); 
-    
+  }, this);
 
-    //Interface de vida 
-    const vida= this.scene.add.image(900,450,'hud_vida'); 
-    vida.setDepth(1000); 
-    //Inteface de habilidad
-    const barra= this.scene.add.image(950,430,'hud_skill_bar'); 
+  //Por defecto se ejecuta la animación de idle
 
-    barra.setDepth(1000); 
-    this.trepable = false;
-    this.bloqueadoIz = false;
-    this.bloqueadoDr = false;
-    this.yParedTop = 0;
-    this.yParedBottom = 0;
-    
-    this.cambioVelocidad();
     
   }
 
@@ -286,6 +350,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
   this.vida--;
      console.log("Vida actual " + this.vida); 
      this.x-= 75; 
+     this.bloqueadoDr = false;
+     this.bloqueadoIz = false;
      if(this.vida== 0){ //PANTALLA DE GAMEOVER
      }
 
@@ -307,6 +373,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     /*Tecla para el ataque básico*/ 
     this.keyP= this.scene.input.keyboard.addKey('P'); 
+
+    /*Tecla para el ataque básico*/ 
+    this.keyO= this.scene.input.keyboard.addKey('O'); 
 
     /*Tecla para trepar paredes especiales*/ 
     this.keyW= this.scene.input.keyboard.addKey('W'); 
@@ -373,36 +442,46 @@ export default class Player extends Phaser.GameObjects.Sprite {
    */
   meAgarroPared(){
     this.trepable = !this.trepable;
+    if(this.bloqueadoDr) this.setFlipX(false);
+    else if(this.bloqueadoIz) this.setFlipX(true);
     this.modo = "COLGANDO";
     this.body.setSize(35, 90);
     this.body.setOffset(46, 30);
     this.body.setAllowGravity(false);//Con esto ya no estare tocando el suelo (al parecer)
   }
   voyTreapando(){
-    if(this.keyW.isDown && this.y > this.yParedTop){
-      this.suboPared();
-    }else if(Phaser.Input.Keyboard.JustDown(this.keyW) && this.y <= this.yParedTop){
-      let subiendoEncima  = this.scene.add.timeline({
-        
-        target: this,
-        ease: 'Linear',
-        duration: 2,
-        run: () => {
-          console.log("pasa")
-      },
-        tweens: [
-            { y: this.yParedTop-this.height },
-            { x: this.x + this.width }
-        ]
-      });
-      subiendoEncima.play();
-    }else if(this.keyS.isDown && this.y < this.yParedBottom){
-      this.bajoPared();
-    }else {//Estoy quieto trepando la pared.
-      this.play('ishi_climb_idle',true);
-      this.body.setVelocityY(0);
-      this.speed_actual = 0;
-    }
+    if(!this.escalando){
+      if(this.keyW.isDown && this.y > this.yParedTop){
+        this.suboPared();
+      }else if(Phaser.Input.Keyboard.JustDown(this.keyW) && this.y <= this.yParedTop){
+        /*
+        let subiendoEncima  = this.scene.add.timeline({
+          
+          target: this,
+          ease: 'Linear',
+          duration: 2,
+          run: () => {
+            console.log("pasa")
+        },
+          tweens: [
+              { y: this.yParedTop-this.height },
+              { x: this.x + this.width }
+          ]
+        });
+        subiendoEncima.play();
+        */
+        moveTo(this, this.x+this.width, this.yParedTop-this.height, 500, 1);
+        //this.play('ishi_wall_grip').chain('ishi_getting_up').chain('ishi_wall_finish');
+        this.play('ishi_wall_finish');
+        this.escalando = true;
+      }else if(this.keyS.isDown && this.y < this.yParedBottom){
+        this.bajoPared();
+      }else {//Estoy quieto trepando la pared.
+        this.play('ishi_climb_idle',true);
+        this.body.setVelocityY(0);
+        this.speed_actual = 0;
+      }
+   } 
   }
 
   suboPared(){
@@ -413,11 +492,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   bajoPared(){
     console.log('Abajo voy');
+    this.play('ishi_climb_down',true);
     this.body.setVelocityY(-this.jumpSpeed/2);
   }
   wallJump(){
     if(this.bloqueadoDr){
       this.bloqueadoDr = false;
+      this.setFlip(true);
       this.modo="SALTANDO";
       this.modo_ant = "COLGANDO";
       this.speed = 600;
@@ -428,6 +509,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
     else if(this.bloqueadoIz){
       this.bloqueadoIz = false;
+      this.setFlip(false);
       this.modo="SALTANDO";
       this.modo_ant = "COLGANDO";
       this.speed = 600;
@@ -465,7 +547,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
     if(this.body.blocked.right){//Estoy bloqueado
       this.bloqueadoDr = true;
     }else{//No estoy bloqueado
-      this.play('ishi_running', true);
+      if(this.modo == 'LEVANTADO'){
+        this.play('ishi_walking', true);
+      }else if(this.modo == 'AGACHADO'){
+        this.play('ishi_running', true);
+      }
       this.setFlip(false);  
       this.body.setVelocityX(this.speed);
       this.speed_actual = this.speed;
@@ -477,7 +563,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
     if(this.body.blocked.left){//Estoy bloqueado
       this.bloqueadoIz = true;
     }else{
-      this.play('ishi_running', true);
+      if(this.modo == 'LEVANTADO'){
+        this.play('ishi_walking', true);
+      }else if(this.modo == 'AGACHADO'){
+        this.play('ishi_running', true);
+      }
       this.setFlip(true); 
       this.body.setVelocityX(-this.speed);
       this.speed_actual = -this.speed;
@@ -623,15 +713,29 @@ export default class Player extends Phaser.GameObjects.Sprite {
           this.modo = "SALTANDO";
         }
         this.movimientoSuelo();
-        if(Phaser.Input.Keyboard.JustDown(this.keyP)) {
+        if(Phaser.Input.Keyboard.JustDown(this.keyP) && this.modo == "LEVANTADO") {
           this.logicaAtaque();
         }
       }
     }else if(!this.body.onFloor() && this.modo=="SALTANDO"){//HE SALTADO Y ESTOY EN EL AIRE
-      this.body.setSize(35, 60);
-      this.body.setOffset(46, 60);
-      this.play('ishi_jumping', true); 
-      this.movimientoAire();
+      if(!this.dash){
+        this.body.setSize(35, 60);
+        this.body.setOffset(46, 60);
+        this.play('ishi_jumping', true); 
+        this.movimientoAire();
+        if(Phaser.Input.Keyboard.JustDown(this.keyO)){
+          this.dash = true;
+          this.body.setAllowGravity(false);
+          this.body.setVelocityY(0);
+          this.play('ishi_dash');
+        }
+      }else{
+        if(!this.flipX){
+          this.body.setVelocityX(this.dashSpeed);
+        }else{
+          this.body.setVelocityX(-this.dashSpeed);
+        }
+      }
     }else if(this.body.onFloor() && (this.modo=="SALTANDO" || this.modo=="COLGANDO") ){//Si, en mi salto, toco el suelo, vuelvo a mi modo anterior
       this.body.setAllowGravity(true);
       if(this.modo_ant == "LEVANTADO"){
@@ -644,9 +748,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.trepable = false;
     }else if(!this.body.onFloor() && this.modo=="COLGANDO"){
       console.log('Trepando');
+      this.body.setVelocityX(0);
       if(Phaser.Input.Keyboard.JustDown(this.keyShift)){//Me dejo caer
         this.cambiaModo("AGACHADO");
         this.modo_ant = "LEVANTADO";
+        this.bloqueadoDr = false;
+        this.bloqueadoIz = false;
         this.body.setAllowGravity(true);
       }
       this.voyTreapando();
@@ -654,8 +761,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.wallJump();
       }
     }else{
-      this.play('idle_ishi', true);//Animacion caida
+      this.speed = 300;
       this.movimientoAire();
+    }
+    if(this.y >= 2900){//TEMPORAL
+      this.x = 100;
+      this.body.setVelocityX(0);
+      this.body.setVelocityY(0)
+      this.y = 100;
     }
   }
 }

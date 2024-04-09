@@ -26,6 +26,7 @@ export default class Wall extends Phaser.GameObjects.Sprite {
         this.altura= 250;
         this.anchura= 32;
         this.scene.physics.add.existing(this,true);
+
         if(trepable){
             this.body.debugBodyColor = 0xFFFF00;
         }
