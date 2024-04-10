@@ -50,10 +50,10 @@ export default class Level extends Phaser.Scene {
         this.climbableWalls = this.add.group();
 
         //Sacamos al personaje 
-        this.player= this.mapa.createFromObjects('Sprites', {
+        /*this.player= this.mapa.createFromObjects('Sprites', {
             name: "Jugador",
             classType: Player
-          });
+          });*/
         
           
 
@@ -61,10 +61,10 @@ export default class Level extends Phaser.Scene {
         for (const objeto of this.mapa.getObjectLayer('Sprites').objects) {
             // `objeto.name` u `objeto.type` nos llegan de las propiedades del
             // objeto en Tiled
-            /*if (objeto.type === 'jugador') {
+            if (objeto.type === 'jugador') {
               this.player= new Player(this,objeto.x, objeto.y -100);
               this.player.setScale(0.5); 
-            }*/
+            }
             
              if(objeto.type === 'Seta') {
                 let seta_aux= new Poison_Seta(this, objeto.x, objeto.y -100, true);
@@ -169,25 +169,10 @@ export default class Level extends Phaser.Scene {
 
         this.scene.run('hudIshi',{target: this.player});
     }
-    
-   
-
-
-
-
-    /**
-     * Genera una estrella en una de las bases del escenario
-     * @param {Array<Base>} from Lista de bases sobre las que se puede crear una estrella
-     * Si es null, entonces se crea aleatoriamente sobre cualquiera de las bases existentes
-     */
-    spawn(from = null) {
-        Phaser.Math.RND.pick(from || this.bases.children.entries).spawn();
-    }
 
     recibirGolpe(){
         console.log("Recibiendo daño"); 
     }
-
 
     update(t,dt){
         super.update(t,dt);

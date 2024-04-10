@@ -36,6 +36,7 @@ export default class Pause_Menu extends Phaser.Scene {
 
         exitOption.on('pulsado', () => {
             this.scene.stop(this.ant_escena); 
+            this.scene.stop('hudIshi'); 
             this.scene.start('main'); 
         }); 
 

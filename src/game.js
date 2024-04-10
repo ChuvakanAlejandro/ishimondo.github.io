@@ -6,7 +6,7 @@ import HudIshi from './hudplayer.js';
 import Pause from './pause_menu.js';
 import Galery from './galery_menu.js'; 
 import Phaser from 'phaser'; 
-
+import Nivel_1 from './nivel1.js'
 /**
  * Inicio del juego en Phaser. Creamos el archivo de configuración del juego y creamos
  * la clase Game de Phaser, encargada de crear e iniciar el juego.
@@ -20,7 +20,7 @@ let config = {
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     pixelArt: true,
-    scene: [Boot, Main, HudIshi, Pause, Galery, Level, End],
+    scene: [Boot, Main, HudIshi, Pause, Galery, Level, Nivel_1 ,End],
     physics: {
         default: 'arcade',
         arcade: {

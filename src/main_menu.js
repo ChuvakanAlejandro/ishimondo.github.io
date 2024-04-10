@@ -33,7 +33,7 @@ export default class Main_Menu extends Phaser.Scene {
         this.add.text(galeryOption.x,galeryOption.y, 'GALERIA', {fontFamily: "RetroFont", fontSize: 30 }).setOrigin(0.5); 
 
         playOption.on('pulsado', () => {
-            this.scene.start('level'); 
+            this.scene.start('nivel1'); 
         }); 
 
         galeryOption.on('pulsado', () => {

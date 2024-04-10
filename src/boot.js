@@ -15,7 +15,7 @@ import seta_poison from '../assets/animations/seta_venenosa.png'
 import proyectil from '../assets/animations/proyectil.png'
 import background from '../assets/sprites/background.jpg'
 import Button from '../assets/sprites/button.png'
-import Bosque from '../assets/maps/bosque.png'
+import Bosque from '../assets/maps/mundo1.png'
 import tilemap from '../assets/maps/nivel1.json'
 import RetroFont from 'url:../assets/fonts/Retro_Computer.ttf'
 
@@ -73,7 +73,7 @@ export default class Boot extends Phaser.Scene {
     /*Carga del archivo del tilemap*/
 
     this.load.tilemapTiledJSON('tilemap', tilemap); //CARGA DEL ARCHIVO DEL TILEMAP (NO LO CREA) 
-    this.load.image('Bosque' , Bosque); //CARGA DEL ATLAS DE PATRONES 
+    this.load.image('forest' , Bosque); //CARGA DEL ATLAS DE PATRONES 
 
     /*Carga de fuentes*/ 
     this.loadFont("RetroFont", RetroFont); 
@@ -85,6 +85,6 @@ export default class Boot extends Phaser.Scene {
    * nivel del juego
    */
   create() {
-    this.scene.start('level');
+    this.scene.start('main');
   }
 }
