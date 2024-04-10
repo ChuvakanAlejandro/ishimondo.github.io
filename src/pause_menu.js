@@ -28,11 +28,20 @@ export default class Pause_Menu extends Phaser.Scene {
 
         const exitOption= this.add.image(width* 0.3, height*0.7, 'button').setDisplaySize(250,100); 
         
+        const restartOption= this.add.image(width - (width * 0.3)  ,exitOption.y, 'button').setDisplaySize(250,100); 
+
+
         this.add.text(exitOption.x, exitOption.y, 'SALIR DEL NIVEL', {fontFamily: "RetroFont", fontSize: 20}).setOrigin(0.5); 
+        this.add.text(restartOption.x, restartOption.y, 'VOLVER A EMPEZAR', {fontFamily: "RetroFont", fontSize: 20}).setOrigin(0.5); 
 
         exitOption.on('pulsado', () => {
             this.scene.stop(this.ant_escena); 
             this.scene.start('main'); 
+        }); 
+
+        restartOption.on('pulsado', () => {
+            this.scene.stop();
+            this.scene.start(this.ant_escena); 
         }); 
 
 
@@ -44,7 +53,8 @@ export default class Pause_Menu extends Phaser.Scene {
         });
         
         this.buttons= [
-            exitOption
+            exitOption,
+            restartOption
         ]; 
 
         this.seleccionarBoton(0); 

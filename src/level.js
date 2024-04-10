@@ -49,16 +49,23 @@ export default class Level extends Phaser.Scene {
         this.climbableWalls = this.add.group();
 
         //Sacamos al personaje 
+        this.player= this.mapa.createFromObjects('Sprites', {
+            name: "Jugador",
+            classType: Player
+          });
+        
+          
 
+          
         for (const objeto of this.mapa.getObjectLayer('Sprites').objects) {
             // `objeto.name` u `objeto.type` nos llegan de las propiedades del
             // objeto en Tiled
-            if (objeto.type === 'jugador') {
+            /*if (objeto.type === 'jugador') {
               this.player= new Player(this,objeto.x, objeto.y -100);
               this.player.setScale(0.5); 
-            }
+            }*/
             
-            else if(objeto.type === 'Seta') {
+             if(objeto.type === 'Seta') {
                 let seta_aux= new Poison_Seta(this, objeto.x, objeto.y -100, true);
                 seta_aux.setScale(0.5); 
                 this.enemies.add(seta_aux);

@@ -36,6 +36,10 @@ export default class Main_Menu extends Phaser.Scene {
             this.scene.start('level'); 
         }); 
 
+        galeryOption.on('pulsado', () => {
+            this.scene.start('galery'); 
+        });
+
         this.buttons = [
             playOption,
             galeryOption
