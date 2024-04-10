@@ -17,9 +17,9 @@ export default class Poison_Seta extends Enemigo{
     constructor(scene, x, y, aplastable = false) {
 
         //super(scene,x,y,'seta_bosque');
-        super(scene,x,y,'seta_bosque',aplastable);
+        super(scene,x,y,'seta_bosque');
         this.in_delay= false; 
-        //this.aplastable= aplastable; 
+        this.aplastable= aplastable; 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.body.setCollideWorldBounds(false); 

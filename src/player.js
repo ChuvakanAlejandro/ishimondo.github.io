@@ -32,7 +32,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     /*Declaracion e inicializacion de parametros*/ 
     this.vida= 4;  //Vida
-    this.energia = 8;
+    this.energia = 5;
     this.speed = 300; //Velocidad (en modo Levantado por defecto)
     this.dashSpeed = 700;
     this.speed_actual = 0;
@@ -41,6 +41,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.modo= "LEVANTADO"; //Modo del personaje (Levantado por defecto)
     this.atacando = false;
     this.dash = false;
+    this.stamina = true;
     this.trepable = false;
     this.escalando = false;
     this.bloqueadoIz = false;
@@ -716,8 +717,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.body.setOffset(46, 60);
         this.play('ishi_jumping', true); 
         this.movimientoAire();
-        if(Phaser.Input.Keyboard.JustDown(this.keyO)){
+        if(Phaser.Input.Keyboard.JustDown(this.keyO) && this.energia > 0){
           this.dash = true;
+          this.gastaEn();
           this.body.setAllowGravity(false);
           this.body.setVelocityY(0);
           this.play('ishi_dash');
@@ -754,7 +756,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.wallJump();
       }
     }else{
-      this.speed = 300;
+      this.cambiaModo("AGACHADO");
       this.movimientoAire();
     }
 
@@ -766,8 +768,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
 
+  gastaEn(){
+    if(this.stamina && this.energia != 0){
+      this.energia = this.energia -1;
+    }
+  }
+
   health(){
     return this.vida;
+  }
+  energy(){
+    return this.energia;
   }
 }
 

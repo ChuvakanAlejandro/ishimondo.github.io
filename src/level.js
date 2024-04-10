@@ -69,7 +69,7 @@ export default class Level extends Phaser.Scene {
        
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
 
-        this.scene.run('hudIshi',{player: this.player});
+        this.scene.run('hudIshi',{target: this.player});
     }
     
 
