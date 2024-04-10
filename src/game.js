@@ -2,6 +2,7 @@ import Boot from './boot.js';
 import End from './end.js';
 import Level from './level.js';
 import Main from './main_menu.js';
+import HudIshi from './hudplayer.js';
 import Phaser from 'phaser'
 
 /**
@@ -17,7 +18,7 @@ let config = {
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     pixelArt: true,
-    scene: [Boot, Main, Level, End],
+    scene: [Boot, Main, HudIshi, Level, End],
     physics: {
         default: 'arcade',
         arcade: {

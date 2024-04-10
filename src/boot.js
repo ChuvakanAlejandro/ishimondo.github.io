@@ -4,7 +4,12 @@ import platform from '../assets/sprites/platform.png'
 import base from '../assets/sprites/base.png'
 import star from '../assets/sprites/star.png'
 import player from '../assets/sprites/Ishi.png'
-import hud_player from '../assets/sprites/interfaz_player.png'
+import hud_vida from '../assets/sprites/hud_vida.png'
+import hud_skill_bar from '../assets/sprites/hud_skill_bar.png'
+import barra from '../assets/sprites/barra.png'
+import vt from '../assets/sprites/vt_assets.png'
+import en from '../assets/sprites/en_assets.png'
+import i_face from '../assets/sprites/ishi_face.png'
 import ishi from '../assets/animations/Ishi_sprites.png'
 import seta_poison from '../assets/animations/seta_venenosa.png'
 import proyectil from '../assets/animations/proyectil.png'
@@ -50,7 +55,12 @@ export default class Boot extends Phaser.Scene {
     this.load.image('star', star);
     this.load.image('player', player);
     this.load.image('wall', wall)
-    this.load.image('hud_player', hud_player ); 
+    this.load.image('hud_vida', hud_vida ); 
+    this.load.image('hud_skill_bar', hud_skill_bar ); 
+    this.load.image('barra', barra );
+    this.load.spritesheet('vt', vt,{frameWidth:32,frameHeight:16});
+    this.load.spritesheet('en', en,{frameWidth:18,frameHeight:10});
+    this.load.spritesheet('ishi_face', i_face,{frameWidth:96,frameHeight:96});    
     this.load.image('bala_seta', proyectil);
     this.load.spritesheet('ishi', ishi,{frameWidth:128,frameHeight:128});
     this.load.spritesheet('seta_bosque', seta_poison, {frameWidth: 96 ,frameHeight: 96}); 
@@ -67,6 +77,6 @@ export default class Boot extends Phaser.Scene {
    * nivel del juego
    */
   create() {
-    this.scene.start('main');
+    this.scene.start('level');
   }
 }

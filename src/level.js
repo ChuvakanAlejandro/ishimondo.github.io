@@ -1,8 +1,9 @@
 import Platform from './platform.js';
 import Player from './player.js';
 import Poison_Seta  from './poison_seta.js';
+import Wall from './wall.js';
 import Phaser from 'phaser'
-import Wall from './wall.js'; 
+ 
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -29,22 +30,13 @@ export default class Level extends Phaser.Scene {
 
         this.enter_key= this.input.keyboard.addKey('Enter'); 
 
-        this.add.image(1000,1000,'background');
         this.stars = 10;
         this.bases = this.add.group();
         this.climbableWalls = this.add.group();
-      
-        this.cameras.main.setBounds(0, 0, 2000, 2000);
-
-
-
-        this.textoVida= this.add.text(width*0.5, height*0.5, "Vida actual: 4");  
-        this.textoVida.setScrollFactor(1,1); 
-        this.textoVida.setOrigin(0.5,0.5); 
-
-
-
-        this.physics.world.setBounds(0, 0, 2000, 2000);
+        this.player = new Player(this, 1000, 0);
+        this.seta1= new Poison_Seta(this, 600, 1000, true);
+        this.cameras.main.setBounds(0, 0, 20000, 1250);
+        this.physics.world.setBounds(0, 0, 20000, 3000);
 
 
         this.player = new Player(this, this.cameras.main.centerX, 600);
@@ -65,7 +57,7 @@ export default class Level extends Phaser.Scene {
             } 
         }
 
-        new Platform(this, this.player, this.seta1, this.bases, 0, 1250);
+        new Platform(this, this.player, this.seta1, this.bases, 0, 11250);
         new Platform(this, this.player, this.seta1, this.bases, 250, 1250);
         new Platform(this, this.player, this.seta1, this.bases, 500, 1250);
         new Platform(this, this.player, this.seta1, this.bases, 750, 1250);
@@ -73,13 +65,19 @@ export default class Level extends Phaser.Scene {
         new Platform(this, this.player, this.seta1, this.bases, 1250, 1250);
         new Platform(this, this.player, this.seta1, this.bases, 1500, 1250);
         new Platform(this, this.player, this.seta1, this.bases, 1750, 1250);
-        new Wall(this, this.player, 1850, 1050, true);
-        new Platform(this, this.player, this.seta1, this.bases, 1750, 50);
-        new Platform(this, this.player, this.seta1, this.bases, 2050, 150);
+        new Wall(this, this.player, 1850, 950, true);
+        new Platform(this, this.player, this.seta1, this.bases, 1350, 1000);
+        new Wall(this, this.player, 1150, 600, true);
+        new Wall(this, this.player, 1450, 600, true);
+        new Platform(this, this.player, this.seta1, this.bases, 1950, 500);
+        new Platform(this, this.player, this.seta1, this.bases, 2200, 500);
+        new Platform(this, this.player, this.seta1, this.bases, 2650, 500);
+        new Platform(this, this.player, this.seta1, this.bases, 2950, 500);
+        new Platform(this, this.player, this.seta1, this.bases, 100, 100);
        
-
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
-      
+
+        this.scene.run('hudIshi',{target: this.player});
     }
     
 
@@ -96,17 +94,6 @@ export default class Level extends Phaser.Scene {
         console.log("Recibiendo daño"); 
     }
 
-
-    /*
-      Metodo que se encarga de reducir la gravedad simulando que el personaje sube por la pared 
-      Solo funcionara si se pulsa la tecla W estando pegado a una pared 
-    */
-    climbWall(){
-        if((this.player.body.blocked.right || this.player.body.blocked.left) && (this.player.keyW.isDown)){
-            this.player.body.setVelocityY(this.player.jumpSpeed/2); 
-        }
-        
-    }
 
     update(t,dt){
         super.update(t,dt);
