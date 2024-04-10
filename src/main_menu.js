@@ -24,17 +24,21 @@ export default class Main_Menu extends Phaser.Scene {
         const {width, height} = this.scale;
 
         /*Texto con el nombre del juego */
-        this.add.text(width* 0.35, height*0.3, 'ISHIMONDO',{fontFamily: "Retro", fontSize:50}); 
+        this.add.text(width* 0.35, height*0.3, 'ISHIMONDO',{fontFamily: "RetroFont", fontSize:50}); 
 
         /*Botones de opcion*/ 
         const playOption= this.add.image(width* 0.3, height*0.7, 'button').setDisplaySize(250,100); 
         const galeryOption= this.add.image( width - (width * 0.3)  ,playOption.y, 'button').setDisplaySize(250,100); 
-        this.add.text(playOption.x, playOption.y, 'JUGAR', {fontFamily: "Retro", fontSize: 30}).setOrigin(0.5); 
-        this.add.text(galeryOption.x,galeryOption.y, 'GALERIA', {fontFamily: "Retro", fontSize: 30 }).setOrigin(0.5); 
+        this.add.text(playOption.x, playOption.y, 'JUGAR', {fontFamily: "RetroFont", fontSize: 30}).setOrigin(0.5); 
+        this.add.text(galeryOption.x,galeryOption.y, 'GALERIA', {fontFamily: "RetroFont", fontSize: 30 }).setOrigin(0.5); 
 
         playOption.on('pulsado', () => {
             this.scene.start('level'); 
         }); 
+
+        galeryOption.on('pulsado', () => {
+            this.scene.start('galery'); 
+        });
 
         this.buttons = [
             playOption,

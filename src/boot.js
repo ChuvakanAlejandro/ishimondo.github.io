@@ -15,6 +15,9 @@ import seta_poison from '../assets/animations/seta_venenosa.png'
 import proyectil from '../assets/animations/proyectil.png'
 import background from '../assets/sprites/background.jpg'
 import Button from '../assets/sprites/button.png'
+import Bosque from '../assets/maps/bosque.png'
+import tilemap from '../assets/maps/nivel1.json'
+import RetroFont from 'url:../assets/fonts/Retro_Computer.ttf'
 
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
@@ -67,9 +70,14 @@ export default class Boot extends Phaser.Scene {
     this.load.spritesheet('proyectil_seta', proyectil, {frameWidth: 38  ,frameHeight: 14}); 
 
 
-    /*Carga de fuentes*/ 
+    /*Carga del archivo del tilemap*/
 
-    this.loadFont("Retro", "../assets/fonts/Retro_Computer.ttf"); 
+    this.load.tilemapTiledJSON('tilemap', tilemap); //CARGA DEL ARCHIVO DEL TILEMAP (NO LO CREA) 
+    this.load.image('Bosque' , Bosque); //CARGA DEL ATLAS DE PATRONES 
+
+    /*Carga de fuentes*/ 
+    this.loadFont("RetroFont", RetroFont); 
+    
   }
 
   /**
