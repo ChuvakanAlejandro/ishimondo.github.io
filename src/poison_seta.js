@@ -2,10 +2,9 @@ import Phaser from 'phaser'
 import game from './game.js'
 import Player from './player.js';
 import Proyectil_Seta from './proyectil.js';
-import Enemigo from './Enemigo.js';
 
 
-export default class Poison_Seta extends Enemigo{
+export default class Poison_Seta extends Phaser.GameObjects.Sprite{
     /**
    * Constructor de la seta 
    * @param {Phaser.Scene} scene Escena a la que pertenece la seta 
@@ -17,13 +16,15 @@ export default class Poison_Seta extends Enemigo{
     constructor(scene, x, y, aplastable = false) {
 
         //super(scene,x,y,'seta_bosque');
-        super(scene,x,y,'seta_bosque');
-        this.in_delay= false; 
-        this.aplastable= aplastable; 
+        super(scene,x,y,'seta_bosque'); 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.body.setCollideWorldBounds(false); 
         this.body.pushable= false;
+
+        //Parametros de seta
+        this.aplastable= aplastable; 
+        this.in_delay= false;
 
         //Animacion por defecto
         this.setAnimaciones();
