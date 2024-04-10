@@ -174,41 +174,23 @@ export default class Player extends Phaser.GameObjects.Sprite {
     });
 
     //Ishi termina de subir la pared
-    /*this.anims.create({
-      key: 'ishi_wall_grip',
-      frames: this.anims.generateFrameNumbers('ishi', {start: 97, end: 98 }),
-      frameRate: 5,
-      repeat: 0
-    });
-
-    this.on('animationcomplete-ishi_wall_grip', () => {
-      moveTo(this, this.x, this.yParedTop-this.height, 500, 1);
-    }, this);
-    
-    this.anims.create({
-      key: 'ishi_getting_up',
-      frames: this.anims.generateFrameNumbers('ishi', {start: 99, end: 101 }),
-      frameRate: 10,
-      repeat: 0
-    });
-
-    this.anims.create({
-      key: 'ishi_wall_finish',
-      frames: this.anims.generateFrameNumbers('ishi', {start: 102, end: 102 }),
-      frameRate: 5,
-      repeat: 0
-    });*/
     this.anims.create({
       key: 'ishi_wall_finish',
       frames: this.anims.generateFrameNumbers('ishi', {start: 97, end: 102 }),
-      frameRate: 5,
+      frameRate: 10,
       repeat: 0
     }); 
  
+    this.on('animationstart-ishi_wall_finish', () => {
+      this.body.setSize(35, 60);
+      this.body.setOffset(46, 60);
+    }, this);
+
+
     this.on('animationcomplete-ishi_wall_finish', () => {
       this.body.setAllowGravity(true);
       this.escalando = false;
-      this.cambiaModo("LEVANTADO");
+      this.cambiaModo("AGACHADO");
       this.bloqueadoDr = false;
       this.bloqueadoIz = false;
     }, this);
@@ -397,9 +379,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     /*Tecla de salto*/ 
 
-    this.keySpace= this.scene.input.keyboard.addKey('SPACE'); 
-    this.keySpace.on('down', event=> {
-    }); 
+    this.keySpace= this.scene.input.keyboard.addKey('SPACE');
 
     /*Tecla cambio a 4 patas*/
     this.keyShift= this.scene.input.keyboard.addKey('SHIFT'); 
@@ -453,25 +433,38 @@ export default class Player extends Phaser.GameObjects.Sprite {
     if(!this.escalando){
       if(this.keyW.isDown && this.y > this.yParedTop){
         this.suboPared();
-      }else if(Phaser.Input.Keyboard.JustDown(this.keyW) && this.y <= this.yParedTop){
-        /*
-        let subiendoEncima  = this.scene.add.timeline({
+      }else if(Phaser.Input.Keyboard.JustDown(this.keyW) && this.y <= this.yParedTop){ 
+        this.body.setVelocityY(0);
+        if(this.bloqueadoDr){
+          const chanin = this.scene.tweens.chain({
+            targets: this,
+            tweens:  [{ 
+                y: this.yParedTop-40,
+                duration: 200
+              },
+              { 
+                x: this.x + 30,
+                duration: 400
+              }
+          ]}
+          );
+          chanin.restart();
+        }else if(this.bloqueadoIz){
+          const chanin = this.scene.tweens.chain({
+            targets: this,
+            tweens:  [{ 
+                y: this.yParedTop-40,
+                duration: 200
+              },
+              { 
+                x: this.x - 30,
+                duration: 400
+              }
+          ]}
+          );
+          chanin.restart();
+        }
           
-          target: this,
-          ease: 'Linear',
-          duration: 2,
-          run: () => {
-            console.log("pasa")
-        },
-          tweens: [
-              { y: this.yParedTop-this.height },
-              { x: this.x + this.width }
-          ]
-        });
-        subiendoEncima.play();
-        */
-        moveTo(this, this.x+this.width, this.yParedTop-this.height, 500, 1);
-        //this.play('ishi_wall_grip').chain('ishi_getting_up').chain('ishi_wall_finish');
         this.play('ishi_wall_finish');
         this.escalando = true;
       }else if(this.keyS.isDown && this.y < this.yParedBottom){
@@ -764,12 +757,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.speed = 300;
       this.movimientoAire();
     }
+
     if(this.y >= 2900){//TEMPORAL
       this.x = 100;
       this.body.setVelocityX(0);
       this.body.setVelocityY(0)
       this.y = 100;
     }
+  }
+
+  health(){
+    return this.vida;
   }
 }
 

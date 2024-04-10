@@ -14,18 +14,29 @@ export default class Poison_Seta extends Enemigo{
    * @param {boolean} aplastable Indica si es posible matar al enemigo saltando encima de el 
    */
 
-    constructor(scene, x, y, aplastable= false ) {
-        
-        super(scene,x,y,'seta_bosque');
-        
+    constructor(scene, x, y, aplastable = false) {
+
+        //super(scene,x,y,'seta_bosque');
+        super(scene,x,y,'seta_bosque',aplastable);
         this.in_delay= false; 
-        this.aplastable= aplastable; 
+        //this.aplastable= aplastable; 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.body.setCollideWorldBounds(false); 
         this.body.pushable= false;
 
+        //Animacion por defecto
+        this.setAnimaciones();
 
+      
+        this.body.setSize(32, 32);
+        this.body.setOffset(34, 55);
+
+        this.play('idle_seta', true); 
+
+    }
+
+    setAnimaciones(){
         //Animacion por defecto
         this.anims.create({
             key: 'idle_seta',
@@ -40,13 +51,6 @@ export default class Poison_Seta extends Enemigo{
             frameRate: 8,
             repeat: 0
         }); 
-
-      
-        this.body.setSize(32, 32);
-        this.body.setOffset(34, 55);
-
-        this.play('idle_seta', true); 
-
         this.on("animationcomplete-seta_dispara", ()=>{this.dispara()}, this); 
     }
 

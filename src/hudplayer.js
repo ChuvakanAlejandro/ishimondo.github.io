@@ -14,9 +14,45 @@ export default class HudIshi extends Phaser.Scene {
     }
 
     create() {
-        let healthBar = this.makeBar(0x2ecc71);
-        let hudIshi = this.add.image(10,10,'barra');
-        hudIshi.setOrigin(0,0);
+        //this.healthBar = this.makeBar(0x2ecc71);
+        this.hudIshi = this.add.image(10,10,'barra');
+        this.hudIshi.setOrigin(0,0);
+        class Vt extends Phaser.GameObjects.Sprite
+        {
+            constructor (scene,x,y,player,num)
+            {
+                super(scene, x, y, 'vt');
+                this.player = scene.player
+                scene.add.existing(this)
+                this.num = num;
+            }
+
+            lleno(){
+                this.setTexture('vt',0);
+            }
+
+            rojo()
+            {
+                this.setTexture('vt',1);
+            }
+            vacio()
+            {
+                this.setTexture('vt',2);
+            }
+            preUpdate(t,dt) {
+                super.preUpdate(t,dt);
+                if(this.player.health() < this.num){
+                    this.vacio();
+                }
+                else{
+                    this.lleno();
+                }
+            }
+        }
+        this.vida1 = new Vt (this,82,66,this.player,1);
+        this.vida2 = new Vt (this,112,66,this.player,2);
+        this.vida3 = new Vt (this,142,66,this.player,3);  
+        this.vida4 = new Vt (this,172,66,this.player,4);  
        
     }
 
