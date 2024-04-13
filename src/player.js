@@ -395,6 +395,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.yParedTop = ytop;
     this.yParedBottom = ybottom;
   }
+
+
+
+  
   cambiaModo(actual){
     switch(actual) {
       case "AGACHADO": 
@@ -451,7 +455,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
           ]}
           );
           chanin.restart();
-        }else if(this.bloqueadoIz){
+        }
+        else if(this.bloqueadoIz){
           const chanin = this.scene.tweens.chain({
             targets: this,
             tweens:  [{ 
@@ -469,7 +474,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           
         this.play('ishi_wall_finish');
         this.escalando = true;
-      }else if(this.keyS.isDown && this.y < this.yParedBottom){
+      }else if(this.keyS.isDown){
         this.bajoPared();
       }else {//Estoy quieto trepando la pared.
         this.play('ishi_climb_idle',true);

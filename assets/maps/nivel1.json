@@ -22,17 +22,6 @@
          "name":"Sprites",
          "objects":[
                 {
-                 "height":104,
-                 "id":1,
-                 "name":"coleccionable1",
-                 "rotation":0,
-                 "type":"Coleccionable",
-                 "visible":true,
-                 "width":60,
-                 "x":1149,
-                 "y":465
-                }, 
-                {
                  "height":0,
                  "id":8,
                  "name":"Ishi",
@@ -41,8 +30,123 @@
                  "type":"Jugador",
                  "visible":true,
                  "width":0,
-                 "x":416,
-                 "y":2341
+                 "x":50,
+                 "y":2353
+                }, 
+                {
+                 "height":48,
+                 "id":9,
+                 "name":"Tutorial1",
+                 "rotation":0,
+                 "type":"cajaTutorial",
+                 "visible":true,
+                 "width":49,
+                 "x":206,
+                 "y":2377
+                }, 
+                {
+                 "height":48,
+                 "id":14,
+                 "name":"Tutorial2",
+                 "rotation":0,
+                 "type":"cajaTutorial",
+                 "visible":true,
+                 "width":49,
+                 "x":583.5,
+                 "y":2374
+                }, 
+                {
+                 "height":48,
+                 "id":15,
+                 "name":"Tutorial3 ",
+                 "rotation":0,
+                 "type":"cajaTutorial",
+                 "visible":true,
+                 "width":49,
+                 "x":1348.5,
+                 "y":2312
+                }, 
+                {
+                 "height":48,
+                 "id":16,
+                 "name":"Tutorial5",
+                 "rotation":0,
+                 "type":"cajaTutorial",
+                 "visible":true,
+                 "width":49,
+                 "x":2054.5,
+                 "y":2312
+                }, 
+                {
+                 "height":0,
+                 "id":17,
+                 "name":"seta1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"Seta",
+                 "visible":true,
+                 "width":0,
+                 "x":1690,
+                 "y":2336
+                }, 
+                {
+                 "height":48,
+                 "id":19,
+                 "name":"Tutorial4",
+                 "rotation":0,
+                 "type":"cajaTutorial",
+                 "visible":true,
+                 "width":49,
+                 "x":1863.5,
+                 "y":2311
+                }, 
+                {
+                 "height":0,
+                 "id":20,
+                 "name":"seta2",
+                 "point":true,
+                 "rotation":0,
+                 "type":"Seta",
+                 "visible":true,
+                 "width":0,
+                 "x":3357,
+                 "y":1971
+                }, 
+                {
+                 "height":0,
+                 "id":21,
+                 "name":"seta4",
+                 "point":true,
+                 "rotation":0,
+                 "type":"Seta",
+                 "visible":true,
+                 "width":0,
+                 "x":2402,
+                 "y":938
+                }, 
+                {
+                 "height":0,
+                 "id":22,
+                 "name":"seta3",
+                 "point":true,
+                 "rotation":0,
+                 "type":"Seta",
+                 "visible":true,
+                 "width":0,
+                 "x":3425,
+                 "y":1073
+                }, 
+                {
+                 "height":0,
+                 "id":24,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"Coleccionable",
+                 "visible":true,
+                 "width":0,
+                 "x":1180,
+                 "y":484
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -79,7 +183,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":9,
+ "nextobjectid":35,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
@@ -137,6 +241,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"escalable",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -146,6 +255,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"escalable",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -155,6 +269,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"escalable",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -164,6 +283,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"escalable",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -173,6 +297,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"escalable",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -182,6 +311,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"escalable",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -189,6 +323,11 @@
                  "properties":[
                         {
                          "name":"colisiona",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"escalable",
                          "type":"bool",
                          "value":true
                         }]
@@ -200,6 +339,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"escalable",
+                         "type":"bool",
+                         "value":true
                         }]
                 }, 
                 {
@@ -209,6 +353,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"escalable",
+                         "type":"bool",
+                         "value":true
                         }]
                 }, 
                 {
@@ -216,6 +365,11 @@
                  "properties":[
                         {
                          "name":"colisiona",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"escalable",
                          "type":"bool",
                          "value":true
                         }]
@@ -501,18 +655,91 @@
                 }, 
                 {
                  "id":44,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":0,
+                             "id":1,
+                             "name":"",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    }, 
+                                    {
+                                     "x":0,
+                                     "y":64.0515
+                                    }, 
+                                    {
+                                     "x":11.4715,
+                                     "y":64.0515
+                                    }, 
+                                    {
+                                     "x":11.7265,
+                                     "y":0.502365
+                                    }],
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":0,
+                             "x":52.3154,
+                             "y":-0.246771
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    },
                  "properties":[
                         {
                          "name":"colisiona",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"da\u00f1a",
                          "type":"bool",
                          "value":true
                         }]
                 }, 
                 {
                  "id":45,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":3,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":12.25,
+                             "id":3,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":63.5,
+                             "x":0.25,
+                             "y":51.625
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    },
                  "properties":[
                         {
                          "name":"colisiona",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"da\u00f1a",
                          "type":"bool",
                          "value":true
                         }]

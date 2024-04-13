@@ -21,7 +21,7 @@ export default class Wall extends Phaser.GameObjects.Sprite {
     constructor(scene, player, x, y, trepable, width, height) {
         super(scene, x, y);
         this.label = this.scene.add.text(this.x, this.y, "WALL");
-        //this.setOrigin(0,0);
+        //this.setOrigin(x,y);
         this.scene.add.existing(this); 
         this.altura= width;
         this.anchura= height;
@@ -35,6 +35,7 @@ export default class Wall extends Phaser.GameObjects.Sprite {
         this.setTint= 0x66ff7f; 
         this.label = this.scene.add.text(this.x, this.y+this.height, "BOTTOM WALL");
         this.label = this.scene.add.text(this.x, this.y-this.height, "TOP WALL");
+        
         //Colisionador entre la pared y el personaje 
         this.scene.physics.add.collider(this, player, () => {this.handleCollision()}); 
     }

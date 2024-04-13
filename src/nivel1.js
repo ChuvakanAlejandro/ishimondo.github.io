@@ -1,5 +1,8 @@
 import Phaser from 'phaser'; 
 import Player from './player.js';
+import Poison_Seta from './poison_seta.js';
+
+
 
 export default class Nivel1 extends Phaser.Scene{
 
@@ -25,38 +28,67 @@ export default class Nivel1 extends Phaser.Scene{
         this.decoracionLayer= this.map.createLayer('Decoracion', tileset);  
 
         this.groundLayer.setCollisionByProperty({colisiona: true}); 
+        this.decoracionLayer.setCollisionByProperty({daña:true}); 
+        
+        this.player= this.map.createFromObjects('Sprites', {
+            name: 'Ishi', 
+            classType: Player
+        } )[0]; 
 
 
         //Grupos 
         this.enemies= this.physics.add.group(); 
-        this.climbableWalls = this.add.group();
 
         for (const objeto of this.map.getObjectLayer('Sprites').objects) {
             // `objeto.name` u `objeto.type` nos llegan de las propiedades del
             // objeto en Tiled
-            if (objeto.type === 'Jugador') {
-              this.player= new Player(this,objeto.x, objeto.y -100); 
-            }
             
-             if(objeto.type === 'Seta') {
+            if(objeto.type === 'Seta') {
                 let seta_aux= new Poison_Seta(this, objeto.x, objeto.y -100, true);
-                seta_aux.setScale(0.5); 
                 this.enemies.add(seta_aux);
-            }
+            } 
 
-            else if(objeto.type === 'Pared_escalable'){
-                let pared_aux= new Wall(this, this.player, objeto.x, objeto.y + 50, true, objeto.width, objeto.height)
-            }
         }
 
+
+
         this.physics.add.collider(this.groundLayer, this.player); 
-        //this.cameras.main.setBounds(this.player.x, this.player.y, this.map.width, this.map.height);
-        this.cameras.main.setBounds(this.map.x,this.map.y,this.map.widthInPixels, this.map.heightInPixels);
+        this.physics.add.collider(this.decoracionLayer, this.player, () => {
+            this.player.restarVida(); 
+        }); 
+
+        this.physics.add.collider(this.groundLayer,this.enemies); 
+        this.physics.add.collider(this.enemies, this.player, recibirDanyo); 
+        function recibirDanyo(obj1, obj2) {
+            
+            //Comprobar que el personaje esta pisando al enemigo 
+            if((obj1.body.blocked.down && obj2.body.blocked.up) && obj2.aplastable){
+                obj2.morir(); 
+            }
+            else{
+            
+                obj1.restarVida();
+            } 
+        }
+
+
+        /*
+           
+
+        */
+
+
+        this.groundLayer.setTileIndexCallback([12,10], this.fin_escalada,this); 
+
+        this.groundLayer.setTileIndexCallback([11,13], this.escalada,this); 
+
+        //Camara del juego 
+        this.cameras.main.setBounds(0,0,4480, 2550);
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
 
-
+        //HUD de vida 
         this.scene.run('hudIshi',{target: this.player});
-
+        this.scene.bringToTop('hudIshi'); 
     }
 
     update(){
@@ -66,6 +98,19 @@ export default class Nivel1 extends Phaser.Scene{
             this.scene.launch('pause', {nombre_escena: 'nivel1'}).pause;  
             this.scene.bringToTop('pause'); 
         }
+        
     }
 
+
+    escalada(){
+        
+        const tile= this.groundLayer.getTileAtWorldXY(this.player.x + 32, this.player.y) ?? this.groundLayer.getTileAtWorldXY(this.player.x - 32, this.player.y); 
+        console.log(tile.index); 
+        this.player.paredTrepable(true,100,100); 
+    }
+
+    fin_escalada(){
+        console.log("Termino de escalar"); 
+        //Parar de escalar 
+    }
 }
