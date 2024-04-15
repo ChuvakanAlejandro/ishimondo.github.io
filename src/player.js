@@ -46,6 +46,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.escalando = false;
     this.bloqueadoIz = false;
     this.bloqueadoDr = false;
+    this.bloqueoMovement = false;
+    this.imbecilidad = true;
     this.yParedTop = 0;
     this.yParedBottom = 0;
 
@@ -71,13 +73,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     
     this.cambioVelocidad();
 
-    /*TODO Collider con grupo de enemigos
-        this.scene.physics.add.collider(this, this.scene.enemies, (o1, o2) => {
-              if(o1.modo=== "ATACANDO") {
-                  o2.morir(); 
-              }          
-        })
-    */
+    this.scene.physics.add.collider(this, this.scene.enemies, (o1, o2) => {
+      this.damagedIshi(o2.x,o2,y);         
+    })
   }
 
 
@@ -227,23 +225,22 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
    this.on('animationcomplete-ishi_preparaGolpe1', () => {
      switch(this.flipX){
-       case true: 
-         this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 30,60); 
-       break; 
+        case true: 
+          this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 30,60); 
+        break; 
 
-       case false: 
-         this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y+15, 30,60); 
-       break; 
-    }
+        case false: 
+          this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y+15, 30,60); 
+        break; 
+      }
 
-    this.hitboxAttack.setOrigin(0.5,0.5);
+      this.hitboxAttack.setOrigin(0.5,0.5);
 
-    this.scene.physics.add.existing(this.hitboxAttack, true); 
-    this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
-
-    function procesarAtaque(o1, o2){
-        o2.morir(); 
-    }
+      this.scene.physics.add.existing(this.hitboxAttack, true); 
+      this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
+      function procesarAtaque(o1, o2){
+          o2.morir(); 
+      }
     }, this); 
 
     this.on('animationcomplete-ishi_Golpe1', () => {this.hitboxAttack.destroy()}, this); 
@@ -268,77 +265,97 @@ export default class Player extends Phaser.GameObjects.Sprite {
   //Callback para el segundo arañazo que hace ishi 
 
   this.on('animationcomplete-ishi_preparaGolpe2', ()=> {
+      switch(this.flipX){
+          case true: 
+            this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 30,60); 
+          break; 
 
-    switch(this.flipX){
-        case true: 
-          this.hitboxAttack= this.scene.add.zone(this.x - 50, this.y+15, 30,60); 
-        break; 
+          case false: 
+            this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y+15, 30,60); 
+          break; 
+      }
 
-        case false: 
-          this.hitboxAttack= this.scene.add.zone(this.x + 50, this.y+15, 30,60); 
-        break; 
-    }
+      this.hitboxAttack.setOrigin(0.5,0.5);
 
-    this.hitboxAttack.setOrigin(0.5,0.5);
+      this.scene.physics.add.existing(this.hitboxAttack, true); 
+      this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
 
-    this.scene.physics.add.existing(this.hitboxAttack, true); 
-    this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
+      function procesarAtaque(o1, o2){
+          o2.morir(); 
+      }
 
-    function procesarAtaque(o1, o2){
-        o2.morir(); 
-    }
+    }, this); 
 
-  }, this); 
-
-  this.on('animationcomplete-ishi_Golpe2', () => {this.hitboxAttack.destroy()}, this); 
-
+    this.on('animationcomplete-ishi_Golpe2', () => {this.hitboxAttack.destroy()}, this); 
 
 
-  this.anims.create({
-    key: 'ishi_finAtaque',
-    frames: this.anims.generateFrameNumbers('ishi', {start: 64, end: 65 }),
-    frameRate: 20,
-    repeat: 0
-  }); 
 
-  //Callback para cuando Ishi termina de atacar 
-  this.on('animationcomplete-ishi_finAtaque', ()=> {this.atacando= false;}, this); 
+    this.anims.create({
+      key: 'ishi_finAtaque',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 64, end: 65 }),
+      frameRate: 20,
+      repeat: 0
+    }); 
 
-  //Ishi Dash
-  this.anims.create({
-    key: 'ishi_dash',
-    frames: this.anims.generateFrameNumbers('ishi', {start: 92, end: 96 }),
-    frameRate: 15,
-    repeat: 0
-  }); 
+    //Callback para cuando Ishi termina de atacar 
+    this.on('animationcomplete-ishi_finAtaque', ()=> {this.atacando= false;}, this); 
 
-  this.on('animationcomplete-ishi_dash', () => {
-    this.body.setAllowGravity(true);
-    this.dash = false;
-    this.modo = "LEVANTADO";
-    this.body.setSize(35, 90);
-    this.body.setOffset(46, 30);
-  }, this);
+    //Ishi Dash
+    this.anims.create({
+      key: 'ishi_dash',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 92, end: 96 }),
+      frameRate: 15,
+      repeat: 0
+    }); 
 
-  //Por defecto se ejecuta la animación de idle
+    this.on('animationcomplete-ishi_dash', () => {
+      this.body.setAllowGravity(true);
+      this.dash = false;
+      this.modo = "LEVANTADO";
+      this.body.setSize(35, 90);
+      this.body.setOffset(46, 30);
+    }, this);
 
-    
+    //Ishi Hurt
+    this.anims.create({
+      key: 'ishi_hurt',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 35, end: 39 }),
+      frameRate: 15,
+      repeat: 0
+    }); 
   }
 
   /*
    PROVISIONAL
  */
 
- restarVida(){
+  damagedIshi(xEnemigo,y){
+    this.bloqueadoDr = false;
+    this.bloqueadoIz = false;
+    this.body.setAllowGravity(true);
+    this.modo_ant = this.modo;
+    this.modo = "GOLPEADO";
+    this.imbecilidad = true;
+    this.ishiPushed(xEnemigo);
+    this.restarVida();
+  }
+  ishiPushed(xEnemigo){
+    this.bloqueoMovement = true;
+    this.body.setVelocityY(0);
+    this.body.setVelocityY(this.jumpSpeed/2);
+    if(this.x > xEnemigo){
+      this.body.setVelocityX(-200);
+    }else{
+      this.body.setVelocityX(200);
+    }
+    this.play('ishi_hurt');
+  }
+  restarVida(){
     this.vida--;
      console.log("Vida actual " + this.vida); 
-     this.x-= 75; 
-     this.bloqueadoDr = false;
-     this.bloqueadoIz = false;
      if(this.vida== 0){ //PANTALLA DE GAMEOVER
         this.scene.scene.start('end'); 
      }
-
   }
 
   
@@ -677,14 +694,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   /*
-    LOGICA DEL ATAQUE DE ISHI (FALTAN COSAS)
+    LOGICA DEL ATAQUE DE ISHI
   */
 
   logicaAtaque(){
     //Flag de ataque 
     this.atacando= true; 
-    this.body.setVelocityX(0); 
-    // TODO Insertar animacion de ataque     
+    this.body.setVelocityX(0);    
     
     this.play('ishi_preparaGolpe1').chain('ishi_Golpe1').chain('ishi_preparaGolpe2').chain('ishi_Golpe2').chain('ishi_finAtaque'); 
   }
@@ -756,6 +772,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if(Phaser.Input.Keyboard.JustDown(this.keySpace)){
         this.wallJump();
       }
+    }else if(this.body.onFloor() && this.modo=="GOLPEADO"){
+      this.imbecilidad = false;
+      this.modo = this.modo_ant;
     }else{
       this.cambiaModo("AGACHADO");
       this.movimientoAire();

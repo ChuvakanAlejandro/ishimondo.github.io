@@ -11,6 +11,7 @@ import vt from '../assets/sprites/vt_assets.png'
 import en from '../assets/sprites/en_assets.png'
 import i_face from '../assets/sprites/ishi_face.png'
 import ishi from '../assets/animations/Ishi_sprites.png'
+import mush from '../assets/animations/mushmi.png'
 import seta_poison from '../assets/animations/seta_venenosa.png'
 import proyectil from '../assets/animations/proyectil.png'
 import background from '../assets/sprites/background.jpg'
@@ -63,6 +64,7 @@ export default class Boot extends Phaser.Scene {
     this.load.spritesheet('ishi_face', i_face,{frameWidth:96,frameHeight:96});    
     this.load.image('bala_seta', proyectil);
     this.load.spritesheet('ishi', ishi,{frameWidth:128,frameHeight:128});
+    this.load.spritesheet('mushmi', mush,{frameWidth:96,frameHeight:96});
     this.load.spritesheet('seta_bosque', seta_poison, {frameWidth: 96 ,frameHeight: 96}); 
     this.load.spritesheet('proyectil_seta', proyectil, {frameWidth: 38  ,frameHeight: 14}); 
 

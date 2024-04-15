@@ -29,33 +29,15 @@ export default class Level extends Phaser.Scene {
         const {width, height}= this.scale; 
 
         this.enter_key= this.input.keyboard.addKey('Enter'); 
+        this.enemies= this.add.group();
 
         this.stars = 10;
         this.bases = this.add.group();
-        this.climbableWalls = this.add.group();
-        this.player = new Player(this, 1000, 0);
-        this.seta1= new Poison_Seta(this, 600, 1000, true);
+        this.player = new Player(this, 900, 1000);
+        this.seta1= new Poison_Seta(this, 600, 1000, true, this.enemies);
         this.cameras.main.setBounds(0, 0, 20000, 1250);
         this.physics.world.setBounds(0, 0, 20000, 3000);
 
-
-        this.player = new Player(this, this.cameras.main.centerX, 600);
-        this.seta1= new Poison_Seta(this, 600, 1000, true);
-        this.enemies= this.physics.add.group(); 
-        this.enemies.add(this.seta1);
-
-        this.physics.add.collider(this.enemies, this.player, recibirDanyo); 
-        function recibirDanyo(obj1, obj2) {
-            
-            //Comprobar que el personaje esta pisando al enemigo 
-            if((obj1.body.blocked.down|| obj2.body.blocked.up) && obj2.aplastable){
-                obj2.morir(); 
-            }
-            else{
-            
-                obj1.restarVida();
-            } 
-        }
 
         new Platform(this, this.player, this.seta1, this.bases, 0, 11250);
         new Platform(this, this.player, this.seta1, this.bases, 250, 1250);
