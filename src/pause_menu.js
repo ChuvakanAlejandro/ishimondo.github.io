@@ -24,7 +24,7 @@ export default class Pause_Menu extends Phaser.Scene {
     create() {
 
         const {width, height} = this.scale;
-        this.labelPausa= this.add.text(width* 0.45, height*0.3, 'PAUSA',{fontFamily: "RetroFont", fontSize:50}); 
+        this.labelPausa= this.add.text(width* 0.4, height*0.3, 'PAUSA',{fontFamily: "RetroFont", fontSize:50}); 
 
         const exitOption= this.add.image(width* 0.3, height*0.7, 'button').setDisplaySize(250,100); 
         

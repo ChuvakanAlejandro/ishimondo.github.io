@@ -47,6 +47,8 @@ export default class Main_Menu extends Phaser.Scene {
 
 
         this.seleccionarBoton(0); 
+        this.scene.launch('full_screen'); 
+        this.scene.bringToTop('full_screen'); 
     }
 
     update() {
