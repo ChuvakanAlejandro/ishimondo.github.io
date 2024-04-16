@@ -70,14 +70,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.mapeoTeclas(); 
     
     this.cambioVelocidad();
-
-    /*TODO Collider con grupo de enemigos
-        this.scene.physics.add.collider(this, this.scene.enemies, (o1, o2) => {
-              if(o1.modo=== "ATACANDO") {
-                  o2.morir(); 
-              }          
-        })
-    */
   }
 
 
@@ -336,7 +328,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
      this.bloqueadoDr = false;
      this.bloqueadoIz = false;
      if(this.vida== 0){ //PANTALLA DE GAMEOVER
-        this.scene.scene.start('end'); 
+        this.scene.scene.start('end', {nombre_escena: 'nivel1'}); 
      }
 
   }
@@ -391,14 +383,22 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   paredTrepable(trepable, ytop, ybottom){
+    this.fin_escalada= false; 
     this.trepable = trepable;
     this.yParedTop = ytop;
     this.yParedBottom = ybottom;
   }
 
 
-
+  paraDeTrepar(){
+    this.fin_escalada= true; 
+  }
   
+
+  estaTrepando(){
+    return this.modo=== "COLGANDO"; 
+  }
+
   cambiaModo(actual){
     switch(actual) {
       case "AGACHADO": 
@@ -435,17 +435,21 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.setOffset(46, 30);
     this.body.setAllowGravity(false);//Con esto ya no estare tocando el suelo (al parecer)
   }
+
+
+
+
   voyTreapando(){
     if(!this.escalando){
-      if(this.keyW.isDown && this.y > this.yParedTop){
+      if(this.keyW.isDown && this.y && !this.fin_escalada){
         this.suboPared();
-      }else if(Phaser.Input.Keyboard.JustDown(this.keyW) && this.y <= this.yParedTop){ 
+      }else if(Phaser.Input.Keyboard.JustDown(this.keyW) && this.fin_escalada){ 
         this.body.setVelocityY(0);
         if(this.bloqueadoDr){
           const chanin = this.scene.tweens.chain({
             targets: this,
             tweens:  [{ 
-                y: this.yParedTop-40,
+                y: this.y-45,
                 duration: 200
               },
               { 
@@ -460,7 +464,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           const chanin = this.scene.tweens.chain({
             targets: this,
             tweens:  [{ 
-                y: this.yParedTop-40,
+                y: this.y-45,
                 duration: 200
               },
               { 
@@ -747,7 +751,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.cambiaModo("AGACHADO");
       }
       this.trepable = false;
-    }else if(!this.body.onFloor() && this.modo=="COLGANDO"){
+    }
+    else if(!this.body.onFloor() && this.modo=="COLGANDO"){ //ESTOY COLGADO
       console.log('Trepando');
       this.body.setVelocityX(0);
       if(Phaser.Input.Keyboard.JustDown(this.keyShift)){//Me dejo caer

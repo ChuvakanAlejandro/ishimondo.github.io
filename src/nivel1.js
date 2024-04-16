@@ -71,15 +71,6 @@ export default class Nivel1 extends Phaser.Scene{
             } 
         }
 
-
-        /*
-           
-
-        */
-
-
-        this.groundLayer.setTileIndexCallback([12,10], this.fin_escalada,this); 
-
         this.groundLayer.setTileIndexCallback([11,13], this.escalada,this); 
 
         //Camara del juego 
@@ -99,18 +90,17 @@ export default class Nivel1 extends Phaser.Scene{
             this.scene.bringToTop('pause'); 
         }
         
+
+        if(this.player.estaTrepando()){
+            const tile= this.groundLayer.getTileAtWorldXY(this.player.x+32, this.player.y+58) ?? this.groundLayer.getTileAtWorldXY(this.player.x-32, this.player.y+58); 
+            if(tile.index=== 10 || tile.index=== 12){
+                this.player.paraDeTrepar(); 
+            }
+        }
     }
 
 
     escalada(){
-        
-        const tile= this.groundLayer.getTileAtWorldXY(this.player.x + 32, this.player.y) ?? this.groundLayer.getTileAtWorldXY(this.player.x - 32, this.player.y); 
-        console.log(tile.index); 
         this.player.paredTrepable(true,100,100); 
-    }
-
-    fin_escalada(){
-        console.log("Termino de escalar"); 
-        //Parar de escalar 
     }
 }
