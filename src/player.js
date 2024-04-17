@@ -47,6 +47,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.bloqueadoIz = false;
     this.bloqueadoDr = false;
     this.bloqueoMovement = false;
+    this.superJump = false;
     this.invecibilidad = false;
     this.yParedTop = 0;
     this.yParedBottom = 0;
@@ -79,6 +80,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.scene.physics.add.overlap(this, this.scene.enemies, (o1, o2) => {
       if((o1.body.touching.down || o2.body.blocked.up) && o2.stepedOn()){
         console.log('ENTRO');
+        this.stepingOnEnemie();
       }
       if(!this.invecibilidad)
         this.damagedIshi(o2.x,o2,y);         
@@ -246,7 +248,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.scene.physics.add.existing(this.hitboxAttack, true); 
       this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
       function procesarAtaque(o1, o2){
-          o2.mePegan(); 
+          o2.mePegan(o1.x); 
       }
     }, this); 
 
@@ -330,8 +332,29 @@ export default class Player extends Phaser.GameObjects.Sprite {
       frameRate: 15,
       repeat: 0
     }); 
-    this.on('animationcomplete-ishi_hurt', ()=> {this.inPain= false;}, this); 
+    this.on('animationcomplete-ishi_hurt', ()=> {this.inPain= false;}, this);
+    this.anims.create({
+      key: 'ishi_steping',
+      frames: this.anims.generateFrameNumbers('ishi', {start: 31, end: 34 }),
+      frameRate: 6,
+      repeat: 0
+    }); 
+    this.on('animationcomplete-ishi_steping', ()=> {
+      this.setAllowGravity(true);
+      this.cambiaModo("LEVANTADO");
+      this.modo_ant = this.modo;
+      this.modo = "SALTANDO";
+      if(this.superJump){
+        this.body.setVelocityY(this.jumpSpeed+100);
+        this.superJump = false;
+      }
+    }, this);  
 
+  }
+
+  stepingOnEnemie(){
+    this.body.setAllowGravity(false);
+    this.modo = "APLASTANDO";
   }
 
   damagedIshi(xEnemigo,y){
@@ -711,79 +734,86 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   preUpdate(t,dt) {
     super.preUpdate(t,dt);
-    if(this.body.onFloor() && (this.modo=="LEVANTADO" || this.modo=="AGACHADO")){
-      if(!this.atacando){
-        if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { //De base, SHIFT cambiara de modo
-          console.log("Se pulso la tecla shift"); 
-          if(this.trepable && (this.bloqueadoDr || this.bloqueadoIz)){//CAMBIANDO A MODO COLGANDO si encuentro una pared trepable y estoy bloqueado por ella
-            this.meAgarroPared();
-          
-          }else if(! (this.bloqueadoDr || this.bloqueadoIz)){
-            this.modo_ant = this.modo;
-            this.cambiaModo(this.modo);
-          }
-        }else if (Phaser.Input.Keyboard.JustDown(this.keySpace)) {//Cambiando a SALTANDO
-          this.body.setVelocityY(this.jumpSpeed);
-          this.modo_ant = this.modo;
-          this.modo = "SALTANDO";
-        }
-        this.movimientoSuelo();
-        if(Phaser.Input.Keyboard.JustDown(this.keyP) && this.modo == "LEVANTADO") {
-          this.logicaAtaque();
-        }
-      }
-    }else if(!this.body.onFloor() && this.modo=="SALTANDO"){//HE SALTADO Y ESTOY EN EL AIRE
-      if(!this.dash){
-        this.body.setSize(35, 60);
-        this.body.setOffset(46, 60);
-        this.play('ishi_jumping', true); 
-        this.movimientoAire();
-        if(Phaser.Input.Keyboard.JustDown(this.keyO) && this.energia > 0){
-          this.dash = true;
-          this.gastaEn();
-          this.body.setAllowGravity(false);
-          this.body.setVelocityY(0);
-          this.play('ishi_dash');
-        }
-      }else{
-        if(!this.flipX){
-          this.body.setVelocityX(this.dashSpeed);
-        }else{
-          this.body.setVelocityX(-this.dashSpeed);
-        }
-      }
-    }else if(this.body.onFloor() && (this.modo=="SALTANDO" || this.modo=="COLGANDO") ){//Si, en mi salto, toco el suelo, vuelvo a mi modo anterior
-      this.body.setAllowGravity(true);
-      if(this.modo_ant == "LEVANTADO"){
-        this.cambiaModo("AGACHADO");
-      }else if(this.modo_ant == "AGACHADO"){
-        this.cambiaModo("LEVANTADO");
-      }else{
-        this.cambiaModo("AGACHADO");
-      }
-      this.trepable = false;
-    }else if(!this.body.onFloor() && this.modo=="COLGANDO"){
-      console.log('Trepando');
-      this.body.setVelocityX(0);
-      if(Phaser.Input.Keyboard.JustDown(this.keyShift)){//Me dejo caer
-        this.cambiaModo("AGACHADO");
-        this.modo_ant = "LEVANTADO";
-        this.bloqueadoDr = false;
-        this.bloqueadoIz = false;
-        this.body.setAllowGravity(true);
-      }
-      this.voyTreapando();
+    if(this.modo == "APLASTANDO"){
       if(Phaser.Input.Keyboard.JustDown(this.keySpace)){
-        this.wallJump();
+        this.superJump = true;
       }
-    }else if(this.body.onFloor() && this.modo=="GOLPEADO" && !this.inPain){
-      this.modo = this.modo_ant;
-    }else{
-      if(this.modo=="GOLPEADO"){
-        console.log("DOLOR");
+    }
+    else{
+      if(this.body.onFloor() && (this.modo=="LEVANTADO" || this.modo=="AGACHADO")){
+        if(!this.atacando){
+          if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { //De base, SHIFT cambiara de modo
+            console.log("Se pulso la tecla shift"); 
+            if(this.trepable && (this.bloqueadoDr || this.bloqueadoIz)){//CAMBIANDO A MODO COLGANDO si encuentro una pared trepable y estoy bloqueado por ella
+              this.meAgarroPared();
+            
+            }else if(! (this.bloqueadoDr || this.bloqueadoIz)){
+              this.modo_ant = this.modo;
+              this.cambiaModo(this.modo);
+            }
+          }else if (Phaser.Input.Keyboard.JustDown(this.keySpace)) {//Cambiando a SALTANDO
+            this.body.setVelocityY(this.jumpSpeed);
+            this.modo_ant = this.modo;
+            this.modo = "SALTANDO";
+          }
+          this.movimientoSuelo();
+          if(Phaser.Input.Keyboard.JustDown(this.keyP) && this.modo == "LEVANTADO") {
+            this.logicaAtaque();
+          }
+        }
+      }else if(!this.body.onFloor() && this.modo=="SALTANDO"){//HE SALTADO Y ESTOY EN EL AIRE
+        if(!this.dash){
+          this.body.setSize(35, 60);
+          this.body.setOffset(46, 60);
+          this.play('ishi_jumping', true); 
+          this.movimientoAire();
+          if(Phaser.Input.Keyboard.JustDown(this.keyO) && this.energia > 0){
+            this.dash = true;
+            this.gastaEn();
+            this.body.setAllowGravity(false);
+            this.body.setVelocityY(0);
+            this.play('ishi_dash');
+          }
+        }else{
+          if(!this.flipX){
+            this.body.setVelocityX(this.dashSpeed);
+          }else{
+            this.body.setVelocityX(-this.dashSpeed);
+          }
+        }
+      }else if(this.body.onFloor() && (this.modo=="SALTANDO" || this.modo=="COLGANDO") ){//Si, en mi salto, toco el suelo, vuelvo a mi modo anterior
+        this.body.setAllowGravity(true);
+        if(this.modo_ant == "LEVANTADO"){
+          this.cambiaModo("AGACHADO");
+        }else if(this.modo_ant == "AGACHADO"){
+          this.cambiaModo("LEVANTADO");
+        }else{
+          this.cambiaModo("AGACHADO");
+        }
+        this.trepable = false;
+      }else if(!this.body.onFloor() && this.modo=="COLGANDO"){
+        console.log('Trepando');
+        this.body.setVelocityX(0);
+        if(Phaser.Input.Keyboard.JustDown(this.keyShift)){//Me dejo caer
+          this.cambiaModo("AGACHADO");
+          this.modo_ant = "LEVANTADO";
+          this.bloqueadoDr = false;
+          this.bloqueadoIz = false;
+          this.body.setAllowGravity(true);
+        }
+        this.voyTreapando();
+        if(Phaser.Input.Keyboard.JustDown(this.keySpace)){
+          this.wallJump();
+        }
+      }else if(this.body.onFloor() && this.modo=="GOLPEADO" && !this.inPain){
+        this.modo = this.modo_ant;
       }else{
-        this.cambiaModo("AGACHADO");
-        this.movimientoAire();
+        if(this.modo=="GOLPEADO"){
+          console.log("DOLOR");
+        }else{
+          this.cambiaModo("AGACHADO");
+          this.movimientoAire();
+        }
       }
     }
     if(this.invecibilidad && !this.inPain){
