@@ -23,7 +23,9 @@ export default class Vt extends Phaser.GameObjects.Sprite{
     }
     preUpdate(t,dt) {
         super.preUpdate(t,dt);
-        if(this.target.health() < this.num){
+        if((this.target.health() + 1) == this.num && this.target.mode() == 'GOLPEADO'){
+            this.rojo();
+        }else if(this.target.health() < this.num){
             this.vacio();
         }
         else{

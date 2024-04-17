@@ -17,7 +17,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y) {
 
     super(scene, x, y, 'ishi');
-    this.setOrigin(0,0.5);
+    this.setOrigin(0.5,0.5);
     this.score = 0;
     this.vida= 4; 
     console.log("Vida actual:  " + this.vida); 
@@ -47,10 +47,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.bloqueadoIz = false;
     this.bloqueadoDr = false;
     this.bloqueoMovement = false;
-    this.imbecilidad = true;
+    this.invecibilidad = false;
     this.yParedTop = 0;
     this.yParedBottom = 0;
+    this.inPain = false;
 
+    this.invencibilityFrames = 100;
+    this.countImb = 0;
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
 
@@ -73,9 +76,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
     
     this.cambioVelocidad();
 
-    this.scene.physics.add.collider(this, this.scene.enemies, (o1, o2) => {
-      this.damagedIshi(o2.x,o2,y);         
-    })
+    this.scene.physics.add.overlap(this, this.scene.enemies, (o1, o2) => {
+      if((o1.body.touching.down || o2.body.blocked.up) && o2.stepedOn()){
+        console.log('ENTRO');
+      }
+      if(!this.invecibilidad)
+        this.damagedIshi(o2.x,o2,y);         
+    });
   }
 
 
@@ -239,7 +246,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.scene.physics.add.existing(this.hitboxAttack, true); 
       this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
       function procesarAtaque(o1, o2){
-          o2.morir(); 
+          o2.mePegan(); 
       }
     }, this); 
 
@@ -281,7 +288,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
 
       function procesarAtaque(o1, o2){
-          o2.morir(); 
+        o2.mePegan(o1.x);
       }
 
     }, this); 
@@ -323,11 +330,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
       frameRate: 15,
       repeat: 0
     }); 
-  }
+    this.on('animationcomplete-ishi_hurt', ()=> {this.inPain= false;}, this); 
 
-  /*
-   PROVISIONAL
- */
+  }
 
   damagedIshi(xEnemigo,y){
     this.bloqueadoDr = false;
@@ -335,18 +340,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.setAllowGravity(true);
     this.modo_ant = this.modo;
     this.modo = "GOLPEADO";
-    this.imbecilidad = true;
+    this.invecibilidad = true;
     this.ishiPushed(xEnemigo);
     this.restarVida();
+    this.inPain = true;
   }
   ishiPushed(xEnemigo){
     this.bloqueoMovement = true;
-    this.body.setVelocityY(0);
-    this.body.setVelocityY(this.jumpSpeed/2);
-    if(this.x > xEnemigo){
-      this.body.setVelocityX(-200);
+    if(this.x < xEnemigo){
+      this.body.setVelocity(-200, this.jumpSpeed/2);
     }else{
-      this.body.setVelocityX(200);
+      this.body.setVelocity(200, this.jumpSpeed/2);
     }
     this.play('ishi_hurt');
   }
@@ -772,19 +776,26 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if(Phaser.Input.Keyboard.JustDown(this.keySpace)){
         this.wallJump();
       }
-    }else if(this.body.onFloor() && this.modo=="GOLPEADO"){
-      this.imbecilidad = false;
+    }else if(this.body.onFloor() && this.modo=="GOLPEADO" && !this.inPain){
       this.modo = this.modo_ant;
     }else{
-      this.cambiaModo("AGACHADO");
-      this.movimientoAire();
+      if(this.modo=="GOLPEADO"){
+        console.log("DOLOR");
+      }else{
+        this.cambiaModo("AGACHADO");
+        this.movimientoAire();
+      }
+    }
+    if(this.invecibilidad && !this.inPain){
+        console.log("Invencible");
+        this.invincible();
     }
 
     if(this.y >= 2900){//TEMPORAL
-      this.x = 100;
+      this.x = 1000;
       this.body.setVelocityX(0);
       this.body.setVelocityY(0)
-      this.y = 100;
+      this.y = 1000;
     }
   }
 
@@ -794,11 +805,24 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
 
+  invincible(){
+    this.setAlpha(0.75);
+    this.countImb++;
+    if(this.countImb == this.invencibilityFrames){
+      this.setAlpha(1);
+      this.invecibilidad = false;
+      this.countImb = 0;
+    }
+  }
+
   health(){
     return this.vida;
   }
   energy(){
     return this.energia;
+  }
+  mode(){
+    return this.modo;
   }
 }
 

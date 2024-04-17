@@ -18,12 +18,13 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
 
         //super(scene,x,y,'seta_bosque');
         super(scene,x,y,'mushmi');
-        this.setOrigin(0,0.5); 
+        this.setOrigin(0.5,0.5); 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.body.setCollideWorldBounds(false); 
         this.body.pushable= false;
 
+        this.group = enemies;
         enemies.add(this);
 
         //Parametros de seta
@@ -36,12 +37,14 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
         this.resting = true;
         this.check = true;
         this.delay_idle = 100;
+
+        this.muriendo = false;
         //Animacion por defecto
         this.setAnimaciones();
 
       
-        this.body.setSize(32, 32);
-        this.body.setOffset(34, 55);
+        this.body.setSize(32, 24);
+        this.body.setOffset(34, 64);
         
         //TIMERS
         this.shootsCooldown = this.scene.time.addEvent({
@@ -118,7 +121,9 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
             frameRate: 15,
             repeat: 0 
         });
-        this.on("animationcomplete-mush_recovers", ()=>{this.attacking = false; this.delay_idle = 100;}, this);
+        this.on("animationcomplete-mush_recovers", ()=>{
+            this.attacking = false; this.delay_idle = 100;
+        }, this);
         this.anims.create({
             key: 'mush_squeezed',
             frames: this.anims.generateFrameNumbers('mushmi', {start: 24, end: 27}),
@@ -127,22 +132,27 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
         });
         this.anims.create({
             key: 'mush_scratched',
-            frames: this.anims.generateFrameNumbers('mushmi', {start: 25, end: 31}),
-            frameRate: 15,
+            frames: this.anims.generateFrameNumbers('mushmi', {start: 28, end: 31}),
+            frameRate: 7,
             repeat: 0 
         });
         this.anims.create({
             key: 'mush_dies_scratched',
             frames: this.anims.generateFrameNumbers('mushmi', {start: 32, end: 35}),
-            frameRate: 15,
+            frameRate: 10,
             repeat: 0 
         });
+        this.on("animationcomplete-mush_dies_scratched", ()=>{
+            this.muriendo = true;
+        }, this);
         this.anims.create({
             key: 'mush_dies_squeezed',
             frames: this.anims.generateFrameNumbers('mushmi', {start: 36, end: 39}),
             frameRate: 15,
             repeat: 0 
-        });       
+        });
+        this.on("animationcomplete-mush_dies_squeezed", ()=>{this.muriendo = true;}, this); 
+
     }
 
     cambiaModo(){
@@ -204,7 +214,8 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
                     this.attacking = false;
                     if(this.delay_idle > 0){
                         this.play('mush_idle',true);
-                        this.delay_idle--;                    }else{
+                        this.delay_idle--;                    
+                    }else{
                         this.play('mush_looks',true);
                     }
                 }
@@ -212,6 +223,13 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
             if(!this.detecting(this.detection) && !this.attacking){
                 this.playReverse('shows_up',true);
                 this.resting = true;
+            }
+        }else{
+            if(this.muriendo){
+                this.setAlpha(this.alpha - 0.05);
+                if(this.alpha == 0){
+                    this.morir();
+                }
             }
         } 
     }
@@ -226,10 +244,29 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
             .chain('mush_shoots').chain('mush_recovers').chain('mush_idle');
     } 
 
+    meAplastan(){
+        this.modo = "APLASTADO";
+        this.group.remove(this);
+        this.play('mush_squeezed').chain('mush_dies_squeezed');
+    }
+    mePegan(xPlayer){
+        if(this.modo == "OCULTA" || this.modo == 'MOSTRADA'){
+            if(this.x < xPlayer){
+                this.setFlip(true);
+            }else{
+                this.setFlip(false);
+            }
+            this.modo = "GOLPEADO";
+            this.group.remove(this);
+            this.play('mush_scratched').chain('mush_dies_scratched');
+        }
+    }
+
+    stepedOn(){
+        return this.aplastable;
+    }
+
     morir(){
-        /*
-            -Falta animacion de muerte 
-        */
        this.destroy(); 
     }
 
