@@ -1,6 +1,4 @@
 import Phaser from 'phaser'
-import game from './game.js'
-import Player from './player.js';
 import Proyectil_Seta from './proyectil.js';
 
 
@@ -43,8 +41,8 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
         this.setAnimaciones();
 
       
-        this.body.setSize(32, 24);
-        this.body.setOffset(34, 64);
+        this.body.setSize(32, 26);
+        this.body.setOffset(32, 62);
         
         //TIMERS
         this.shootsCooldown = this.scene.time.addEvent({
@@ -231,7 +229,8 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
                     this.morir();
                 }
             }
-        } 
+        }
+        
     }
 
     /*
@@ -240,24 +239,28 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
 
     dispara(){
         this.attacking = true;
+        
         this.play('mush_prepares').chain('mush_inhales')
-            .chain('mush_shoots').chain('mush_recovers').chain('mush_idle');
+            .chain('mush_shoots').chain('mush_recovers');
     } 
 
     meAplastan(){
+        this.stop();
         this.modo = "APLASTADO";
-        this.group.remove(this);
+        this.body.destroy();
         this.play('mush_squeezed').chain('mush_dies_squeezed');
     }
-    mePegan(xPlayer){
+    mePegan(){
+        this.stop();
         if(this.modo == "OCULTA" || this.modo == 'MOSTRADA'){
-            if(this.x < xPlayer){
+            if(this.x < this.scene.player.x){
                 this.setFlip(true);
             }else{
                 this.setFlip(false);
             }
             this.modo = "GOLPEADO";
-            this.group.remove(this);
+            this.body.destroy();
+            this.stop();
             this.play('mush_scratched').chain('mush_dies_scratched');
         }
     }

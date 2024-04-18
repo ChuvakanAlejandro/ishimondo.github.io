@@ -1,6 +1,7 @@
 import Platform from './platform.js';
 import Player from './player.js';
 import Poison_Seta  from './poison_seta.js';
+import Bug from './bug.js';
 import Wall from './wall.js';
 import Phaser from 'phaser'
  
@@ -33,29 +34,31 @@ export default class Level extends Phaser.Scene {
 
         this.stars = 10;
         this.bases = this.add.group();
-        this.player = new Player(this, 900, 1000);
-        this.seta1= new Poison_Seta(this, 600, 1000, true, this.enemies);
+        this.player = new Player(this, 400, 1100);
+        this.bicho= new Bug(this, 200, 750, true, this.enemies);
         this.cameras.main.setBounds(0, 0, 20000, 1250);
         this.physics.world.setBounds(0, 0, 20000, 3000);
 
+        new Platform(this, this.player, this.enemies, this.bases, 250, 900);
+        new Platform(this, this.player, this.enemies, this.bases, 500, 1000);
+        new Platform(this, this.player, this.enemies, this.bases, 750, 1100);
 
-        new Platform(this, this.player, this.seta1, this.bases, 0, 11250);
-        new Platform(this, this.player, this.seta1, this.bases, 250, 1250);
-        new Platform(this, this.player, this.seta1, this.bases, 500, 1250);
-        new Platform(this, this.player, this.seta1, this.bases, 750, 1250);
-        new Platform(this, this.player, this.seta1, this.bases, 1000, 1250);
-        new Platform(this, this.player, this.seta1, this.bases, 1250, 1250);
-        new Platform(this, this.player, this.seta1, this.bases, 1500, 1250);
-        new Platform(this, this.player, this.seta1, this.bases, 1750, 1250);
+        new Platform(this, this.player, this.enemies, this.bases, 250, 1250);
+        new Platform(this, this.player, this.enemies, this.bases, 500, 1250);
+        new Platform(this, this.player, this.enemies, this.bases, 750, 1250);
+        new Platform(this, this.player, this.enemies, this.bases, 1000, 1250);
+        new Platform(this, this.player, this.enemies, this.bases, 1250, 1250);
+        new Platform(this, this.player, this.enemies, this.bases, 1500, 1250);
+        new Platform(this, this.player, this.enemies, this.bases, 1750, 1250);
         new Wall(this, this.player, 1850, 950, true);
-        new Platform(this, this.player, this.seta1, this.bases, 1350, 1000);
+        new Platform(this, this.player, this.enemies, this.bases, 1350, 1000);
         new Wall(this, this.player, 1150, 600, true);
         new Wall(this, this.player, 1450, 600, true);
-        new Platform(this, this.player, this.seta1, this.bases, 1950, 500);
-        new Platform(this, this.player, this.seta1, this.bases, 2200, 500);
-        new Platform(this, this.player, this.seta1, this.bases, 2650, 500);
-        new Platform(this, this.player, this.seta1, this.bases, 2950, 500);
-        new Platform(this, this.player, this.seta1, this.bases, 100, 100);
+        new Platform(this, this.player, this.enemies, this.bases, 1950, 500);
+        new Platform(this, this.player, this.enemies, this.bases, 2200, 500);
+        new Platform(this, this.player, this.enemies, this.bases, 2650, 500);
+        new Platform(this, this.player, this.enemies, this.bases, 2950, 500);
+        new Platform(this, this.player, this.enemies, this.bases, 100, 100);
        
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
 

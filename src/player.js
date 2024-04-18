@@ -81,8 +81,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if((o1.body.touching.down || o2.body.blocked.up) && o2.stepedOn()){
         console.log('ENTRO');
         this.stepingOnEnemie();
+        o2.meAplastan();
       }
-      if(!this.invecibilidad)
+      else if(!this.invecibilidad && !(o1.body.touching.down || o2.body.blocked.up))
         this.damagedIshi(o2.x,o2,y);         
     });
   }
@@ -248,7 +249,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.scene.physics.add.existing(this.hitboxAttack, true); 
       this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
       function procesarAtaque(o1, o2){
-          o2.mePegan(o1.x); 
+          o2.mePegan(); 
       }
     }, this); 
 
@@ -290,7 +291,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.scene.physics.overlap(this.hitboxAttack, this.scene.enemies, procesarAtaque); 
 
       function procesarAtaque(o1, o2){
-        o2.mePegan(o1.x);
+        o2.mePegan();
       }
 
     }, this); 
@@ -336,11 +337,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.anims.create({
       key: 'ishi_steping',
       frames: this.anims.generateFrameNumbers('ishi', {start: 31, end: 34 }),
-      frameRate: 6,
+      frameRate: 15,
       repeat: 0
     }); 
     this.on('animationcomplete-ishi_steping', ()=> {
-      this.setAllowGravity(true);
+      this.body.setAllowGravity(true);
       this.cambiaModo("LEVANTADO");
       this.modo_ant = this.modo;
       this.modo = "SALTANDO";
@@ -353,8 +354,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   stepingOnEnemie(){
+    this.body.setVelocity(0,0);
     this.body.setAllowGravity(false);
     this.modo = "APLASTANDO";
+    this.play('ishi_steping');
   }
 
   damagedIshi(xEnemigo,y){
@@ -614,6 +617,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   movimientoAire(){
+    this.bloqueadoDr = false;
+    this.bloqueadoIz = false;
     if(this.modo == "SALTANDO"){
       if (this.keyA.isDown){
         this.voyIzquierdaAire();
@@ -671,6 +676,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
   voyIzquierdaAire(){
     console.log("Se pulso la tecla A en el aire");
+    this.bloqueadoDr = false;
     if(this.body.blocked.left && Phaser.Input.Keyboard.JustDown(this.keyShift) && this.trepable){//Estoy bloqueado
       this.bloqueadoIz = true;
       if(!this.flipX){
@@ -678,7 +684,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
       this.meAgarroPared();
     }else{
-        if(this.speed_actual > -this.speed){
+      this.bloqueadoDr = false;
+      this.bloqueadoIz = true;
+      if(this.speed_actual > -this.speed){
         this.speed_actual = this.speed_actual-50;
         if(this.speed_actual < -this.speed)
           this.speed_actual = this.speed_actual + 10;
@@ -738,8 +746,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if(Phaser.Input.Keyboard.JustDown(this.keySpace)){
         this.superJump = true;
       }
-    }
-    else{
+    }else if(this.modo == "GOLPEADO"){
+      if(!this.inPain && this.body.onFloor()){
+        this.cambiaModo("AGACHADO");
+      }
+    }else{
       if(this.body.onFloor() && (this.modo=="LEVANTADO" || this.modo=="AGACHADO")){
         if(!this.atacando){
           if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { //De base, SHIFT cambiara de modo
@@ -805,15 +816,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
         if(Phaser.Input.Keyboard.JustDown(this.keySpace)){
           this.wallJump();
         }
-      }else if(this.body.onFloor() && this.modo=="GOLPEADO" && !this.inPain){
-        this.modo = this.modo_ant;
       }else{
-        if(this.modo=="GOLPEADO"){
-          console.log("DOLOR");
-        }else{
-          this.cambiaModo("AGACHADO");
-          this.movimientoAire();
-        }
+        this.cambiaModo("AGACHADO");
+        this.movimientoAire();
       }
     }
     if(this.invecibilidad && !this.inPain){
