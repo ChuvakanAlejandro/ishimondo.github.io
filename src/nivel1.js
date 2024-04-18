@@ -30,23 +30,22 @@ export default class Nivel1 extends Phaser.Scene{
         
         this.groundLayer.setCollisionByProperty({colisiona: true}); 
         this.decoracionLayer.setCollisionByProperty({daña:true}); 
-        
-        this.player= this.map.createFromObjects('Sprites', {
-            name: 'Ishi', 
-            classType: Player
-        } )[0]; 
-
 
         //Grupos 
         this.enemies= this.physics.add.group(); 
+
+        this.player= this.map.createFromObjects('Sprites', {
+            name: 'Ishi', 
+            classType: Player
+        } )[0];
 
         for (const objeto of this.map.getObjectLayer('Sprites').objects) {
             // `objeto.name` u `objeto.type` nos llegan de las propiedades del
             // objeto en Tiled
             
             if(objeto.type === 'Seta') {
-                let seta_aux= new Poison_Seta(this, objeto.x, objeto.y -100, true);
-                this.enemies.add(seta_aux);
+                let seta_aux= new Poison_Seta(this, objeto.x, objeto.y -100, true, this.enemies);
+            
             } 
 
         }
@@ -59,18 +58,7 @@ export default class Nivel1 extends Phaser.Scene{
         }); 
 
         this.physics.add.collider(this.groundLayer,this.enemies); 
-        this.physics.add.collider(this.enemies, this.player, recibirDanyo); 
-        function recibirDanyo(obj1, obj2) {
-            
-            //Comprobar que el personaje esta pisando al enemigo 
-            if((obj1.body.blocked.down && obj2.body.blocked.up) && obj2.aplastable){
-                obj2.morir(); 
-            }
-            else{
-            
-                obj1.restarVida();
-            } 
-        }
+        
 
         this.groundLayer.setTileIndexCallback([11,13], this.empiezaEscalada,this); 
 
