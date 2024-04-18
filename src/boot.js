@@ -7,6 +7,7 @@ import player from '../assets/sprites/Ishi.png'
 import hud_vida from '../assets/sprites/hud_vida.png'
 import hud_skill_bar from '../assets/sprites/hud_skill_bar.png'
 import full_screen_img from '../assets/sprites/full_screen.png'
+import no_full_screen_img from '../assets/sprites/no_full_screen.png'
 import barra from '../assets/sprites/barra.png'
 import vt from '../assets/sprites/vt_assets.png'
 import en from '../assets/sprites/en_assets.png'
@@ -63,6 +64,7 @@ export default class Boot extends Phaser.Scene {
     this.load.image('hud_skill_bar', hud_skill_bar ); 
     this.load.image('barra', barra );
     this.load.image('full_screen', full_screen_img); 
+    this.load.image('no_full_screen', no_full_screen_img); 
     this.load.spritesheet('vt', vt,{frameWidth:32,frameHeight:16});
     this.load.spritesheet('en', en,{frameWidth:18,frameHeight:10});
     this.load.spritesheet('ishi_face', i_face,{frameWidth:96,frameHeight:96});    

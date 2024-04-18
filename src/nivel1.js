@@ -27,6 +27,7 @@ export default class Nivel1 extends Phaser.Scene{
        
         this.decoracionLayer= this.map.createLayer('Decoracion', tileset);  
 
+        
         this.groundLayer.setCollisionByProperty({colisiona: true}); 
         this.decoracionLayer.setCollisionByProperty({daña:true}); 
         
@@ -71,7 +72,7 @@ export default class Nivel1 extends Phaser.Scene{
             } 
         }
 
-        this.groundLayer.setTileIndexCallback([11,13], this.escalada,this); 
+        this.groundLayer.setTileIndexCallback([11,13], this.empiezaEscalada,this); 
 
         //Camara del juego 
         this.cameras.main.setBounds(0,0,4480, 2550);
@@ -90,17 +91,42 @@ export default class Nivel1 extends Phaser.Scene{
             this.scene.bringToTop('pause'); 
         }
         
+    }
 
-        if(this.player.estaTrepando()){
-            const tile= this.groundLayer.getTileAtWorldXY(this.player.x+32, this.player.y+58) ?? this.groundLayer.getTileAtWorldXY(this.player.x-32, this.player.y+58); 
-            if(tile.index=== 10 || tile.index=== 12){
-                this.player.paraDeTrepar(); 
-            }
+    compruebaTileEscalada(x, y, direccion){
+       
+        switch(direccion){
+            case 'bajada': 
+                let tile1= this.groundLayer.getTileAtWorldXY(x+32, y+32, true); 
+                if(tile1.index==-1){
+                    tile1=this.groundLayer.getTileAtWorldXY(x-1,y+32,true); 
+                    if(tile1.index=== -1 || tile1.index=== 4 || tile1.index=== 6)  return false; 
+                    else return true; 
+                } 
+                if(tile1.index=== 4 || tile1.index=== 6) return false;
+                else return true;
+
+            case 'subida': 
+                let tile2= this.groundLayer.getTileAtWorldXY(x+32, y-32, true);  
+
+                if(tile2.index== -1){
+                    this.groundLayer.getTileAtWorldXY(x-16, y-58, true); 
+                    if(tile2.index=== -1 || tile2.index=== 4 || tile2.index=== 6) return false; 
+                    else return true; 
+                }
+                if(tile2.index=== 4 || tile2.index=== 6) return false;
+                else return true;  
+            
+            case 'fin':     
+                let tile3= this.groundLayer.getTileAtWorldXY(x+32,y) ?? this.groundLayer.getTileAtWorldXY(x-20, y); 
+                if(tile3.index=== 10 || tile3.index=== 12){
+                    return true; 
+                }
+                else return false; 
         }
     }
 
-
-    escalada(){
+    empiezaEscalada(){
         this.player.paredTrepable(true,100,100); 
     }
 }

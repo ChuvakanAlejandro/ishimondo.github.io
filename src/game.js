@@ -18,7 +18,7 @@ let config = {
     height: 500,
     backgroundColor: '#4488aa',
     scale: {
-        mode: Phaser.Scale.FIT,  
+        //mode: Phaser.Scale.FIT,  
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     pixelArt: true,
@@ -32,4 +32,9 @@ let config = {
     }
 };
 
+
+
+
 new Phaser.Game(config);
+
+

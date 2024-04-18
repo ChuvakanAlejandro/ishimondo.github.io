@@ -389,12 +389,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.yParedBottom = ybottom;
   }
 
-
-  paraDeTrepar(){
-    this.fin_escalada= true; 
-  }
-  
-
   estaTrepando(){
     return this.modo=== "COLGANDO"; 
   }
@@ -441,15 +435,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   voyTreapando(){
     if(!this.escalando){
-      if(this.keyW.isDown && this.y && !this.fin_escalada){
+      if(this.keyW.isDown && this.scene.compruebaTileEscalada(this.x, this.y, 'subida')){
         this.suboPared();
-      }else if(Phaser.Input.Keyboard.JustDown(this.keyW) && this.fin_escalada){ 
+      } 
+      else if(Phaser.Input.Keyboard.JustDown(this.keyW) && this.scene.compruebaTileEscalada(this.x, this.y, 'fin') ){ 
         this.body.setVelocityY(0);
         if(this.bloqueadoDr){
           const chanin = this.scene.tweens.chain({
             targets: this,
             tweens:  [{ 
-                y: this.y-45,
+                y: this.y-84,
                 duration: 200
               },
               { 
@@ -478,7 +473,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           
         this.play('ishi_wall_finish');
         this.escalando = true;
-      }else if(this.keyS.isDown){
+      }else if(this.keyS.isDown && this.scene.compruebaTileEscalada(this.x, this.y, 'bajada')){
         this.bajoPared();
       }else {//Estoy quieto trepando la pared.
         this.play('ishi_climb_idle',true);
