@@ -22,10 +22,12 @@ export default class Hface extends Phaser.GameObjects.Sprite{
     }
     preUpdate(t,dt) {
         super.preUpdate(t,dt);
-        if(this.target.health() < 2){
-            this.iAmNotOkay();
+        if(this.target.mode() == 'GOLPEADO'){
+            this.iAmHurt();
         }
-        else{
+        else if(this.target.health() < 2){
+            this.iAmNotOkay();
+        }else{
             this.iAmOkay();
         }
     }
