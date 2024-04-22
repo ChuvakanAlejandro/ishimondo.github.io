@@ -18,6 +18,7 @@ export default class Pause_Menu extends Phaser.Scene {
         this.enter_key= this.input.keyboard.addKey('Enter'); 
 
         this.indiceBotonAct= 0; 
+        this.sound.pauseAll();
     }
 
 
@@ -36,6 +37,7 @@ export default class Pause_Menu extends Phaser.Scene {
 
         exitOption.on('pulsado', () => {
             this.scene.stop(this.ant_escena); 
+            this.sound.stopAll(); 
             this.scene.stop('hudIshi'); 
             this.scene.start('main'); 
         }); 
@@ -64,6 +66,7 @@ export default class Pause_Menu extends Phaser.Scene {
     update() {
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter 
             this.scene.stop(); 
+            this.sound.resumeAll(); 
             this.scene.resume(this.ant_escena); //Volvemos al gameplay
         }
 

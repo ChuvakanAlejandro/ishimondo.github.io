@@ -16,12 +16,14 @@ import ishi from '../assets/animations/Ishi_sprites.png'
 import mush from '../assets/animations/mushmi.png'
 import bug from '../assets/animations/bug.png'
 import proyectil from '../assets/animations/proyectil.png'
-import background from '../assets/sprites/background.jpg'
+import background from '../assets/sprites/background.png'
 import Button from '../assets/sprites/button.png'
 import Bosque from '../assets/maps/mundo1.png'
 import tilemap from '../assets/maps/nivel1.json'
 import RetroFont from 'url:../assets/fonts/Retro_Computer.ttf'
 
+import Forest_Theme from 'url:../assets/audio/musica_bosque.mp3'
+import Sonido_Daño from 'url:../assets/audio/golpe_jugador.mp3'
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
  * Esta escena se puede mejorar añadiendo una imagen del juego y una 
@@ -84,6 +86,10 @@ export default class Boot extends Phaser.Scene {
     /*Carga de fuentes*/ 
     this.loadFont("RetroFont", RetroFont); 
     
+
+    /*Carga de audios*/ 
+    this.load.audio("forest_theme", Forest_Theme); 
+    this.load.audio("sonido_daño", Sonido_Daño); 
   }
 
   /**

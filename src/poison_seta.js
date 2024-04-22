@@ -183,9 +183,6 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
         }else{
             r = r && (this.scene.player.x > this.x)
         }
-        if(r){
-            console.log("Ishi esta cerca");
-        }
         return r && !this.in_cooldown && !this.attacking;
     }
         

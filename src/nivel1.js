@@ -12,6 +12,11 @@ export default class Nivel1 extends Phaser.Scene{
 
     init() {
         this.enter_key= this.input.keyboard.addKey('Enter'); 
+        this.bso= this.sound.add("forest_theme"); 
+        this.sonido_golpe= this.sound.add("sonido_daño"); 
+        this.bso.play(); 
+       
+        this.bso.setLoop(true); 
     }
 
     create(){
@@ -27,42 +32,52 @@ export default class Nivel1 extends Phaser.Scene{
        
         this.decoracionLayer= this.map.createLayer('Decoracion', tileset);  
 
-        
-        this.groundLayer.setCollisionByProperty({colisiona: true}); 
-        this.decoracionLayer.setCollisionByProperty({daña:true}); 
+        this.groundLayer.setCollisionByProperty({colisiona: true});  
 
         //Grupos 
         this.enemies= this.physics.add.group(); 
 
+        //Creando al jugador 
         this.player= this.map.createFromObjects('Sprites', {
             name: 'Ishi', 
             classType: Player
         } )[0];
 
+
+        //Creando la zona para el 'final del nivel' 
+
+        let eventAux= this.map.createFromObjects('Sprites', {name: 'fin_nivel'}) [0]; 
+        this.final_nivel= this.add.zone(eventAux.x, eventAux.y,eventAux.displayWidth, eventAux.displayHeight);
+        this.physics.world.enable(this.final_nivel); 
+        this.final_nivel.body.setAllowGravity(false);
+        this.final_nivel.body.setImmovable(false);
+        eventAux.destroy();   
+       
+        //Creando a los enemigos 
         for (const objeto of this.map.getObjectLayer('Sprites').objects) {
-            // `objeto.name` u `objeto.type` nos llegan de las propiedades del
-            // objeto en Tiled
-            
             if(objeto.type === 'Seta') {
                 let seta_aux= new Poison_Seta(this, objeto.x, objeto.y -100, true, this.enemies);
-            
             } 
-
         }
 
-
-
+        //Collider del suelo con el jugador 
         this.physics.add.collider(this.groundLayer, this.player); 
-        this.physics.add.collider(this.decoracionLayer, this.player, () => {
-            this.player.restarVida(); 
-        }); 
 
+        //Collider del suelo con los enemigos 
         this.physics.add.collider(this.groundLayer,this.enemies); 
-        
 
+
+        //Terminar el nivel 
+        this.physics.add.overlap(this.player, this.final_nivel, ()=>{
+            this.bso.destroy(); 
+            this.scene.start('main'); 
+        });
+
+
+        //Callback para empezar la escalada 
         this.groundLayer.setTileIndexCallback([11,13], this.empiezaEscalada,this); 
 
-        //Camara del juego 
+        //Camara del juego
         this.cameras.main.setBounds(0,0,4480, 2550);
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
 
@@ -73,12 +88,11 @@ export default class Nivel1 extends Phaser.Scene{
 
     update(){
         super.update(); 
-        if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter 
+        if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  
             this.scene.pause();
             this.scene.launch('pause', {nombre_escena: 'nivel1'}).pause;  
             this.scene.bringToTop('pause'); 
         }
-        
     }
 
     compruebaTileEscalada(x, y, direccion){
@@ -87,22 +101,25 @@ export default class Nivel1 extends Phaser.Scene{
             case 'bajada': 
                 let tile1= this.groundLayer.getTileAtWorldXY(x+32, y+32, true); 
                 if(tile1.index==-1){
-                    tile1=this.groundLayer.getTileAtWorldXY(x-1,y+32,true); 
-                    if(tile1.index=== -1 || tile1.index=== 4 || tile1.index=== 6)  return false; 
+                    tile1=this.groundLayer.getTileAtWorldXY(x-32,y+32,true); 
+        
+                    if(!tile1.properties['escalable'])  return false; 
                     else return true; 
                 } 
-                if(tile1.index=== 4 || tile1.index=== 6) return false;
+
+                if(!tile1.properties['escalable']) return false;
                 else return true;
 
             case 'subida': 
                 let tile2= this.groundLayer.getTileAtWorldXY(x+32, y-32, true);  
 
                 if(tile2.index== -1){
-                    this.groundLayer.getTileAtWorldXY(x-16, y-58, true); 
-                    if(tile2.index=== -1 || tile2.index=== 4 || tile2.index=== 6) return false; 
+                    tile2= this.groundLayer.getTileAtWorldXY(x-32, y-32, true); 
+                    if(!tile2.properties['escalable']) return false; 
                     else return true; 
                 }
-                if(tile2.index=== 4 || tile2.index=== 6) return false;
+        
+                if(!tile2.properties['escalable']) return false;
                 else return true;  
             
             case 'fin':     

@@ -147,6 +147,28 @@
                  "width":0,
                  "x":1180,
                  "y":484
+                }, 
+                {
+                 "height":639,
+                 "id":35,
+                 "name":"fin_nivel",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":123,
+                 "x":4354,
+                 "y":642
+                }, 
+                {
+                 "height":26,
+                 "id":36,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":34,
+                 "x":4426,
+                 "y":1189
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -182,8 +204,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":5,
- "nextobjectid":35,
+ "nextlayerid":6,
+ "nextobjectid":38,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
@@ -498,6 +520,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"escalable",
+                         "type":"bool",
+                         "value":true
                         }]
                 }, 
                 {
@@ -505,6 +532,11 @@
                  "properties":[
                         {
                          "name":"colisiona",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"escalable",
                          "type":"bool",
                          "value":true
                         }]
@@ -904,6 +936,11 @@
                          "name":"colisiona",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"da\u00f1o",
+                         "type":"bool",
+                         "value":true
                         }]
                 }, 
                 {
@@ -911,6 +948,11 @@
                  "properties":[
                         {
                          "name":"colisiona",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"da\u00f1o",
                          "type":"bool",
                          "value":true
                         }]

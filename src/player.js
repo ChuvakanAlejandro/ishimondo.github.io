@@ -361,6 +361,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   damagedIshi(xEnemigo,y){
+    this.scene.sonido_golpe.play(); 
     this.bloqueadoDr = false;
     this.bloqueadoIz = false;
     this.body.setAllowGravity(true);
@@ -382,7 +383,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
   restarVida(){
     this.vida--;
-     console.log("Vida actual " + this.vida); 
      if(this.vida== 0){ //PANTALLA DE GAMEOVER
         this.scene.scene.start('end', {nombre_escena: 'nivel1'}); 
      }
@@ -514,7 +514,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           const chanin = this.scene.tweens.chain({
             targets: this,
             tweens:  [{ 
-                y: this.y-45,
+                y: this.y-84,
                 duration: 200
               },
               { 
@@ -539,13 +539,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   suboPared(){
-    console.log('Arriba voy');
     this.play('ishi_climbing',true);
     this.body.setVelocityY(this.jumpSpeed/3);
   }
 
   bajoPared(){
-    console.log('Abajo voy');
     this.play('ishi_climb_down',true);
     this.body.setVelocityY(-this.jumpSpeed/2);
   }
@@ -596,7 +594,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
   voyDerechaSuelo(){
-    console.log("Se pulso la tecla D");
     this.bloqueadoIz = false; //Si me muevo a la derecha, ya no tengo nada bloqueando my moviemiento a mi izquierda
     if(this.body.blocked.right){//Estoy bloqueado
       this.bloqueadoDr = true;
@@ -612,7 +609,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
   voyIzquierdaSuelo(){
-    console.log("Se pulso la tecla A"); 
     this.bloqueadoDr = false;//Si me muevo a la izquierda, ya no tengo nada bloqueando my moviemiento a mi derecha
     if(this.body.blocked.left){//Estoy bloqueado
       this.bloqueadoIz = true;
@@ -671,7 +667,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.setVelocityX(this.speed_actual);
   }
   voyDerechaAire(){
-    console.log("Se pulso la tecla D en el aire");
     if(this.body.blocked.right && Phaser.Input.Keyboard.JustDown(this.keyShift) && this.trepable){//Estoy bloqueado
       this.bloqueadoDr = true;
       if(this.flipX){
@@ -687,7 +682,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
   voyIzquierdaAire(){
-    console.log("Se pulso la tecla A en el aire");
     this.bloqueadoDr = false;
     if(this.body.blocked.left && Phaser.Input.Keyboard.JustDown(this.keyShift) && this.trepable){//Estoy bloqueado
       this.bloqueadoIz = true;
@@ -706,7 +700,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
   caigoDerecha(){
-    console.log("Se pulso la tecla D en el aire");
     this.play('ishi_falling',true);
     this.setFlip(false); 
     if(this.body.blocked.right && Phaser.Input.Keyboard.JustDown(this.keyShift) && this.trepable){//Estoy bloqueado
@@ -723,7 +716,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
   caigoIzquierda(){
-    console.log("Se pulso la tecla A en el aire");
     this.play('ishi_falling',true);
     this.setFlip(false); 
     if(this.body.blocked.left && Phaser.Input.Keyboard.JustDown(this.keyShift) && this.trepable){//Estoy bloqueado
@@ -766,7 +758,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if(this.body.onFloor() && (this.modo=="LEVANTADO" || this.modo=="AGACHADO")){
         if(!this.atacando){
           if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { //De base, SHIFT cambiara de modo
-            console.log("Se pulso la tecla shift"); 
             if(this.trepable && (this.bloqueadoDr || this.bloqueadoIz)){//CAMBIANDO A MODO COLGANDO si encuentro una pared trepable y estoy bloqueado por ella
               this.meAgarroPared();
             
@@ -834,7 +825,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
     if(this.invecibilidad && !this.inPain){
-        console.log("Invencible");
         this.invincible();
     }
 
