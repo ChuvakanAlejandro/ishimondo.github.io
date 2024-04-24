@@ -29,6 +29,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     this.body.setSize(35, 90);
     this.body.setOffset(46, 30);
+    this.body.setMaxVelocityY(700);
 
     /*Declaracion e inicializacion de parametros*/ 
     this.vida= 4;  //Vida
@@ -52,7 +53,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.yParedTop = 0;
     this.yParedBottom = 0;
     this.inPain = false;
-
     this.invencibilityFrames = 100;
     this.countImb = 0;
     // Esta label es la UI en la que pondremos la puntuación del jugador
@@ -674,6 +674,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
       this.meAgarroPared();
     }else{
+      this.bloqueadoDr = false;
+      this.bloqueadoIz = false;
       if(this.speed_actual < this.speed){
         this.speed_actual = this.speed_actual+50;
         if(this.speed_actual > this.speed)
@@ -682,7 +684,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
   }
   voyIzquierdaAire(){
-    this.bloqueadoDr = false;
     if(this.body.blocked.left && Phaser.Input.Keyboard.JustDown(this.keyShift) && this.trepable){//Estoy bloqueado
       this.bloqueadoIz = true;
       if(!this.flipX){
@@ -691,7 +692,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.meAgarroPared();
     }else{
       this.bloqueadoDr = false;
-      this.bloqueadoIz = true;
+      this.bloqueadoIz = false;
       if(this.speed_actual > -this.speed){
         this.speed_actual = this.speed_actual-50;
         if(this.speed_actual < -this.speed)
@@ -826,13 +827,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
     if(this.invecibilidad && !this.inPain){
         this.invincible();
-    }
-
-    if(this.y >= 2900){//TEMPORAL
-      this.x = 1000;
-      this.body.setVelocityX(0);
-      this.body.setVelocityY(0)
-      this.y = 1000;
     }
   }
 

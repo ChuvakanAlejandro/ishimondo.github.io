@@ -29,6 +29,7 @@ export default class Bug extends Phaser.GameObjects.Sprite{
         this.vida = 2;
         this.velocidad = 150;
         this.muriendo = false;
+        this.golpeado = false;
         //Animacion por defecto
         this.setAnimaciones();
 
@@ -67,6 +68,7 @@ export default class Bug extends Phaser.GameObjects.Sprite{
             frameRate: 10,
             repeat: 0 
         });
+        this.on("animationcomplete-bug_scratched", ()=>{this.golpeado = false;}, this); 
         this.anims.create({
             key: 'bug_dies',
             frames: this.anims.generateFrameNumbers('bug', {start: 17, end: 20}),
@@ -80,17 +82,29 @@ export default class Bug extends Phaser.GameObjects.Sprite{
 
 
     preUpdate(t,dt){
-        super.preUpdate(t,dt);  
-        if (Phaser.Math.Distance.Between(this.x, this.y, this.scene.player.x, this.scene.player.y) < 600) {
-            this.play('bug_walks',true);
-            this.body.setVelocityX(this.velocidad);
-        }
-        else{
-            this.play('bug_idle',true);
-            this.body.setVelocityX(0);
+        super.preUpdate(t,dt); 
+        if (this.vida >0){
+            if(!this.golpeado){
+                if (Phaser.Math.Distance.Between(this.x, this.y, this.scene.player.x, this.scene.player.y) < 750) {
+                    if(this.body.blocked.left && this.scene.groundLayer){
+                        this.setFlip(false);
+                        this.velocidad *=-1;
+                    }else if (this.body.blocked.right){
+                        this.setFlip(true);
+                        this.velocidad *=-1;
+                    }
+                    //this.play('bug_walks',true);
+                    //this.body.setVelocityX(this.velocidad);
+                    this.play('bug_idle',true);
+                    this.body.setVelocityX(0);
+                }
+                else{
+                    this.play('bug_idle',true);
+                    this.body.setVelocityX(0);
+                }
+            }
         }
         
-        /*
         else{
             if(this.muriendo){
                 this.setAlpha(this.alpha - 0.05);
@@ -99,27 +113,25 @@ export default class Bug extends Phaser.GameObjects.Sprite{
                 }
             }
         }
-        */
         
     }
 
     meAplastan(){
         this.stop();
+        this.vida = 0;
         this.body.destroy();
         this.play('bug_squeezed').chain('bug_dies');
     }
     mePegan(){
         this.stop();
-        if(this.modo == "OCULTA" || this.modo == 'MOSTRADA'){
-            if(this.x < this.scene.player.x){
-                this.setFlip(true);
-            }else{
-                this.setFlip(false);
-            }
-            this.modo = "GOLPEADO";
+        this.vida--;
+        this.golpeado = true;
+        if(this.vida == 0){
             this.body.destroy();
-            this.stop();
-            this.play('mush_scratched').chain('mush_dies_scratched');
+            this.play('bug_scratched').chain('bug_dies');
+        }
+        else{
+            this.play('bug_scratched');
         }
     }
 
