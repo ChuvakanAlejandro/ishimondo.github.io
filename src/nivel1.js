@@ -1,6 +1,7 @@
 import Phaser from 'phaser'; 
 import Player from './player.js';
 import Poison_Seta from './poison_seta.js';
+import Bug from './bug.js';
 import Coleccionable from './coleccionable.js';
 
 
@@ -60,7 +61,7 @@ export default class Nivel1 extends Phaser.Scene{
         //Creando a los enemigos 
         for (const objeto of this.map.getObjectLayer('Sprites').objects) {
             if(objeto.type === 'Seta') {
-                let seta_aux= new Poison_Seta(this, objeto.x, objeto.y -100, true, this.enemies);
+                let enemy= new Bug(this, objeto.x, objeto.y -100, true, this.enemies);
             } 
         }
 
