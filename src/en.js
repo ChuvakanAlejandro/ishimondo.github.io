@@ -25,4 +25,8 @@ export default class En extends Phaser.GameObjects.Sprite{
             this.lleno();
         }
     }
+
+    recargarEnergia(){
+
+    }
 }

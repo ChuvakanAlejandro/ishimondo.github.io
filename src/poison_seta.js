@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import Proyectil_Seta from './proyectil.js';
-
+import Orbe from './orbe.js';
 
 export default class Poison_Seta extends Phaser.GameObjects.Sprite{
     /**
@@ -149,7 +149,13 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
             frameRate: 15,
             repeat: 0 
         });
-        this.on("animationcomplete-mush_dies_squeezed", ()=>{this.muriendo = true;}, this); 
+
+
+        this.on("animationcomplete-mush_dies_squeezed", ()=>{
+            this.muriendo = true;
+            new Orbe(this.scene, this.x, this.y, 'vt');
+
+        }, this); 
 
     }
 
@@ -227,7 +233,6 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
                 }
             }
         }
-        
     }
 
     /*

@@ -8,11 +8,25 @@ export default class Main_Menu extends Phaser.Scene {
     */
 
     constructor() {
-        super({key: 'main'});
+        super({key: 'main'});5
     }
 
-    init(){
-      
+    init(datos){
+        if(typeof datos.imagenes==='undefined'){ //Primera entrada al juego
+            this.image_data= []; 
+            
+            for(let i=0; i<6; i++){
+                this.image_data[i]= {desbloqueda: false,
+                                    texto: '????????',
+                                    imagen: 'img_locked'}; 
+            }
+        }
+
+        else {
+            this.image_data= datos.imagenes; 
+        }
+
+
         this.cursors= this.input.keyboard.createCursorKeys(); 
         this.indiceBotonAct= 0; 
     }
@@ -27,17 +41,17 @@ export default class Main_Menu extends Phaser.Scene {
         this.add.text(width* 0.35, height*0.3, 'ISHIMONDO',{fontFamily: "RetroFont", fontSize:50}); 
 
         /*Botones de opcion*/ 
-        const playOption= this.add.image(width* 0.3, height*0.7, 'button').setDisplaySize(250,100); 
-        const galeryOption= this.add.image( width - (width * 0.3)  ,playOption.y, 'button').setDisplaySize(250,100); 
+        const playOption= this.add.image(width* 0.3, height*0.7, 'button')
+        const galeryOption= this.add.image( width - (width * 0.3)  ,playOption.y, 'button')
         this.add.text(playOption.x, playOption.y, 'JUGAR', {fontFamily: "RetroFont", fontSize: 30}).setOrigin(0.5); 
         this.add.text(galeryOption.x,galeryOption.y, 'GALERIA', {fontFamily: "RetroFont", fontSize: 30 }).setOrigin(0.5); 
 
         playOption.on('pulsado', () => {
-            this.scene.start('nivel1'); 
+            this.scene.start('nivel1', {imagenes: this.image_data}); 
         }); 
 
         galeryOption.on('pulsado', () => {
-            this.scene.start('galery'); 
+            this.scene.start('galery', {imagenes: this.image_data}); 
         });
 
         this.buttons = [

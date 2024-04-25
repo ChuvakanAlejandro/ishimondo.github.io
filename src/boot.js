@@ -4,8 +4,6 @@ import platform from '../assets/sprites/platform.png'
 import base from '../assets/sprites/base.png'
 import star from '../assets/sprites/star.png'
 import player from '../assets/sprites/Ishi.png'
-import hud_vida from '../assets/sprites/hud_vida.png'
-import hud_skill_bar from '../assets/sprites/hud_skill_bar.png'
 import full_screen_img from '../assets/sprites/full_screen.png'
 import no_full_screen_img from '../assets/sprites/no_full_screen.png'
 import barra from '../assets/sprites/barra.png'
@@ -19,9 +17,13 @@ import proyectil from '../assets/animations/proyectil.png'
 import background from '../assets/sprites/background.png'
 import Button from '../assets/sprites/button.png'
 import Bosque from '../assets/maps/mundo1.png'
-import tilemap from '../assets/maps/nivel1.json'
-import RetroFont from 'url:../assets/fonts/Retro_Computer.ttf'
+import coleccionable from '../assets/animations/coleccionable.png'
+import img_locked from '../assets/sprites/imagen_oculta.png'
 
+
+import tilemapN1 from '../assets/maps/nivel1.json'
+import tilemapN2 from '../assets/maps/nivel2.json'
+import RetroFont from 'url:../assets/fonts/Retro_Computer.ttf'
 import Forest_Theme from 'url:../assets/audio/musica_bosque.mp3'
 import Sonido_Daño from 'url:../assets/audio/golpe_jugador.mp3'
 /**
@@ -62,16 +64,18 @@ export default class Boot extends Phaser.Scene {
     this.load.image('base', base);
     this.load.image('star', star);
     this.load.image('player', player);
-    this.load.image('wall', wall)
-    this.load.image('hud_vida', hud_vida ); 
-    this.load.image('hud_skill_bar', hud_skill_bar ); 
+    this.load.image('wall', wall); 
     this.load.image('barra', barra );
     this.load.image('full_screen', full_screen_img); 
+    this.load.image('img_locked', img_locked); 
     this.load.image('no_full_screen', no_full_screen_img); 
     this.load.spritesheet('vt', vt,{frameWidth:32,frameHeight:16});
     this.load.spritesheet('en', en,{frameWidth:18,frameHeight:10});
     this.load.spritesheet('ishi_face', i_face,{frameWidth:96,frameHeight:96});    
     this.load.image('bala_seta', proyectil);
+
+
+    this.load.spritesheet('coleccionable', coleccionable, {frameWidth:32,frameHeight:32}); 
     this.load.spritesheet('ishi', ishi,{frameWidth:128,frameHeight:128});
     this.load.spritesheet('mushmi', mush,{frameWidth:96,frameHeight:96});
     this.load.spritesheet('bug', bug, {frameWidth: 128 ,frameHeight: 128}); 
@@ -80,7 +84,8 @@ export default class Boot extends Phaser.Scene {
 
     /*Carga del archivo del tilemap*/
 
-    this.load.tilemapTiledJSON('tilemap', tilemap); //CARGA DEL ARCHIVO DEL TILEMAP (NO LO CREA) 
+    this.load.tilemapTiledJSON('nivel1', tilemapN1); //CARGA DEL ARCHIVO DEL TILEMAP (NO LO CREA) 
+    this.load.tilemapTiledJSON('nivel2', tilemapN2); 
     this.load.image('forest' , Bosque); //CARGA DEL ATLAS DE PATRONES 
 
     /*Carga de fuentes*/ 

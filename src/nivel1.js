@@ -1,6 +1,7 @@
 import Phaser from 'phaser'; 
 import Player from './player.js';
 import Poison_Seta from './poison_seta.js';
+import Coleccionable from './coleccionable.js';
 
 
 
@@ -10,7 +11,8 @@ export default class Nivel1 extends Phaser.Scene{
         super({key: 'nivel1'});
     }
 
-    init() {
+    init(datos) {
+        this.image_data= datos.imagenes;
         this.enter_key= this.input.keyboard.addKey('Enter'); 
         this.bso= this.sound.add("forest_theme"); 
         this.sonido_golpe= this.sound.add("sonido_daño"); 
@@ -20,8 +22,10 @@ export default class Nivel1 extends Phaser.Scene{
     }
 
     create(){
+
+        //Creacion del mapa y de las capas 
         this.map= this.make.tilemap({
-            key: 'tilemap',
+            key: 'nivel1',
             tileWidth:  64,
             tileHeight: 64
         });
@@ -32,7 +36,9 @@ export default class Nivel1 extends Phaser.Scene{
        
         this.decoracionLayer= this.map.createLayer('Decoracion', tileset);  
 
-        this.groundLayer.setCollisionByProperty({colisiona: true});  
+       
+        this.groundLayer.setCollisionByProperty({colisiona: true}); 
+        //this.decoracionLayer.setCollisionByProperty({daña: true});  
 
         //Grupos 
         this.enemies= this.physics.add.group(); 
@@ -42,8 +48,6 @@ export default class Nivel1 extends Phaser.Scene{
             name: 'Ishi', 
             classType: Player
         } )[0];
-
-
         //Creando la zona para el 'final del nivel' 
 
         let eventAux= this.map.createFromObjects('Sprites', {name: 'fin_nivel'}) [0]; 
@@ -63,16 +67,39 @@ export default class Nivel1 extends Phaser.Scene{
         //Collider del suelo con el jugador 
         this.physics.add.collider(this.groundLayer, this.player); 
 
+        /*this.physics.add.collider(this.decoracionLayer, this.player, (o1, o2)=>{
+            if(!o1.invecibilidad) 
+                this.player.damagedIshi(o2.x,o2.y); 
+        }) */
+
+
         //Collider del suelo con los enemigos 
         this.physics.add.collider(this.groundLayer,this.enemies); 
 
 
         //Terminar el nivel 
         this.physics.add.overlap(this.player, this.final_nivel, ()=>{
-            this.bso.destroy(); 
-            this.scene.start('main'); 
+            if(!this.coleccionable.active) {
+                this.image_data[0].desbloqueda= true;
+                this.image_data[0].texto= 'Boceto inicial de Ishi';  
+            }
+            this.bso.destroy();
+            this.scene.stop('hudIshi') 
+            this.scene.start('main', {imagenes: this.image_data}); 
+
         });
 
+        //Creamos el coleccionable
+        if(!this.image_data[0].desbloqueda){
+            this.coleccionable= this.map.createFromObjects('Sprites', {
+                type: 'Coleccionable',
+                classType: Coleccionable
+            }) [0]; 
+            this.physics.add.overlap(this.player, this.coleccionable, ()=>{
+                this.coleccionable.destroy(); 
+            }); 
+        }
+        
 
         //Callback para empezar la escalada 
         this.groundLayer.setTileIndexCallback([11,13], this.empiezaEscalada,this); 
@@ -90,7 +117,7 @@ export default class Nivel1 extends Phaser.Scene{
         super.update(); 
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  
             this.scene.pause();
-            this.scene.launch('pause', {nombre_escena: 'nivel1'}).pause;  
+            this.scene.launch('pause', {nombre_escena: 'nivel1', imagenes: this.image_data}).pause;  
             this.scene.bringToTop('pause'); 
         }
     }

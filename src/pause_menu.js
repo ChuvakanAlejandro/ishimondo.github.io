@@ -14,6 +14,7 @@ export default class Pause_Menu extends Phaser.Scene {
 
     init(datos){
         this.ant_escena= datos.nombre_escena;  
+        this.image_data= datos.imagenes; 
         this.cursors= this.input.keyboard.createCursorKeys(); 
         this.enter_key= this.input.keyboard.addKey('Enter'); 
 
@@ -39,12 +40,12 @@ export default class Pause_Menu extends Phaser.Scene {
             this.scene.stop(this.ant_escena); 
             this.sound.stopAll(); 
             this.scene.stop('hudIshi'); 
-            this.scene.start('main'); 
+            this.scene.start('main', {imagenes: this.image_data}); 
         }); 
 
         restartOption.on('pulsado', () => {
             this.scene.stop();
-            this.scene.start(this.ant_escena); 
+            this.scene.start(this.ant_escena, {imagenes: this.image_data}); 
         }); 
 
 
