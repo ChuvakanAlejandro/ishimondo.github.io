@@ -36,9 +36,8 @@ export default class Nivel1 extends Phaser.Scene{
         this.groundLayer= this.map.createLayer('Suelo', tileset); 
        
         this.decoracionLayer= this.map.createLayer('Decoracion', tileset);  
-
-       
         this.groundLayer.setCollisionByProperty({colisiona: true}); 
+
         //this.decoracionLayer.setCollisionByProperty({daña: true});  
 
         //Grupos 
@@ -107,11 +106,13 @@ export default class Nivel1 extends Phaser.Scene{
 
         //Camara del juego
         this.cameras.main.setBounds(0,0,4480, 2550);
+        this.physics.world.setBounds(0,0,4480,2550);
+        this.add.image(0,0,4480, 2550, 'background').setOrigin(0,0); 
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
 
-        //HUD de vida 
+        /*HUD de vida 
         this.scene.run('hudIshi',{target: this.player});
-        this.scene.bringToTop('hudIshi'); 
+        this.scene.bringToTop('hudIshi');*/ 
     }
 
     update(){

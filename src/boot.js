@@ -14,7 +14,7 @@ import ishi from '../assets/animations/Ishi_sprites.png'
 import mush from '../assets/animations/mushmi.png'
 import bug from '../assets/animations/bug.png'
 import proyectil from '../assets/animations/proyectil.png'
-import background from '../assets/sprites/background.png'
+import background from '../assets/sprites/background.jpeg'
 import Button from '../assets/sprites/button.png'
 import Bosque from '../assets/maps/mundo1.png'
 import coleccionable from '../assets/animations/coleccionable.png'
@@ -58,6 +58,7 @@ export default class Boot extends Phaser.Scene {
   preload() {
     // Con setPath podemos establecer el prefijo que se añadirá a todos los load que aparecen a continuación
     this.load.setPath('assets/sprites/');
+    
     this.load.image('background', background);
     this.load.image('button', Button); 
     this.load.image('platform', platform);
