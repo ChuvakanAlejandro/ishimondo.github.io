@@ -23,7 +23,7 @@ export default class Nivel1 extends Phaser.Scene{
     }
 
     create(){
-
+        const {width, height}= this.scale; 
         //Creacion del mapa y de las capas 
         this.map= this.make.tilemap({
             key: 'nivel1',
@@ -48,6 +48,8 @@ export default class Nivel1 extends Phaser.Scene{
             name: 'Ishi', 
             classType: Player
         } )[0];
+
+
         //Creando la zona para el 'final del nivel' 
 
         let eventAux= this.map.createFromObjects('Sprites', {name: 'fin_nivel'}) [0]; 
@@ -60,7 +62,7 @@ export default class Nivel1 extends Phaser.Scene{
         //Creando a los enemigos 
         for (const objeto of this.map.getObjectLayer('Sprites').objects) {
             if(objeto.type === 'Seta') {
-                let enemy= new Bug(this, objeto.x, objeto.y -100, true, this.enemies);
+                let enemy= new Poison_Seta(this, objeto.x, objeto.y -100, true, this.enemies);
             } 
         }
 
@@ -107,12 +109,14 @@ export default class Nivel1 extends Phaser.Scene{
         //Camara del juego
         this.cameras.main.setBounds(0,0,4480, 2550);
         this.physics.world.setBounds(0,0,4480,2550);
-        this.add.image(0,0,4480, 2550, 'background').setOrigin(0,0); 
+       
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
+        this.background_image= this.add.tileSprite(this.player.x+200, this.player.y-175, width, height,'background_world').setDepth(-100);
+        //sthis.background_image.setScrollFactor(0); 
 
-        /*HUD de vida 
+        /*HUD de vida */
         this.scene.run('hudIshi',{target: this.player});
-        this.scene.bringToTop('hudIshi');*/ 
+        this.scene.bringToTop('hudIshi');
     }
 
     update(){
@@ -122,6 +126,8 @@ export default class Nivel1 extends Phaser.Scene{
             this.scene.launch('pause', {nombre_escena: 'nivel1', imagenes: this.image_data}).pause;  
             this.scene.bringToTop('pause'); 
         }
+     
+         this.background_image.tilePositionX= this.cameras.main.scrollX * .3; 
     }
 
     compruebaTileEscalada(x, y, direccion){

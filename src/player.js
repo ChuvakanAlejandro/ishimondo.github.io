@@ -37,7 +37,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.speed = 300; //Velocidad (en modo Levantado por defecto)
     this.dashSpeed = 700;
     this.speed_actual = 0;
-    this.jumpSpeed = -500;
+    this.jumpSpeed = -600;
     this.modo_ant= "LEVANTADO"; 
     this.modo= "LEVANTADO"; //Modo del personaje (Levantado por defecto)
     this.atacando = false;

@@ -14,7 +14,8 @@ import ishi from '../assets/animations/Ishi_sprites.png'
 import mush from '../assets/animations/mushmi.png'
 import bug from '../assets/animations/bug.png'
 import proyectil from '../assets/animations/proyectil.png'
-import background from '../assets/sprites/background.jpeg'
+import background_menu from '../assets/sprites/background_menu.png'
+import background_world from '../assets/sprites/background_world.png'
 import Button from '../assets/sprites/button.png'
 import Bosque from '../assets/maps/mundo1.png'
 import coleccionable from '../assets/animations/coleccionable.png'
@@ -24,6 +25,7 @@ import img_locked from '../assets/sprites/imagen_oculta.png'
 import tilemapN1 from '../assets/maps/nivel1.json'
 import tilemapN2 from '../assets/maps/nivel2.json'
 import RetroFont from 'url:../assets/fonts/Retro_Computer.ttf'
+import Main_Theme from 'url:../assets/audio/main_theme.wav'
 import Forest_Theme from 'url:../assets/audio/musica_bosque.mp3'
 import Sonido_Daño from 'url:../assets/audio/golpe_jugador.mp3'
 /**
@@ -59,7 +61,9 @@ export default class Boot extends Phaser.Scene {
     // Con setPath podemos establecer el prefijo que se añadirá a todos los load que aparecen a continuación
     this.load.setPath('assets/sprites/');
     
-    this.load.image('background', background);
+    this.load.image('background_menu', background_menu);
+    this.load.image('background_world', background_world); 
+
     this.load.image('button', Button); 
     this.load.image('platform', platform);
     this.load.image('base', base);
@@ -94,6 +98,7 @@ export default class Boot extends Phaser.Scene {
     
 
     /*Carga de audios*/ 
+    this.load.audio("main_theme", Main_Theme); 
     this.load.audio("forest_theme", Forest_Theme); 
     this.load.audio("sonido_daño", Sonido_Daño); 
   }

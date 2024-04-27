@@ -26,7 +26,9 @@ export default class Main_Menu extends Phaser.Scene {
             this.image_data= datos.imagenes; 
         }
 
-
+        this.bso= this.sound.add("main_theme"); 
+        this.bso.play(); 
+        this.bso.setLoop(true);
         this.cursors= this.input.keyboard.createCursorKeys(); 
         this.indiceBotonAct= 0; 
     }
@@ -34,11 +36,14 @@ export default class Main_Menu extends Phaser.Scene {
 
 
     create() {
-
+       
         const {width, height} = this.scale;
 
+        //Imagen de fondo 
+        this.add.image(width*0.5,height*0.5, 'background_menu').setScale(2); 
+
         /*Texto con el nombre del juego */
-        this.add.text(width* 0.35, height*0.3, 'ISHIMONDO',{fontFamily: "RetroFont", fontSize:50}); 
+        this.add.text(width* 0.33, height*0.3, 'ISHIMONDO',{fontFamily: "RetroFont", fontSize:50}); 
 
         /*Botones de opcion*/ 
         const playOption= this.add.image(width* 0.3, height*0.7, 'button')
@@ -47,6 +52,7 @@ export default class Main_Menu extends Phaser.Scene {
         this.add.text(galeryOption.x,galeryOption.y, 'GALERIA', {fontFamily: "RetroFont", fontSize: 30 }).setOrigin(0.5); 
 
         playOption.on('pulsado', () => {
+            this.bso.stop(); 
             this.scene.start('nivel1', {imagenes: this.image_data}); 
         }); 
 
