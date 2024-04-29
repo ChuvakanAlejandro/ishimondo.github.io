@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="assets/sprites/player.png" type="image/png" />
-    <meta name="viewport" content="width=device-width, initial-scale=2.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/game.css">
 
     <title>Ishimondo</title>
@@ -13,32 +13,32 @@
 
 <body>
     <header class= "cabecera">
-       
-            <div class = "opcion"> 
-               <h1> <a href="index.html"> Juego </a></h1> 
-            </div>
-            
-            <div class= "opcion"> 
-              <h1> <a href= "creadores.html">  Sobre nosotros </a> </h1>
 
     </header>
     
-    <main class= "content"> 
-
-        <section class= "juego"> 
-        <script src="./src/game.js" type="module"></script>
-
-        </section>
+    <main class= "estiloIndex"> 
 
         <h1> ¿Qué es Ishimondo? </h1>
         <section class= "descripcion">
             <p> Se trata de un juego de plataformas 2D donde controlas a una criatura espertentica a la caza de su presa más difícil hasta la fecha.</p>
+            <p> A través de un bosque donde el peligro acecha, supera óbstaculos, aplasta enemigos y recoge todas las 'Monedas Ishi'
+                las cuales te recompensarán con bocetos sobre las diferentes criaturas del juego </p>
         </section> 
+        
+        <div class= "opciones">   
+            <div id= "juego"> 
+                <a href= 'juego.html'> 
+                <img src= '/img/gamepadPixel.png' height="300" width="500"  alt= "jugarJuego"> 
+                </a>
+            </div>
 
-        <h1> JUEGO </h1>
-    </main>
-
-  
+            <div id= "controles"> 
+                <a href= 'controles.html'> 
+                    <img src= '/img/keyA.png' height="300" width="375" alt= "verControles"> 
+                </a>
+            </div>
+        </div>
+    </main>  
 </body>
 
 </html>
