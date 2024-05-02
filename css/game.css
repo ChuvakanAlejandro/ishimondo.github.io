@@ -19,12 +19,15 @@ section.listaControles{
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  font-size: 200%;
+  color: white;
+  font-weight: 300;
 }
 
 section.listaControles div{
-    display: block ;
-    font-size: 180%
+    display: flex ;
+    flex-direction: column;
+    margin-top: 5%;
 }
 
 header.cabecera{
@@ -53,6 +56,7 @@ section.descripcion{
     display: flex;
     font-size: 130%;
     text-align: center;
+    flex-direction: column;
 }
 
 div.opciones{
