@@ -63,4 +63,11 @@ div.opciones{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 10%;
+}
+
+
+div.opciones#mini{
+  background-color: white;
+  border:3px solid black;
 }

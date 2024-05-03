@@ -57,6 +57,7 @@ export default class Main_Menu extends Phaser.Scene {
         }); 
 
         galeryOption.on('pulsado', () => {
+            this.bso.stop(); 
             this.scene.start('galery', {imagenes: this.image_data}); 
         });
 

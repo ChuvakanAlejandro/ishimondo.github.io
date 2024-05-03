@@ -18,15 +18,18 @@ import background_menu from '../assets/sprites/background_menu.png'
 import background_world from '../assets/sprites/background_world.png'
 import Button from '../assets/sprites/button.png'
 import Bosque from '../assets/maps/mundo1.png'
+
 import coleccionable from '../assets/animations/coleccionable.png'
 import img_locked from '../assets/sprites/imagen_oculta.png'
-
+import boceto2 from '../assets/sprites/boceto2.png'
+import boceto3 from '../assets/sprites/boceto3.png'
 
 import tilemapN1 from '../assets/maps/nivel1.json'
 import tilemapN2 from '../assets/maps/nivel2.json'
 import RetroFont from 'url:../assets/fonts/Retro_Computer.ttf'
 import Main_Theme from 'url:../assets/audio/main_theme.wav'
 import Forest_Theme from 'url:../assets/audio/musica_bosque.mp3'
+import Galery_Theme from 'url:../assets/audio/galery_theme.mp3'
 import Sonido_Daño from 'url:../assets/audio/golpe_jugador.mp3'
 /**
  * Escena para la precarga de los assets que se usarán en el juego.
@@ -73,6 +76,9 @@ export default class Boot extends Phaser.Scene {
     this.load.image('barra', barra );
     this.load.image('full_screen', full_screen_img); 
     this.load.image('img_locked', img_locked); 
+    this.load.image('boceto2', boceto2); 
+    this.load.image('boceto3', boceto3); 
+
     this.load.image('no_full_screen', no_full_screen_img); 
     this.load.spritesheet('vt', vt,{frameWidth:32,frameHeight:16});
     this.load.spritesheet('en', en,{frameWidth:18,frameHeight:10});
@@ -99,7 +105,8 @@ export default class Boot extends Phaser.Scene {
 
     /*Carga de audios*/ 
     this.load.audio("main_theme", Main_Theme); 
-    this.load.audio("forest_theme", Forest_Theme); 
+    this.load.audio("forest_theme", Forest_Theme);
+    this.load.audio("galery_theme", Galery_Theme); 
     this.load.audio("sonido_daño", Sonido_Daño); 
   }
 

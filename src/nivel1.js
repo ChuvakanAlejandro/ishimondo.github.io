@@ -69,12 +69,6 @@ export default class Nivel1 extends Phaser.Scene{
         //Collider del suelo con el jugador 
         this.physics.add.collider(this.groundLayer, this.player); 
 
-        /*this.physics.add.collider(this.decoracionLayer, this.player, (o1, o2)=>{
-            if(!o1.invecibilidad) 
-                this.player.damagedIshi(o2.x,o2.y); 
-        }) */
-
-
         //Collider del suelo con los enemigos 
         this.physics.add.collider(this.groundLayer,this.enemies); 
 
@@ -83,7 +77,8 @@ export default class Nivel1 extends Phaser.Scene{
         this.physics.add.overlap(this.player, this.final_nivel, ()=>{
             if(!this.coleccionable.active) {
                 this.image_data[0].desbloqueda= true;
-                this.image_data[0].texto= 'Boceto inicial de Ishi';  
+                this.image_data[0].texto= 'Boceto inicial de Ishi';
+                this.image_data[0].imagen= 'boceto2';  
             }
             this.bso.destroy();
             this.scene.stop('hudIshi') 
@@ -111,9 +106,16 @@ export default class Nivel1 extends Phaser.Scene{
         this.physics.world.setBounds(0,0,4480,2550);
        
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
-        this.background_image= this.add.tileSprite(this.player.x+200, this.player.y-175, width, height,'background_world').setDepth(-100);
-        //sthis.background_image.setScrollFactor(0); 
 
+
+        /*Fondo del nivel*/ 
+
+        let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background_world').setDepth(-1000);
+        let scaleX = this.cameras.main.width / image.width;
+        let scaleY = this.cameras.main.height / image.height;
+        let scale = Math.max(scaleX, scaleY);
+        image.setScale(scale).setScrollFactor(0);
+        
         /*HUD de vida */
         this.scene.run('hudIshi',{target: this.player});
         this.scene.bringToTop('hudIshi');
@@ -127,7 +129,6 @@ export default class Nivel1 extends Phaser.Scene{
             this.scene.bringToTop('pause'); 
         }
      
-         this.background_image.tilePositionX= this.cameras.main.scrollX * .3; 
     }
 
     compruebaTileEscalada(x, y, direccion){

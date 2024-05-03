@@ -20,7 +20,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.setOrigin(0.5,0.5);
     this.score = 0;
     this.vida= 4; 
-    console.log("Vida actual:  " + this.vida); 
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     // Queremos que el jugador no se salga de los límites del mundo
@@ -87,11 +86,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.label = this.scene.add.text(this.x, this.y, "");
     this.mapeoTeclas(); 
     
-    this.cambioVelocidad();
 
     this.scene.physics.add.overlap(this, this.scene.enemies, (o1, o2) => {
       if((o1.body.touching.down || o2.body.blocked.up) && o2.stepedOn()){
-        console.log('ENTRO');
+      
         this.stepingOnEnemie();
         o2.meAplastan();
       }
@@ -402,13 +400,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   
-  /**
-   * Actualiza la UI con la puntuación actual
-   */
-  cambioVelocidad() {
-    this.label.text= 'Velocidad actual: ' + this.speed;
-  }
-
   /*
     SET DE LAS TECLAS DE MOVIMIENTO DEL PERSONAJE 
   */
@@ -468,13 +459,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.modo= 'LEVANTADO'; 
         this.body.setSize(35, 90);
         this.body.setOffset(46, 30);
-        this.cambioVelocidad(); 
         this.play('idle_ishi',true); 
         break; 
       case "LEVANTADO": 
         this.speed= 500;
         this.modo= 'AGACHADO'; 
-        this.cambioVelocidad(); 
         this.body.setSize(35, 60);
         this.body.setOffset(46, 60);
         this.play('ishi_crouch',true);
@@ -820,7 +809,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         }
         this.trepable = false;
       }else if(!this.body.onFloor() && this.modo=="COLGANDO"){
-        console.log('Trepando');
+        
         this.body.setVelocityX(0);
         if(Phaser.Input.Keyboard.JustDown(this.keyShift)){//Me dejo caer
           this.cambiaModo("AGACHADO");

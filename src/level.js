@@ -2,7 +2,6 @@ import Platform from './platform.js';
 import Player from './player.js';
 import Poison_Seta  from './poison_seta.js';
 import Bug from './bug.js';
-import Wall from './wall.js';
 import Phaser from 'phaser'
  
 
@@ -120,10 +119,10 @@ export default class Level extends Phaser.Scene {
         new Platform(this, this.player, this.enemies, this.bases, 1250, 1250);
         new Platform(this, this.player, this.enemies, this.bases, 1500, 1250);
         new Platform(this, this.player, this.enemies, this.bases, 1750, 1250);
-        new Wall(this, this.player, 1850, 950, true);
+        /*new Wall(this, this.player, 1850, 950, true);*/
         new Platform(this, this.player, this.enemies, this.bases, 1350, 1000);
-        new Wall(this, this.player, 1150, 600, true);
-        new Wall(this, this.player, 1450, 600, true);
+        /*new Wall(this, this.player, 1150, 600, true);*/
+        /*new Wall(this, this.player, 1450, 600, true);*/
         new Platform(this, this.player, this.enemies, this.bases, 1950, 500);
         new Platform(this, this.player, this.enemies, this.bases, 2200, 500);
         new Platform(this, this.player, this.enemies, this.bases, 2650, 500);
