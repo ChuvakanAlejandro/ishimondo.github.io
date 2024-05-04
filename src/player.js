@@ -1,4 +1,4 @@
-import Star from './star.js';
+
 import Phaser from 'phaser'
 import game from './game.js'; 
 

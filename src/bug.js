@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import Proyectil_Seta from './proyectil.js';
-
+import Orbe from './orbe.js';
 
 export default class Bug extends Phaser.GameObjects.Sprite{
     /**
@@ -93,10 +93,10 @@ export default class Bug extends Phaser.GameObjects.Sprite{
                         this.setFlip(true);
                         this.velocidad *=-1;
                     }
-                    //this.play('bug_walks',true);
-                    //this.body.setVelocityX(this.velocidad);
-                    this.play('bug_idle',true);
-                    this.body.setVelocityX(0);
+                    this.play('bug_walks',true);
+                    this.body.setVelocityX(this.velocidad);
+                    /*this.play('bug_idle',true);
+                    this.body.setVelocityX(0);*/
                 }
                 else{
                     this.play('bug_idle',true);
@@ -140,6 +140,7 @@ export default class Bug extends Phaser.GameObjects.Sprite{
     }
 
     morir(){
+       new Orbe(this.scene, this.x, this.y, 'esfera_vt');
        this.destroy(); 
     }
 

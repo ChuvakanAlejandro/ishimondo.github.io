@@ -153,7 +153,7 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
 
         this.on("animationcomplete-mush_dies_squeezed", ()=>{
             this.muriendo = true;
-            new Orbe(this.scene, this.x, this.y, 'vt');
+           
 
         }, this); 
 
@@ -272,6 +272,7 @@ export default class Poison_Seta extends Phaser.GameObjects.Sprite{
     }
 
     morir(){
+       new Orbe(this.scene, this.x, this.y, 'esfera_vt');
        this.destroy(); 
     }
 

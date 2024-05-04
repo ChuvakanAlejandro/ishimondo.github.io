@@ -13,13 +13,16 @@ export default class Nivel1 extends Phaser.Scene{
     }
 
     init(datos) {
+        const config ={
+            volume: 1,
+            loop: true,
+            delay: 0
+        }
         this.image_data= datos.imagenes;
         this.enter_key= this.input.keyboard.addKey('Enter'); 
-        this.bso= this.sound.add("forest_theme"); 
+        this.bso= this.sound.add("forest_theme", config); 
         this.sonido_golpe= this.sound.add("sonido_daño"); 
         this.bso.play(); 
-       
-        this.bso.setLoop(true); 
     }
 
     create(){
@@ -80,9 +83,9 @@ export default class Nivel1 extends Phaser.Scene{
                 this.image_data[0].texto= 'Boceto inicial de Ishi';
                 this.image_data[0].imagen= 'boceto2';  
             }
-            this.bso.destroy();
+            this.sound.stopAll();
             this.scene.stop('hudIshi') 
-            this.scene.start('main', {imagenes: this.image_data}); 
+            this.scene.start('nivel2', {imagenes: this.image_data}); 
 
         });
 
@@ -102,19 +105,19 @@ export default class Nivel1 extends Phaser.Scene{
         this.groundLayer.setTileIndexCallback([11,13], this.empiezaEscalada,this); 
 
         //Camara del juego
-        this.cameras.main.setBounds(0,0,4480, 2550);
-        this.physics.world.setBounds(0,0,4480,2550);
+        this.cameras.main.setBounds(0,0,7040, 2550);
+        this.physics.world.setBounds(0,0,7040,2550);
        
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
 
 
         /*Fondo del nivel*/ 
 
-        let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background_world').setDepth(-1000);
-        let scaleX = this.cameras.main.width / image.width;
-        let scaleY = this.cameras.main.height / image.height;
+        this.background_image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background_world').setDepth(-1000);
+        let scaleX = this.cameras.main.width / this.background_image.width;
+        let scaleY = this.cameras.main.height / this.background_image.height;
         let scale = Math.max(scaleX, scaleY);
-        image.setScale(scale).setScrollFactor(0);
+        this.background_image.setScale(scale).setScrollFactor(0);
         
         /*HUD de vida */
         this.scene.run('hudIshi',{target: this.player});

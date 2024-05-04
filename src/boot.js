@@ -1,13 +1,16 @@
 import Phaser from 'phaser'
 import wall from '../assets/sprites/wall.png'
 import platform from '../assets/sprites/platform.png'
+import moving_platform from '../assets/sprites/moving_platform.png'
 import base from '../assets/sprites/base.png'
 import star from '../assets/sprites/star.png'
 import player from '../assets/sprites/Ishi.png'
+import planta_jefe from '../assets/animations/flora.png'
 import full_screen_img from '../assets/sprites/full_screen.png'
 import no_full_screen_img from '../assets/sprites/no_full_screen.png'
 import barra from '../assets/sprites/barra.png'
 import vt from '../assets/sprites/vt_assets.png'
+import esfera_vt from '../assets/sprites/esfera_Vt.png'
 import en from '../assets/sprites/en_assets.png'
 import i_face from '../assets/sprites/ishi_face.png'
 import ishi from '../assets/animations/Ishi_sprites.png'
@@ -24,11 +27,14 @@ import img_locked from '../assets/sprites/imagen_oculta.png'
 import boceto2 from '../assets/sprites/boceto2.png'
 import boceto3 from '../assets/sprites/boceto3.png'
 
+import tilemapTutorial from '../assets/maps/tutorial.json'
 import tilemapN1 from '../assets/maps/nivel1.json'
 import tilemapN2 from '../assets/maps/nivel2.json'
+import tilemapN3 from '../assets/maps/nivel3.json'
 import RetroFont from 'url:../assets/fonts/Retro_Computer.ttf'
 import Main_Theme from 'url:../assets/audio/main_theme.wav'
 import Forest_Theme from 'url:../assets/audio/musica_bosque.mp3'
+import Boss_Theme from 'url:../assets/audio/boss_theme.wav'
 import Galery_Theme from 'url:../assets/audio/galery_theme.mp3'
 import Sonido_Daño from 'url:../assets/audio/golpe_jugador.mp3'
 /**
@@ -69,6 +75,7 @@ export default class Boot extends Phaser.Scene {
 
     this.load.image('button', Button); 
     this.load.image('platform', platform);
+    this.load.image('moving_platform', moving_platform); 
     this.load.image('base', base);
     this.load.image('star', star);
     this.load.image('player', player);
@@ -80,6 +87,7 @@ export default class Boot extends Phaser.Scene {
     this.load.image('boceto3', boceto3); 
 
     this.load.image('no_full_screen', no_full_screen_img); 
+    this.load.image('esfera_vt',esfera_vt); 
     this.load.spritesheet('vt', vt,{frameWidth:32,frameHeight:16});
     this.load.spritesheet('en', en,{frameWidth:18,frameHeight:10});
     this.load.spritesheet('ishi_face', i_face,{frameWidth:96,frameHeight:96});    
@@ -88,15 +96,17 @@ export default class Boot extends Phaser.Scene {
 
     this.load.spritesheet('coleccionable', coleccionable, {frameWidth:32,frameHeight:32}); 
     this.load.spritesheet('ishi', ishi,{frameWidth:128,frameHeight:128});
+    this.load.spritesheet('planta_jefe', planta_jefe, {frameWidth: 256, frameHeight: 256}); 
     this.load.spritesheet('mushmi', mush,{frameWidth:96,frameHeight:96});
     this.load.spritesheet('bug', bug, {frameWidth: 128 ,frameHeight: 128}); 
     this.load.spritesheet('proyectil_seta', proyectil, {frameWidth: 38  ,frameHeight: 14}); 
 
 
     /*Carga del archivo del tilemap*/
-
-    this.load.tilemapTiledJSON('nivel1', tilemapN1); //CARGA DEL ARCHIVO DEL TILEMAP (NO LO CREA) 
+    this.load.tilemapTiledJSON('tutorial', tilemapTutorial); 
+    this.load.tilemapTiledJSON('nivel1', tilemapN1); 
     this.load.tilemapTiledJSON('nivel2', tilemapN2); 
+    this.load.tilemapTiledJSON('nivel3', tilemapN3); 
     this.load.image('forest' , Bosque); //CARGA DEL ATLAS DE PATRONES 
 
     /*Carga de fuentes*/ 
@@ -106,6 +116,7 @@ export default class Boot extends Phaser.Scene {
     /*Carga de audios*/ 
     this.load.audio("main_theme", Main_Theme); 
     this.load.audio("forest_theme", Forest_Theme);
+    this.load.audio("boss_theme", Boss_Theme); 
     this.load.audio("galery_theme", Galery_Theme); 
     this.load.audio("sonido_daño", Sonido_Daño); 
   }

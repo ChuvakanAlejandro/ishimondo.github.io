@@ -96,7 +96,7 @@
  </tile>
  <tile id="16">
   <properties>
-   <property name="colisiona" type="bool" value="true"/>
+   <property name="traspasable" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0.246771" y="0.493542" width="63.4201" height="9.37729"/>
@@ -104,7 +104,7 @@
  </tile>
  <tile id="17">
   <properties>
-   <property name="colisiona" type="bool" value="true"/>
+   <property name="traspasable" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index" id="3">
    <object id="3" x="0.493542" y="0.493542" width="63.4201" height="9.13052"/>
@@ -113,6 +113,7 @@
  <tile id="18">
   <properties>
    <property name="colisiona" type="bool" value="true"/>
+   <property name="escalable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="19">
@@ -123,11 +124,12 @@
  <tile id="20">
   <properties>
    <property name="colisiona" type="bool" value="true"/>
+   <property name="escalable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="21">
   <properties>
-   <property name="colisiona" type="bool" value="true"/>
+   <property name="traspasable" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0.740312" y="0.493542" width="62.1862" height="8.88375"/>

@@ -8,7 +8,7 @@ export default class Main_Menu extends Phaser.Scene {
     */
 
     constructor() {
-        super({key: 'main'});5
+        super({key: 'main'});
     }
 
     init(datos){
@@ -26,9 +26,16 @@ export default class Main_Menu extends Phaser.Scene {
             this.image_data= datos.imagenes; 
         }
 
-        this.bso= this.sound.add("main_theme"); 
+
+        const config ={
+            volume: 0.5,
+            loop: true,
+            delay: 0
+        }
+
+        this.bso= this.sound.add("main_theme", config); 
         this.bso.play(); 
-        this.bso.setLoop(true);
+        
         this.cursors= this.input.keyboard.createCursorKeys(); 
         this.indiceBotonAct= 0; 
     }

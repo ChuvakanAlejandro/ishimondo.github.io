@@ -14,14 +14,14 @@ export default class Orbe extends Phaser.GameObjects.Sprite {
 
         this.scene.physics.add.overlap(this.target, this, ()=>{
             switch (tipo) {
-                case 'vt':
+                case 'esfera_vt':
                     if(this.target.health() < 4){
                         this.target.vida++;
                         this.destroy(); 
                     }
                     break;  
                 
-                case 'en': 
+                case 'esfera_en': 
                     if(this.target.energy() < 5){
                         this.target.energia++; 
                         this.destroy(); 
