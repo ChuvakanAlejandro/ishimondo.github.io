@@ -54,6 +54,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.inPain = false;
     this.invencibilityFrames = 100;
     this.countImb = 0;
+    this.isOnPlatform= false; 
+    this.currentPlatform= null; 
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
 
@@ -749,6 +751,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   preUpdate(t,dt) {
     super.preUpdate(t,dt);
+    if (this.isOnPlatform && this.currentPlatform) {
+      this.body.position.x += this.currentPlatform.x;
+      this.body.position.y += this.currentPlatform.y;
+
+      this.isOnPlatform = false;
+      this.currentPlatform = null;
+    }
+
     if(this.modo == "APLASTANDO"){
       if(Phaser.Input.Keyboard.JustDown(this.keySpace)){
         this.superJump = true;
