@@ -91,15 +91,6 @@ export default class Nivel3 extends Phaser.Scene {
             else return false;
         }); 
 
-
-        this.physics.add.collider(this.player, this.boss, this.plantaGolpeada, (player, jefe) => {
-            if(player.body.velocity.y>= 0 && jefe.body.blocked.up){
-                return true; 
-            }
-            else return false; 
-        }); 
-
-
         //Collider del suelo con los enemigos 
         this.physics.add.collider(this.groundLayer,this.boss); 
 
