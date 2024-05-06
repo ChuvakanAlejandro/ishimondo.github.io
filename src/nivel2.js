@@ -93,17 +93,6 @@ export default class Nivel2 extends Phaser.Scene {
                 }
                 else return false;
             });
-        /*
-         this.physics.add.collider(
-            this.player,
-            this.platforms,
-            null,
-            (player, platform) =>
-            {
-                return player.body.velocity.y >= 0;
-            });
-        */
-
 
         //Collider del suelo con los enemigos 
         this.physics.add.collider(this.groundLayer,this.enemies); 

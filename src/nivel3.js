@@ -1,8 +1,8 @@
 import Phaser from 'phaser'; 
 import Player from './player.js';
 import Flora from './Flora.js';
-
 import Coleccionable from './coleccionable.js';
+import Moving_Platform from './moving_platform.js';
 
 export default class Nivel3 extends Phaser.Scene {
 
@@ -14,7 +14,7 @@ export default class Nivel3 extends Phaser.Scene {
     init(datos){
         this.image_data= datos.imagenes;
         this.enter_key= this.input.keyboard.addKey('Enter'); 
-        this.bso= this.sound.add("boss_theme"); 
+        this.bso= this.sound.add("boss_theme", {mute: true}); 
         this.sonido_golpe= this.sound.add("sonido_daño"); 
         this.bso.play(); 
         this.bso.setLoop(true); 
@@ -37,6 +37,9 @@ export default class Nivel3 extends Phaser.Scene {
 
         //Grupos 
         this.enemies= this.physics.add.group(); 
+        this.platforms= this.physics.add.group({allowGravity: false,
+            immovable: true
+        });
 
         //Creando al jugador 
         this.player= this.map.createFromObjects('Sprites', {
@@ -44,26 +47,27 @@ export default class Nivel3 extends Phaser.Scene {
             classType: Player
         } )[0];
 
+        //Creando la zona para el 'final del nivel' 
+
+        let eventAux= this.map.createFromObjects('Sprites', {name: 'fin_nivel'}) [0]; 
+        this.final_nivel= this.add.zone(eventAux.x, eventAux.y,eventAux.displayWidth, eventAux.displayHeight);
+        this.physics.world.enable(this.final_nivel); 
+        this.final_nivel.body.setAllowGravity(false);
+        this.final_nivel.body.setImmovable(false);
+        eventAux.destroy();   
+
 
         //Creando al jefe 
-
         this.boss= this.map.createFromObjects('Sprites',{
             type: 'Jefe',
             classType: Flora
         })[0]; 
 
-
-        /*Creamos el coleccionable
-        if(!this.image_data[2].desbloqueda){
-            this.coleccionable= this.map.createFromObjects('Sprites', {
-                type: 'Coleccionable',
-                classType: Coleccionable
-            }) [0]; 
-
-            this.physics.add.overlap(this.player, this.coleccionable, ()=>{
-                this.coleccionable.destroy(); 
-            }); 
-        } */
+        for (const objeto of this.map.getObjectLayer('Sprites').objects) {
+            if(objeto.type === 'Plataforma') {
+                let aux= new Moving_Platform(this, objeto.x, objeto.y, this.platforms);
+            } 
+        }
 
         //Callback para empezar la escalada 
         this.groundLayer.setTileIndexCallback([11,13,27,28], this.empiezaEscalada,this); 
@@ -71,13 +75,36 @@ export default class Nivel3 extends Phaser.Scene {
 
         //Collider del suelo con el jugador 
         this.physics.add.collider(this.groundLayer, this.player); 
-        
+        this.physics.add.collider(this.player, this.platforms, this.callbackPlataforma, (player)=>{
+            if(player.body.velocity.y>= 0){
+                return true; 
+            }
+            else return false;
+        }); 
+
         //Collider del suelo con los enemigos 
-        this.physics.add.collider(this.groundLayer,this.enemies); 
+        this.physics.add.collider(this.groundLayer,this.boss); 
+
+
+        //Terminar el nivel 
+        this.physics.add.overlap(this.player, this.final_nivel, ()=>{
+            if(!this.coleccionable.active) {
+                this.image_data[0].desbloqueda= true;
+                this.image_data[0].texto= 'Boceto inicial de Ishi';
+                this.image_data[0].imagen= 'boceto2';  
+            }
+            this.bso.destroy();
+            this.scene.stop('hudIshi') 
+            this.scene.start('main_menu', {imagenes: this.image_data}); 
+
+        }, () => {
+            //Solo te puedes pasar el nivel si el jefe ya está muerto 
+            return !this.boss.active; 
+        });
 
         //Camara del juego
-        this.cameras.main.setBounds(0,0,3328, 1536);
-        this.physics.world.setBounds(0,0,3328,1536);
+        this.cameras.main.setBounds(0,0,5952, 1536);
+        this.physics.world.setBounds(0,0,5952,1536);
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
         
         /*Fondo del nivel*/ 
@@ -90,7 +117,75 @@ export default class Nivel3 extends Phaser.Scene {
         //HUD de vida 
         this.scene.run('hudIshi',{target: this.player});
         this.scene.bringToTop('hudIshi'); 
+
+
+        //Tweens para que se muevan las hoja-plataformas
+        this.movimientoPlataformas(); 
     }
+
+    /*Al derrotar al jefe aparece el coleccionable de este nivel si no se ha cogido ya*/ 
+    spawnearColeccionable(){
+        if(!this.image_data[2].desbloqueda){
+            this.coleccionable= this.map.createFromObjects('Sprites', {
+                type: 'Coleccionable',
+                classType: Coleccionable
+            }) [0]; 
+
+            this.physics.add.overlap(this.player, this.coleccionable, ()=>{
+                this.coleccionable.destroy(); 
+            }); 
+        } 
+    }
+
+    callbackPlataforma(player, plataforma){
+        if (plataforma.body.touching.up && player.body.touching.down) {
+            player.isOnPlatform = true;
+            player.currentPlatform = plataforma;      
+        }
+    }
+
+    movimientoPlataformas(){
+        let i = 1;
+        let mov = true;
+
+        this.platforms.children.iterate(child => {
+
+            if(mov){
+
+                this.tweens.add({
+                    targets: child,
+                    y: child.y + 250,
+                    yoyo: true,
+                    duration: 2000,
+                    ease: 'Sine.easeInOut',
+                    repeat: -1,
+                });
+            }
+            else{
+                this.tweens.add({
+                    targets: child,
+                    y: child.y - 250,
+                    yoyo: true,
+                    duration: 2000,
+                    ease: 'Sine.easeInOut',
+                    repeat: -1,
+                });
+            }
+
+            i++;
+
+            if (i % 2 === 0)
+            {
+                i = 0;
+                mov = false;
+            }
+            else{
+                mov = true;
+            }
+
+        });
+    }
+
 
     update(t,dt){
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  
