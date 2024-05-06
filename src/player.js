@@ -211,6 +211,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.on('animationcomplete-ishi_wall_finish', () => {
       this.body.setAllowGravity(true);
       this.escalando = false;
+      this.trepable = false;
       this.cambiaModo("AGACHADO");
       this.bloqueadoDr = false;
       this.bloqueadoIz = false;
@@ -483,6 +484,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.trepable = !this.trepable;
     if(this.bloqueadoDr) this.setFlipX(false);
     else if(this.bloqueadoIz) this.setFlipX(true);
+    this.escalando = false;
     this.modo = "COLGANDO";
     this.body.setSize(35, 90);
     this.body.setOffset(46, 30);
@@ -773,7 +775,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { //De base, SHIFT cambiara de modo
             if(this.trepable && (this.bloqueadoDr || this.bloqueadoIz)){//CAMBIANDO A MODO COLGANDO si encuentro una pared trepable y estoy bloqueado por ella
               this.meAgarroPared();
-            
+              this.trepable = false;
             }else if(! (this.bloqueadoDr || this.bloqueadoIz)){
               this.modo_ant = this.modo;
               this.cambiaModo(this.modo);
@@ -825,6 +827,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           this.cambiaModo("AGACHADO");
           this.modo_ant = "LEVANTADO";
           this.bloqueadoDr = false;
+
           this.bloqueadoIz = false;
           this.body.setAllowGravity(true);
         }
