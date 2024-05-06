@@ -91,6 +91,15 @@ export default class Nivel3 extends Phaser.Scene {
             else return false;
         }); 
 
+
+        this.physics.add.collider(this.player, this.boss, this.plantaGolpeada, (player, jefe) => {
+            if(player.body.velocity.y>= 0 && jefe.body.blocked.up){
+                return true; 
+            }
+            else return false; 
+        }); 
+
+
         //Collider del suelo con los enemigos 
         this.physics.add.collider(this.groundLayer,this.boss); 
 
@@ -195,6 +204,11 @@ export default class Nivel3 extends Phaser.Scene {
         });
     }
 
+
+    plantaGolpeada(player,jefe){
+        console.log("Pisaste a Flora"); 
+      jefe.meAplastan(); 
+    }
 
     update(t,dt){
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  

@@ -14,6 +14,10 @@ export default class Flora extends Phaser.GameObjects.Sprite{
         super(scene, x, y, 'planta_jefe'); 
         this.setOrigin(0.5,0.5); 
         this.scene.add.existing(this);
+        this.scene.physics.add.existing(this); 
+        this.body.setAllowGravity(false); 
+        this.body.pushable= false; 
+
         this.pos_actual= 0; 
         this.posiciones= []; //Posiciones a las que se va moviendo Flora al ser golpeada 
 
@@ -21,6 +25,10 @@ export default class Flora extends Phaser.GameObjects.Sprite{
 
         this.setAnimaciones(); //Sus animaciones 
         this.setScale(1.5);
+
+        /*Hitbox donde va a ser golpeada*/ 
+        this.body.setSize(150,55); 
+        this.body.setOffset(40,100);
 
         this.play('stand_by', true); 
     }
@@ -92,12 +100,11 @@ export default class Flora extends Phaser.GameObjects.Sprite{
     meAplastan(){
         this.stop(); 
         this.golpes_recibidos++; 
-        if(this.golpes_recibidos===3){
-            this.play('morir'); 
+        if(this.golpes_recibidos===300000000000){
+            this.play('morir', true); 
         }
         else {
-
-            
+            this.play('dañada', true); 
         }
     }
 

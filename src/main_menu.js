@@ -58,7 +58,7 @@ export default class Main_Menu extends Phaser.Scene {
 
         playOption.on('pulsado', () => {
             this.bso.stop(); 
-            this.scene.start('nivel1', {imagenes: this.image_data}); 
+            this.scene.start('nivel3', {imagenes: this.image_data}); 
         }); 
 
         galeryOption.on('pulsado', () => {
