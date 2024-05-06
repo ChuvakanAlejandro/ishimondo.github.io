@@ -48,13 +48,17 @@ export default class Main_Menu extends Phaser.Scene {
 
         /*Botones de opcion*/ 
         const playOption= this.add.image(width* 0.3, height*0.7, 'button')
+
+        const tutorialOption= this.add.image(width*0.5, height*0.9, 'button').setScale(0.65); 
+
         const galeryOption= this.add.image( width - (width * 0.3)  ,playOption.y, 'button')
         this.add.text(playOption.x, playOption.y, 'JUGAR', {fontFamily: "RetroFont", fontSize: 30}).setOrigin(0.5); 
-        this.add.text(galeryOption.x,galeryOption.y, 'GALERIA', {fontFamily: "RetroFont", fontSize: 30 }).setOrigin(0.5); 
+        this.add.text(galeryOption.x,galeryOption.y, 'GALERIA', {fontFamily: "RetroFont", fontSize: 30 }).setOrigin(0.5);
+        this.add.text(tutorialOption.x, tutorialOption.y, 'TUTORIAL', {fontFamily: "RetroFont", fontSize: 19}).setOrigin(0.5);  
 
         playOption.on('pulsado', () => {
             this.bso.stop(); 
-            this.scene.start('nivel3', {imagenes: this.image_data}); 
+            this.scene.start('nivel2', {imagenes: this.image_data}); 
         }); 
 
         galeryOption.on('pulsado', () => {
@@ -62,9 +66,16 @@ export default class Main_Menu extends Phaser.Scene {
             this.scene.start('galery', {imagenes: this.image_data}); 
         });
 
+
+        tutorialOption.on('pulsado', () => {
+            this.bso.stop(); 
+            this.scene.start('tutorial', {imagenes: this.image_data});
+        })
+
         this.buttons = [
             playOption,
-            galeryOption
+            galeryOption,
+            tutorialOption
         ]; 
 
 

@@ -95,7 +95,7 @@ export default class Nivel3 extends Phaser.Scene {
             }
             this.bso.destroy();
             this.scene.stop('hudIshi') 
-            this.scene.start('main_menu', {imagenes: this.image_data}); 
+            this.scene.start('main', {imagenes: this.image_data}); 
 
         }, () => {
             //Solo te puedes pasar el nivel si el jefe ya está muerto 

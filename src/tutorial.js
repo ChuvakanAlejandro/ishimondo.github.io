@@ -9,18 +9,13 @@ import Coleccionable from './coleccionable.js';
 export default class Tutorial extends Phaser.Scene{
 
     constructor(){
-        super({key: 'nivel1'});
+        super({key: 'tutorial'});
     }
 
     init(datos) {
-        const config ={
-            volume: 1,
-            loop: true,
-            delay: 0
-        }
         this.image_data= datos.imagenes;
         this.enter_key= this.input.keyboard.addKey('Enter'); 
-        this.bso= this.sound.add("forest_theme", config); 
+        this.bso= this.sound.add("forest_theme", {mute:true}); 
         this.sonido_golpe= this.sound.add("sonido_daño"); 
         this.bso.play(); 
     }
@@ -36,9 +31,12 @@ export default class Tutorial extends Phaser.Scene{
         
         const tileset= this.map.addTilesetImage('forest', 'forest');
         this.groundLayer= this.map.createLayer('Suelo', tileset); 
-       
+        this.ramaLayer= this.map.createLayer('Rama', tileset); 
         this.decoracionLayer= this.map.createLayer('Decoracion', tileset);  
+
         this.groundLayer.setCollisionByProperty({colisiona: true}); 
+        this.ramaLayer.setCollisionByProperty({traspasable: true}); 
+
 
         //Grupos 
         this.enemies= this.physics.add.group(); 
@@ -68,6 +66,13 @@ export default class Tutorial extends Phaser.Scene{
 
         //Collider del suelo con el jugador 
         this.physics.add.collider(this.groundLayer, this.player); 
+        this.physics.add.collider(this.ramaLayer, this.player, null, (player) =>
+            {
+                if(player.body.velocity.y>= 0){
+                    return true; 
+                }
+                else return false;
+            });
 
         //Collider del suelo con los enemigos 
         this.physics.add.collider(this.groundLayer,this.enemies); 
@@ -87,8 +92,8 @@ export default class Tutorial extends Phaser.Scene{
         this.groundLayer.setTileIndexCallback([11,13], this.empiezaEscalada,this); 
 
         //Camara del juego
-        this.cameras.main.setBounds(0,0,7040, 2550);
-        this.physics.world.setBounds(0,0,7040,2550);
+        this.cameras.main.setBounds(0,0,8960, 1792);
+        this.physics.world.setBounds(0,0,8960,1792);
        
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
 

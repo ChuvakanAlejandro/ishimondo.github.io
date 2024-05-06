@@ -10,6 +10,7 @@ import Phaser from 'phaser';
 import Nivel_1 from './nivel1.js'
 import Nivel_2 from './nivel2.js'
 import Nivel_3 from './nivel3.js'
+import Tutorial from './tutorial.js';
 
 /**
  * Inicio del juego en Phaser. Creamos el archivo de configuración del juego y creamos
@@ -24,7 +25,7 @@ let config = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     pixelArt: true,
-    scene: [Boot, Main, Full_Screen, HudIshi, Pause, Galery, Level, Nivel_1, Nivel_2, Nivel_3, End],
+    scene: [Boot, Main, Full_Screen, HudIshi, Pause, Galery, Tutorial, Nivel_1, Nivel_2, Nivel_3, End],
     physics: {
         default: 'arcade',
         arcade: {
