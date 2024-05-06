@@ -67,13 +67,13 @@ export default class Galery_Menu extends Phaser.Scene{
 
     mostrarBoceto(index){
        
-        if(index===6){ 
+        if(index===3){ 
             index= 0; //Primera imagen 
             this.act_img= 0; 
         }
         else if(index===-1){
-            index= 5; //Ultima imagen 
-            this.act_img= 5; 
+            index= 2; //Ultima imagen 
+            this.act_img= 2; 
         }
         //this.imagenValue.image= this.image_data[index].imagen; 
         this.descriptionText.text= this.image_data[index].texto; 

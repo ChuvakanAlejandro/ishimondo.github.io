@@ -87,9 +87,8 @@ export default class Tutorial extends Phaser.Scene{
         });
 
         
-
         //Callback para empezar la escalada 
-        this.groundLayer.setTileIndexCallback([11,13], this.empiezaEscalada,this); 
+        this.groundLayer.setTileIndexCallback([11,13,27,28], this.empiezaEscalada,this); 
 
         //Camara del juego
         this.cameras.main.setBounds(0,0,8960, 1792);
@@ -115,7 +114,7 @@ export default class Tutorial extends Phaser.Scene{
         super.update(); 
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  
             this.scene.pause();
-            this.scene.launch('pause', {nombre_escena: 'nivel1', imagenes: this.image_data}).pause;  
+            this.scene.launch('pause', {nombre_escena: 'tutorial', imagenes: this.image_data}).pause;  
             this.scene.bringToTop('pause'); 
         }
      
@@ -150,7 +149,7 @@ export default class Tutorial extends Phaser.Scene{
             
             case 'fin':     
                 let tile3= this.groundLayer.getTileAtWorldXY(x+32,y) ?? this.groundLayer.getTileAtWorldXY(x-20, y); 
-                if(tile3.index=== 10 || tile3.index=== 12){
+                if(tile3.index=== 10 || tile3.index=== 12 || tile3.index=== 19 || tile3.index=== 21){
                     return true; 
                 }
                 else return false; 

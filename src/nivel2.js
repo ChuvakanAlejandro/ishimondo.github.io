@@ -101,9 +101,9 @@ export default class Nivel2 extends Phaser.Scene {
          //Terminar el nivel 
          this.physics.add.overlap(this.player, this.final_nivel, ()=>{
             if(!this.coleccionable.active) {
-                this.image_data[0].desbloqueda= true;
-                this.image_data[0].texto= 'Boceto inicial de Ishi';
-                this.image_data[0].imagen= 'boceto2';  
+                this.image_data[1].desbloqueda= true;
+                this.image_data[1].texto= 'Boceto inicial de los enemigos';
+                this.image_data[1].imagen= 'boceto2';  
             }
             this.bso.destroy();
             this.scene.stop('hudIshi') 

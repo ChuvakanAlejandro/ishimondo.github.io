@@ -29,12 +29,13 @@ export default class Nivel3 extends Phaser.Scene {
         
         const tileset= this.map.addTilesetImage('forest', 'forest');
 
-        /*this.backgroundLayer= this.map.createLayer('Fondo', tileset); */
+  
         this.groundLayer= this.map.createLayer('Suelo', tileset); 
-       
-        /*this.decoracionLayer= this.map.createLayer('Decoracion', tileset);*/  
-        this.groundLayer.setCollisionByProperty({colisiona: true});  
+        this.ramaLayer= this.map.createLayer('Rama', tileset); 
 
+        this.decoracionLayer= this.map.createLayer('Decoracion', tileset);  
+        this.groundLayer.setCollisionByProperty({colisiona: true});  
+        this.ramaLayer.setCollisionByProperty({traspasable:true}); 
         //Grupos 
         this.enemies= this.physics.add.group(); 
         this.platforms= this.physics.add.group({allowGravity: false,
@@ -75,6 +76,14 @@ export default class Nivel3 extends Phaser.Scene {
 
         //Collider del suelo con el jugador 
         this.physics.add.collider(this.groundLayer, this.player); 
+        this.physics.add.collider(this.ramaLayer, this.player, null, (player) =>
+            {
+                if(player.body.velocity.y>= 0){
+                    return true; 
+                }
+                else return false;
+            });
+
         this.physics.add.collider(this.player, this.platforms, this.callbackPlataforma, (player)=>{
             if(player.body.velocity.y>= 0){
                 return true; 
@@ -89,12 +98,12 @@ export default class Nivel3 extends Phaser.Scene {
         //Terminar el nivel 
         this.physics.add.overlap(this.player, this.final_nivel, ()=>{
             if(!this.coleccionable.active) {
-                this.image_data[0].desbloqueda= true;
-                this.image_data[0].texto= 'Boceto inicial de Ishi';
-                this.image_data[0].imagen= 'boceto2';  
+                this.image_data[2].desbloqueda= true;
+                this.image_data[2].texto= 'Boceto de nivel en papel';
+                this.image_data[2].imagen= 'boceto3';  
             }
             this.bso.destroy();
-            this.scene.stop('hudIshi') 
+            this.scene.stop('hudIshi'); 
             this.scene.start('main', {imagenes: this.image_data}); 
 
         }, () => {
@@ -190,7 +199,7 @@ export default class Nivel3 extends Phaser.Scene {
     update(t,dt){
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  
             this.scene.pause();
-            this.scene.launch('pause', {nombre_escena: 'nivel3'}).pause;  
+            this.scene.launch('pause', {nombre_escena: 'nivel3', imagenes: this.image_data}).pause;  
             this.scene.bringToTop('pause'); 
         }
     }

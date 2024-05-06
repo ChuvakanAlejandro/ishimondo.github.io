@@ -24,6 +24,7 @@ import Bosque from '../assets/maps/mundo1.png'
 
 import coleccionable from '../assets/animations/coleccionable.png'
 import img_locked from '../assets/sprites/imagen_oculta.png'
+import boceto1 from '../assets/sprites/boceto1.png'
 import boceto2 from '../assets/sprites/boceto2.png'
 import boceto3 from '../assets/sprites/boceto3.png'
 

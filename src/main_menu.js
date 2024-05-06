@@ -15,7 +15,7 @@ export default class Main_Menu extends Phaser.Scene {
         if(typeof datos.imagenes==='undefined'){ //Primera entrada al juego
             this.image_data= []; 
             
-            for(let i=0; i<6; i++){
+            for(let i=0; i<3; i++){
                 this.image_data[i]= {desbloqueda: false,
                                     texto: '????????',
                                     imagen: 'img_locked'}; 
@@ -58,7 +58,7 @@ export default class Main_Menu extends Phaser.Scene {
 
         playOption.on('pulsado', () => {
             this.bso.stop(); 
-            this.scene.start('nivel2', {imagenes: this.image_data}); 
+            this.scene.start('nivel1', {imagenes: this.image_data}); 
         }); 
 
         galeryOption.on('pulsado', () => {
