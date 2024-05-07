@@ -64,6 +64,11 @@ export default class Nivel3 extends Phaser.Scene {
             classType: Flora
         })[0]; 
 
+
+
+        this.boss.setPosiciones(); 
+
+
         for (const objeto of this.map.getObjectLayer('Sprites').objects) {
             if(objeto.type === 'Plataforma') {
                 let aux= new Moving_Platform(this, objeto.x, objeto.y, this.platforms);
@@ -108,7 +113,7 @@ export default class Nivel3 extends Phaser.Scene {
 
         }, () => {
             //Solo te puedes pasar el nivel si el jefe ya está muerto 
-            return !this.boss.active; 
+            return this.boss.vida===0; 
         });
 
         //Camara del juego
@@ -133,7 +138,7 @@ export default class Nivel3 extends Phaser.Scene {
     }
 
     /*Al derrotar al jefe aparece el coleccionable de este nivel si no se ha cogido ya*/ 
-    spawnearColeccionable(){
+    spawnColeccionable(){
         if(!this.image_data[2].desbloqueda){
             this.coleccionable= this.map.createFromObjects('Sprites', {
                 type: 'Coleccionable',
@@ -160,7 +165,6 @@ export default class Nivel3 extends Phaser.Scene {
         this.platforms.children.iterate(child => {
 
             if(mov){
-
                 this.tweens.add({
                     targets: child,
                     y: child.y + 250,

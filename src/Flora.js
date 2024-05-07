@@ -13,29 +13,25 @@ export default class Flora extends Phaser.GameObjects.Sprite{
         super(scene, x, y, 'planta_jefe'); 
         this.setOrigin(0.5,0.5); 
         this.scene.add.existing(this);
-        this.scene.physics.add.existing(this); 
-        this.body.setAllowGravity(false); 
-        this.body.pushable= false; 
-
-        this.pos_actual= 0; 
+        this.crearHitbox();
         this.posiciones= []; //Posiciones a las que se va moviendo Flora al ser golpeada 
 
         this.vida= 3; //Golpes que lleva Flora hasta el momento 
+        this.inPain = false;
 
         this.setAnimaciones(); //Sus animaciones 
         this.setScale(1.5);
 
-        /*Hitbox donde va a ser golpeada*/ 
-        this.body.setSize(150,55); 
-        this.body.setOffset(40,100);
-
-        this.scene.physics.add.collider(this.scene.player, this, (o1, o2) => {
-            if((o1.body.touching.down || o2.body.blocked.up)){
-              o1.stepingOnEnemie();
-              o2.meAplastan();
-            }
-            else if(!o1.invecibilidad && !(o1.body.touching.down || o2.body.blocked.up))
-              this.damagedIshi(o2.x,o2,y);         
+       
+        this.scene.physics.add.overlap(this.scene.player, this, (o1, o2) => {
+            if(!this.inPain){
+                if((o1.body.touching.down || o2.body.blocked.up)){
+                    o1.stepingOnEnemie();
+                    o2.meAplastan();
+                }
+                else if(!o1.invecibilidad && !(o1.body.touching.down || o2.body.blocked.up))
+                    this.damagedIshi(o2.x,o2,y);
+            }         
         });
 
         this.play('stand_by', true); 
@@ -72,6 +68,9 @@ export default class Flora extends Phaser.GameObjects.Sprite{
             repeat: 0
         })
 
+        //Callback para cuando termina la animacion de morir 
+        this.on("animationcomplete-esconder", this.reaparecer,
+         this); 
 
         this.anims.create({
             key: 'aparecer',
@@ -80,6 +79,14 @@ export default class Flora extends Phaser.GameObjects.Sprite{
             repeat: 0 
         })
 
+          //Callback para cuando termina la animacion de morir 
+          this.on("animationcomplete-aparecer", ()=>{
+            this.play('stand_by', true);
+            this.inPain = false;
+          },
+          this); 
+
+
         this.anims.create({
             key: 'aparecer_enfadada',
             frames: this.anims.generateFrameNumbers('planta_jefe', {start: 41, end:48}), 
@@ -87,12 +94,19 @@ export default class Flora extends Phaser.GameObjects.Sprite{
             repeat: 0
         })
 
+        this.on("animationcomplete-aparecer_enfadada", ()=>{
+            this.play('stand_by_enfadada', true);
+            this.inPain = false;
+          },
+          this); 
+
+
 
         this.anims.create({
             key: 'morir',
             frames: this.anims.generateFrameNumbers('planta_jefe', {start: 25, end: 28}),
             frameRate: 3,
-            repeat: -1 
+            repeat: 0 
         })
 
 
@@ -100,6 +114,21 @@ export default class Flora extends Phaser.GameObjects.Sprite{
         this.on("animationcomplete-morir", this.morir,
          this); 
 
+    }
+
+    crearHitbox(){
+        this.scene.physics.add.existing(this); 
+        this.body.setAllowGravity(false); 
+        this.body.pushable= false;
+         /*Hitbox donde va a ser golpeada*/ 
+         this.body.setSize(150,55); 
+         this.body.setOffset(40,100);
+ 
+    }
+
+    setPosiciones(){
+        this.posiciones[0]= 2590 
+        this.posiciones[1]= 5082; 
     }
 
     preUpdate(t,dt){
@@ -110,14 +139,28 @@ export default class Flora extends Phaser.GameObjects.Sprite{
     meAplastan(){
         this.stop(); 
         this.vida--;
-        this.body.destroy(); 
+        this.inPain = true;
         if(this.vida===0){
-            this.play('morir', true); 
+            this.play('morir');  
         }
         else {
             this.play('dañada').chain('esconder'); 
         }
     }
+
+
+    reaparecer(){
+        /*Volver a crear la hitbox del bicho*/
+        this.x= this.posiciones[2-this.vida]; 
+        //this.crearHitbox(); 
+
+        /* Ejecutar animacion de aparecer*/
+        if(this.vida===1){
+            this.play('aparecer_enfadada'); 
+        }
+        this.play('aparecer', true);
+    }
+
 
     mePegan(){
         /*Lo ignora porque es un pro*/ 
@@ -125,6 +168,7 @@ export default class Flora extends Phaser.GameObjects.Sprite{
 
     morir(){
         /*Spawnear coleccionable*/ 
+        this.body.destroy(); 
         this.scene.spawnColeccionable(); 
      }
 }
