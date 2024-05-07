@@ -18,14 +18,9 @@
   <object id="8" name="Ishi" type="Jugador" x="50" y="2353">
    <point/>
   </object>
-  <object id="9" name="Tutorial1" type="cajaTutorial" x="206" y="2377" width="49" height="48"/>
-  <object id="14" name="Tutorial2" type="cajaTutorial" x="583.5" y="2374" width="49" height="48"/>
-  <object id="15" name="Tutorial3 " type="cajaTutorial" x="1348.5" y="2312" width="49" height="48"/>
-  <object id="16" name="Tutorial5" type="cajaTutorial" x="2054.5" y="2312" width="49" height="48"/>
   <object id="17" name="seta1" type="Seta" x="1690" y="2336">
    <point/>
   </object>
-  <object id="19" name="Tutorial4" type="cajaTutorial" x="1863.5" y="2311" width="49" height="48"/>
   <object id="20" name="seta2" type="Seta" x="3357" y="1971">
    <point/>
   </object>
