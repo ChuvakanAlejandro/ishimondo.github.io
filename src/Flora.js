@@ -1,5 +1,4 @@
 import Phaser from 'phaser'
-import Orbe from './orbe.js';
 
 export default class Flora extends Phaser.GameObjects.Sprite{
     /**
