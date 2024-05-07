@@ -23,7 +23,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     // Queremos que el jugador no se salga de los límites del mundo
-    this.body.setCollideWorldBounds(true);
+    this.body.setCollideWorldBounds(true); //solo para el debug
 
 
     this.body.setSize(35, 90);
@@ -54,8 +54,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.inPain = false;
     this.invencibilityFrames = 100;
     this.countImb = 0;
-    this.isOnPlatform= false; 
-    this.currentPlatform= null; 
+    this.isOnPlatform = false; 
+    this.currentPlatform = null; 
+    this.lastX = 0;
+    this.lastY = 0;
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
 
@@ -378,6 +380,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.scene.sonido_golpe.play(); 
     this.bloqueadoDr = false;
     this.bloqueadoIz = false;
+    this.atacando = false;
     this.body.setAllowGravity(true);
     this.modo_ant = this.modo;
     this.modo = "GOLPEADO";
@@ -401,6 +404,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
      if(this.vida== 0){ //PANTALLA DE GAMEOVER
         this.scene.gameover(); 
      }
+  }
+  fellFromACliff(){
+    this.restarVida();
+    this.x = this.lastX;
+    this.y = this.lastY;
   }
 
   
@@ -790,6 +798,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
           this.movimientoSuelo();
           if(Phaser.Input.Keyboard.JustDown(this.keyP) && this.modo == "LEVANTADO") {
             this.logicaAtaque();
+          }
+          if(this.body.onFloor()){
+            if(this.flipX)
+              this.lastX = this.x+50;
+            else
+              this.lastX = this.x-50;
+            this.lastY = this.y-10;
           }
         }
       }else if(!(this.body.touching.down || this.body.onFloor()) && this.modo=="SALTANDO"){//HE SALTADO Y ESTOY EN EL AIRE

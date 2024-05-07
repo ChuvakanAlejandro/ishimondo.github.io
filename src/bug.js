@@ -103,6 +103,9 @@ export default class Bug extends Phaser.GameObjects.Sprite{
                     this.body.setVelocityX(0);
                 }
             }
+            else{
+                this.body.setVelocityX(0);
+            }
         }
         
         else{

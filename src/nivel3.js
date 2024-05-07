@@ -53,9 +53,13 @@ export default class Nivel3 extends Phaser.Scene {
 
         let eventAux= this.map.createFromObjects('Sprites', {name: 'fin_nivel'}) [0]; 
         this.final_nivel= this.add.zone(eventAux.x, eventAux.y,eventAux.displayWidth, eventAux.displayHeight);
+        this.falling_Cliff = this.add.zone(0,2000, 14040, 500);
         this.physics.world.enable(this.final_nivel); 
         this.final_nivel.body.setAllowGravity(false);
         this.final_nivel.body.setImmovable(false);
+        this.physics.add.existing(this.falling_Cliff);
+        this.falling_Cliff.body.setAllowGravity(false);
+        this.falling_Cliff.body.setImmovable(false);
         eventAux.destroy();   
 
 
@@ -113,9 +117,12 @@ export default class Nivel3 extends Phaser.Scene {
         });
 
         //Camara del juego
-        this.cameras.main.setBounds(0,0,5952, 1536);
-        this.physics.world.setBounds(0,0,5952,1536);
+        this.cameras.main.setBounds(0,0,5952, 1336);
+        this.physics.world.setBounds(0,0,5952,2036);
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
+        this.physics.add.overlap(this.player, this.falling_Cliff, ()=>{
+            this.player.fellFromACliff();
+        });
         
         /*Fondo del nivel*/ 
         let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background_world').setDepth(-1000);
