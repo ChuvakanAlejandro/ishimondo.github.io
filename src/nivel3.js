@@ -84,12 +84,7 @@ export default class Nivel3 extends Phaser.Scene {
                 else return false;
             });
 
-        this.physics.add.collider(this.player, this.platforms, this.callbackPlataforma, (player)=>{
-            if(player.body.velocity.y>= 0){
-                return true; 
-            }
-            else return false;
-        }); 
+        this.physics.add.collider(this.player, this.platforms, this.callbackPlataforma); 
 
         //Collider del suelo con los enemigos 
         this.physics.add.collider(this.groundLayer,this.boss); 
@@ -168,6 +163,12 @@ export default class Nivel3 extends Phaser.Scene {
                     duration: 2000,
                     ease: 'Sine.easeInOut',
                     repeat: -1,
+                    onUpdate: () => {
+                        child.vx = child.body.position.x - child.previousX;
+                        child.vy = child.body.position.y - child.previousY;
+                        child.previousX = child.body.position.x; 
+                        child.previousY = child.body.position.y; 
+                    }
                 });
             }
             else{
@@ -178,6 +179,12 @@ export default class Nivel3 extends Phaser.Scene {
                     duration: 2000,
                     ease: 'Sine.easeInOut',
                     repeat: -1,
+                    onUpdate: () => {
+                        child.vx = child.body.position.x - child.previousX;
+                        child.vy = child.body.position.y - child.previousY;
+                        child.previousX = child.body.position.x; 
+                        child.previousY = child.body.position.y; 
+                    }
                 });
             }
 

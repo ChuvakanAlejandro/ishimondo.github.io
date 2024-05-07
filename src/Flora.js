@@ -35,7 +35,7 @@ export default class Flora extends Phaser.GameObjects.Sprite{
               o2.meAplastan();
             }
             else if(!o1.invecibilidad && !(o1.body.touching.down || o2.body.blocked.up))
-              this.damagedIshi(o2.x,o2,y);         
+              o1.damagedIshi(o2.x,o2,y);         
         });
 
         this.play('stand_by', true); 
