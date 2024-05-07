@@ -346,7 +346,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       frameRate: 15,
       repeat: 0
     }); 
-    this.on('animationcomplete-ishi_hurt', ()=> {this.inPain= false;}, this);
+    this.on('animationcomplete-ishi_hurt', ()=> {this.inPain = false;}, this);
     this.anims.create({
       key: 'ishi_steping',
       frames: this.anims.generateFrameNumbers('ishi', {start: 31, end: 34 }),
@@ -354,6 +354,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       repeat: 0
     }); 
     this.on('animationcomplete-ishi_steping', ()=> {
+      this.inPain = false;
       this.body.setAllowGravity(true);
       this.cambiaModo("LEVANTADO");
       this.modo_ant = this.modo;
@@ -753,24 +754,23 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   preUpdate(t,dt) {
     super.preUpdate(t,dt);
-    if (this.isOnPlatform && this.currentPlatform) {
-      this.body.position.x += this.currentPlatform.x;
-      this.body.position.y += this.currentPlatform.y;
-
-      this.isOnPlatform = false;
-      this.currentPlatform = null;
-    }
 
     if(this.modo == "APLASTANDO"){
       if(Phaser.Input.Keyboard.JustDown(this.keySpace)){
         this.superJump = true;
       }
     }else if(this.modo == "GOLPEADO"){
-      if(!this.inPain && this.body.onFloor()){
+      if(!this.inPain && (this.body.touching.down || this.body.onFloor())){
         this.cambiaModo("AGACHADO");
       }
     }else{
-      if(this.body.onFloor() && (this.modo=="LEVANTADO" || this.modo=="AGACHADO")){
+      if((this.body.touching.down || this.body.onFloor() || this.isOnPlatform) && (this.modo=="LEVANTADO" || this.modo=="AGACHADO")){
+        if (this.isOnPlatform && this.currentPlatform) {
+          this.x += this.currentPlatform.vx;
+          this.y += this.currentPlatform.vy;
+          //this.isOnPlatform = false;
+          //this.currentPlatform = null;
+        }
         if(!this.atacando){
           if(Phaser.Input.Keyboard.JustDown(this.keyShift)) { //De base, SHIFT cambiara de modo
             if(this.trepable && (this.bloqueadoDr || this.bloqueadoIz)){//CAMBIANDO A MODO COLGANDO si encuentro una pared trepable y estoy bloqueado por ella
@@ -784,13 +784,15 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.body.setVelocityY(this.jumpSpeed);
             this.modo_ant = this.modo;
             this.modo = "SALTANDO";
+            this.isOnPlatform = false;
+            this.currentPlatform = null;
           }
           this.movimientoSuelo();
           if(Phaser.Input.Keyboard.JustDown(this.keyP) && this.modo == "LEVANTADO") {
             this.logicaAtaque();
           }
         }
-      }else if(!this.body.onFloor() && this.modo=="SALTANDO"){//HE SALTADO Y ESTOY EN EL AIRE
+      }else if(!(this.body.touching.down || this.body.onFloor()) && this.modo=="SALTANDO"){//HE SALTADO Y ESTOY EN EL AIRE
         if(!this.dash){
           this.body.setSize(35, 60);
           this.body.setOffset(46, 60);
@@ -810,7 +812,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.body.setVelocityX(-this.dashSpeed);
           }
         }
-      }else if(this.body.onFloor() && (this.modo=="SALTANDO" || this.modo=="COLGANDO") ){//Si, en mi salto, toco el suelo, vuelvo a mi modo anterior
+      }else if((this.body.touching.down || this.body.onFloor()) && (this.modo=="SALTANDO" || this.modo=="COLGANDO") ){//Si, en mi salto, toco el suelo, vuelvo a mi modo anterior
         this.body.setAllowGravity(true);
         if(this.modo_ant == "LEVANTADO"){
           this.cambiaModo("AGACHADO");
@@ -820,7 +822,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           this.cambiaModo("AGACHADO");
         }
         this.trepable = false;
-      }else if(!this.body.onFloor() && this.modo=="COLGANDO"){
+      }else if(!(this.body.touching.down || this.body.onFloor()) && this.modo=="COLGANDO"){
         
         this.body.setVelocityX(0);
         if(Phaser.Input.Keyboard.JustDown(this.keyShift)){//Me dejo caer
@@ -843,6 +845,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     if(this.invecibilidad && !this.inPain){
         this.invincible();
     }
+
   }
 
   gastaEn(){
