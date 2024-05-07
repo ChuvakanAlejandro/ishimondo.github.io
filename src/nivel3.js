@@ -13,6 +13,7 @@ export default class Nivel3 extends Phaser.Scene {
 
     init(datos){
         this.image_data= datos.imagenes;
+        this.nombre_escena= 'nivel3'; 
         this.enter_key= this.input.keyboard.addKey('Enter'); 
         this.bso= this.sound.add("boss_theme", {mute: true}); 
         this.sonido_golpe= this.sound.add("sonido_daño"); 
@@ -215,7 +216,7 @@ export default class Nivel3 extends Phaser.Scene {
     update(t,dt){
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  
             this.scene.pause();
-            this.scene.launch('pause', {nombre_escena: 'nivel3', imagenes: this.image_data}).pause;  
+            this.scene.launch('pause', {nombre_escena: this.nombre_escena, imagenes: this.image_data}).pause;  
             this.scene.bringToTop('pause'); 
         }
     }
@@ -259,5 +260,12 @@ export default class Nivel3 extends Phaser.Scene {
 
     empiezaEscalada(){
         this.player.paredTrepable(true,100,100); 
+    }
+
+   
+    gameover(){
+        this.sound.stopAll(); 
+        this.scene.stop('hudIshi'); 
+        this.scene.start('end', {imagenes: this.image_data, nombre_escena: this.nombre_escena}); 
     }
 }

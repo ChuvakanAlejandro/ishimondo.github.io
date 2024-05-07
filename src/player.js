@@ -399,7 +399,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   restarVida(){
     this.vida--;
      if(this.vida== 0){ //PANTALLA DE GAMEOVER
-        this.scene.scene.start('end', {nombre_escena: 'nivel1'}); 
+        this.scene.gameover(); 
      }
   }
 

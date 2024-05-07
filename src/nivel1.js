@@ -10,6 +10,7 @@ export default class Nivel1 extends Phaser.Scene{
 
     constructor(){
         super({key: 'nivel1'});
+        
     }
 
     init(datos) {
@@ -17,6 +18,7 @@ export default class Nivel1 extends Phaser.Scene{
         this.enter_key= this.input.keyboard.addKey('Enter'); 
         this.bso= this.sound.add("forest_theme", {mute: true}); 
         this.sonido_golpe= this.sound.add("sonido_daño"); 
+        this.nombre_escena= 'nivel1'; 
         this.bso.play(); 
     }
 
@@ -131,7 +133,7 @@ export default class Nivel1 extends Phaser.Scene{
         super.update(); 
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  
             this.scene.pause();
-            this.scene.launch('pause', {nombre_escena: 'nivel1', imagenes: this.image_data}).pause;  
+            this.scene.launch('pause', {nombre_escena: this.nombre_escena, imagenes: this.image_data}).pause;  
             this.scene.bringToTop('pause'); 
         }
      
@@ -175,5 +177,13 @@ export default class Nivel1 extends Phaser.Scene{
 
     empiezaEscalada(){
         this.player.paredTrepable(true,100,100); 
+    }
+
+
+
+    gameover(){
+        this.sound.stopAll(); 
+        this.scene.stop('hudIshi'); 
+        this.scene.start('end', {imagenes: this.image_data, nombre_escena: this.nombre_escena}); 
     }
 }

@@ -36,6 +36,7 @@ import RetroFont from 'url:../assets/fonts/Retro_Computer.ttf'
 import Main_Theme from 'url:../assets/audio/main_theme.wav'
 import Forest_Theme from 'url:../assets/audio/musica_bosque.mp3'
 import Boss_Theme from 'url:../assets/audio/boss_theme.wav'
+import GameOver_Theme from 'url:../assets/audio/musica_gameover.mp3'
 import Galery_Theme from 'url:../assets/audio/galery_theme.mp3'
 import Sonido_Daño from 'url:../assets/audio/golpe_jugador.mp3'
 /**
@@ -118,7 +119,8 @@ export default class Boot extends Phaser.Scene {
     this.load.audio("main_theme", Main_Theme); 
     this.load.audio("forest_theme", Forest_Theme);
     this.load.audio("boss_theme", Boss_Theme); 
-    this.load.audio("galery_theme", Galery_Theme); 
+    this.load.audio("galery_theme", Galery_Theme);
+    this.load.audio("gameover_theme", GameOver_Theme);  
     this.load.audio("sonido_daño", Sonido_Daño); 
   }
 
