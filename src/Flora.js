@@ -146,6 +146,8 @@ export default class Flora extends Phaser.GameObjects.Sprite{
         else {
             this.play('dañada').chain('esconder'); 
         }
+        this.scene.plantaGolpeada();
+
     }
 
 
@@ -157,8 +159,11 @@ export default class Flora extends Phaser.GameObjects.Sprite{
         /* Ejecutar animacion de aparecer*/
         if(this.vida===1){
             this.play('aparecer_enfadada'); 
+        }else{
+            this.play('aparecer', true);
         }
-        this.play('aparecer', true);
+        this.scene.changeOfBounds();
+        this.scene.mostrarNuevaPosicionPlanta();
     }
 
 
@@ -168,6 +173,7 @@ export default class Flora extends Phaser.GameObjects.Sprite{
 
     morir(){
         /*Spawnear coleccionable*/ 
+        this.scene.bossDefeated();
         this.body.destroy(); 
         this.scene.spawnColeccionable(); 
      }

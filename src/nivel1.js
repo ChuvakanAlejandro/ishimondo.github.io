@@ -16,10 +16,10 @@ export default class Nivel1 extends Phaser.Scene{
     init(datos) {
         this.image_data= datos.imagenes;
         this.enter_key= this.input.keyboard.addKey('Enter'); 
-        this.bso= this.sound.add("forest_theme", {mute: true}); 
-        this.sonido_golpe= this.sound.add("sonido_daño"); 
+        this.bso= this.sound.add("forest_theme", {mute: false}); 
         this.nombre_escena= 'nivel1'; 
-        this.bso.play(); 
+        this.bso.play();
+        this.bso.setLoop(true); 
     }
 
     create(){
@@ -55,9 +55,14 @@ export default class Nivel1 extends Phaser.Scene{
 
         let eventAux= this.map.createFromObjects('Sprites', {name: 'fin_nivel'}) [0]; 
         this.final_nivel= this.add.zone(eventAux.x, eventAux.y,eventAux.displayWidth, eventAux.displayHeight);
+        this.falling_Cliff = this.add.zone(0,3050, 14040, 500);
         this.physics.world.enable(this.final_nivel); 
+        this.physics.world.enable(this.falling_Cliff); 
         this.final_nivel.body.setAllowGravity(false);
         this.final_nivel.body.setImmovable(false);
+        this.physics.add.existing(this.falling_Cliff);
+        this.falling_Cliff.body.setAllowGravity(false);
+        this.falling_Cliff.body.setImmovable(false);
         eventAux.destroy();   
        
         //Creando a los enemigos 
@@ -93,6 +98,7 @@ export default class Nivel1 extends Phaser.Scene{
             this.scene.start('nivel2', {imagenes: this.image_data}); 
 
         });
+        
 
         //Creamos el coleccionable
         if(!this.image_data[0].desbloqueda){
@@ -111,7 +117,11 @@ export default class Nivel1 extends Phaser.Scene{
 
         //Camara del juego
         this.cameras.main.setBounds(0,0,7040, 2550);
-        this.physics.world.setBounds(0,0,7040,2550);
+        this.physics.world.setBounds(0,0,7040,3550);
+
+        this.physics.add.overlap(this.player, this.falling_Cliff, ()=>{
+            this.player.fellFromACliff();
+        });
        
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
 

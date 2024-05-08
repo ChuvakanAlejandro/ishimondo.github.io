@@ -14,8 +14,7 @@ export default class Nivel2 extends Phaser.Scene {
     init(datos){
         this.image_data= datos.imagenes;
         this.enter_key= this.input.keyboard.addKey('Enter'); 
-        this.bso= this.sound.add("forest_theme", {mute: true}); 
-        this.sonido_golpe= this.sound.add("sonido_daño"); 
+        this.bso= this.sound.add("forest_theme", {mute: false}); 
         this.nombre_escena= 'nivel2'; 
         this.bso.play(); 
         this.bso.setLoop(true);
@@ -52,9 +51,13 @@ export default class Nivel2 extends Phaser.Scene {
 
         let eventAux= this.map.createFromObjects('Sprites', {name: 'fin_nivel'}) [0]; 
         this.final_nivel= this.add.zone(eventAux.x, eventAux.y,eventAux.displayWidth, eventAux.displayHeight);
+        this.falling_Cliff = this.add.zone(0,3336, 20040, 500);
         this.physics.world.enable(this.final_nivel); 
         this.final_nivel.body.setAllowGravity(false);
         this.final_nivel.body.setImmovable(false);
+        this.physics.add.existing(this.falling_Cliff);
+        this.falling_Cliff.body.setAllowGravity(false);
+        this.falling_Cliff.body.setImmovable(false);
         eventAux.destroy();   
 
 
@@ -98,6 +101,10 @@ export default class Nivel2 extends Phaser.Scene {
         //Collider del suelo con los enemigos 
         this.physics.add.collider(this.groundLayer,this.enemies); 
         this.physics.add.collider(this.ramaLayer, this.enemies); 
+
+        this.physics.add.overlap(this.player, this.falling_Cliff, ()=>{
+            this.player.fellFromACliff();
+        });
 
          //Terminar el nivel 
          this.physics.add.overlap(this.player, this.final_nivel, ()=>{

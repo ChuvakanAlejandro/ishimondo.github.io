@@ -15,8 +15,7 @@ export default class Nivel3 extends Phaser.Scene {
         this.image_data= datos.imagenes;
         this.nombre_escena= 'nivel3'; 
         this.enter_key= this.input.keyboard.addKey('Enter'); 
-        this.bso= this.sound.add("boss_theme", {mute: true}); 
-        this.sonido_golpe= this.sound.add("sonido_daño"); 
+        this.bso= this.sound.add("boss_theme", {mute: false}); 
         this.bso.play(); 
         this.bso.setLoop(true); 
     }
@@ -53,9 +52,13 @@ export default class Nivel3 extends Phaser.Scene {
 
         let eventAux= this.map.createFromObjects('Sprites', {name: 'fin_nivel'}) [0]; 
         this.final_nivel= this.add.zone(eventAux.x, eventAux.y,eventAux.displayWidth, eventAux.displayHeight);
+        this.falling_Cliff = this.add.zone(0,2000, 14040, 500);
         this.physics.world.enable(this.final_nivel); 
         this.final_nivel.body.setAllowGravity(false);
         this.final_nivel.body.setImmovable(false);
+        this.physics.add.existing(this.falling_Cliff);
+        this.falling_Cliff.body.setAllowGravity(false);
+        this.falling_Cliff.body.setImmovable(false);
         eventAux.destroy();   
 
 
@@ -113,9 +116,12 @@ export default class Nivel3 extends Phaser.Scene {
         });
 
         //Camara del juego
-        this.cameras.main.setBounds(0,0,5952, 1536);
-        this.physics.world.setBounds(0,0,5952,1536);
+        this.cameras.main.setBounds(0,0,5952, 1336);
+        this.physics.world.setBounds(0,0,5952,2036);
         this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
+        this.physics.add.overlap(this.player, this.falling_Cliff, ()=>{
+            this.player.fellFromACliff();
+        });
         
         /*Fondo del nivel*/ 
         let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background_world').setDepth(-1000);
@@ -130,7 +136,8 @@ export default class Nivel3 extends Phaser.Scene {
 
 
         //Tweens para que se muevan las hoja-plataformas
-        this.movimientoPlataformas(); 
+        this.movimientoPlataformas();
+        this.changeOfBounds();
     }
 
     /*Al derrotar al jefe aparece el coleccionable de este nivel si no se ha cogido ya*/ 
@@ -208,10 +215,34 @@ export default class Nivel3 extends Phaser.Scene {
     }
 
 
-    plantaGolpeada(player,jefe){
-        console.log("Pisaste a Flora"); 
-      jefe.meAplastan(); 
+    plantaGolpeada(){
+        this.cameras.main.startFollow(this.boss,true, 0.2, 0.2);
     }
+
+    changeOfBounds(){
+        this.cameras.main.setBounds(0,this.boss.y-250,this.boss.x+200, 500);
+        this.physics.world.setBounds(0,this.boss.y-250,this.boss.x+200,2036);
+    }
+
+    mostrarNuevaPosicionPlanta(){
+        this.timedEvent = this.time.addEvent({ 
+            delay: 2000, 
+            callback: this.backToPlayer,
+            callbackScope: this,
+            repeat: 0 
+        }); 
+    }
+
+    bossDefeated(){
+        this.cameras.main.setBounds(0,0,5952, 1336);
+        this.physics.world.setBounds(0,0,5952,2036);
+        this.backToPlayer();
+    }
+
+    backToPlayer(){
+        this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
+    }
+
 
     update(t,dt){
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  
