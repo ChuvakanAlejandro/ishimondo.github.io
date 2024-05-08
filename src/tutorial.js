@@ -15,8 +15,7 @@ export default class Tutorial extends Phaser.Scene{
     init(datos) {
         this.image_data= datos.imagenes;
         this.enter_key= this.input.keyboard.addKey('Enter'); 
-        this.bso= this.sound.add("forest_theme", {mute:true}); 
-        this.sonido_golpe= this.sound.add("sonido_daño"); 
+        this.bso= this.sound.add("forest_theme", {mute:true});
         this.bso.play(); 
     }
 
