@@ -61,7 +61,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // Esta label es la UI en la que pondremos la puntuación del jugador
     this.label = this.scene.add.text(10, 10, "");
 
-
+    this.setDepth(10);
     //Mapeo de controles
     this.mapeoTeclas(); 
 

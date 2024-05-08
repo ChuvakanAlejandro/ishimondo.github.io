@@ -136,7 +136,8 @@ export default class Nivel3 extends Phaser.Scene {
 
 
         //Tweens para que se muevan las hoja-plataformas
-        this.movimientoPlataformas(); 
+        this.movimientoPlataformas();
+        this.changeOfBounds();
     }
 
     /*Al derrotar al jefe aparece el coleccionable de este nivel si no se ha cogido ya*/ 
@@ -214,10 +215,34 @@ export default class Nivel3 extends Phaser.Scene {
     }
 
 
-    plantaGolpeada(player,jefe){
-        console.log("Pisaste a Flora"); 
-      jefe.meAplastan(); 
+    plantaGolpeada(){
+        this.cameras.main.startFollow(this.boss,true, 0.2, 0.2);
     }
+
+    changeOfBounds(){
+        this.cameras.main.setBounds(0,this.boss.y-250,this.boss.x+200, 500);
+        this.physics.world.setBounds(0,this.boss.y-250,this.boss.x+200,2036);
+    }
+
+    mostrarNuevaPosicionPlanta(){
+        this.timedEvent = this.time.addEvent({ 
+            delay: 2000, 
+            callback: this.backToPlayer,
+            callbackScope: this,
+            repeat: 0 
+        }); 
+    }
+
+    bossDefeated(){
+        this.cameras.main.setBounds(0,0,5952, 1336);
+        this.physics.world.setBounds(0,0,5952,2036);
+        this.backToPlayer();
+    }
+
+    backToPlayer(){
+        this.cameras.main.startFollow(this.player,true, 0.2, 0.2);
+    }
+
 
     update(t,dt){
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  

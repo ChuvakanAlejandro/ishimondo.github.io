@@ -27,7 +27,7 @@ export default class Main_Menu extends Phaser.Scene {
         }
 
 
-        this.bso= this.sound.add("main_theme", {mute:true}); 
+        this.bso= this.sound.add("main_theme", {mute:false}); 
         this.bso.play(); 
         
         this.cursors= this.input.keyboard.createCursorKeys(); 
@@ -58,7 +58,7 @@ export default class Main_Menu extends Phaser.Scene {
 
         playOption.on('pulsado', () => {
             this.bso.stop(); 
-            this.scene.start('nivel1', {imagenes: this.image_data}); 
+            this.scene.start('nivel3', {imagenes: this.image_data}); 
         }); 
 
         galeryOption.on('pulsado', () => {
