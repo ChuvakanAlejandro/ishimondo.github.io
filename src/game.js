@@ -1,3 +1,4 @@
+import Phaser from 'phaser';
 import Boot from './boot.js';
 import End from './end.js';
 import Level from './level.js';
@@ -5,8 +6,7 @@ import Main from './main_menu.js';
 import Full_Screen  from './full_screen.js';
 import HudIshi from './hudplayer.js';
 import Pause from './pause_menu.js';
-import Galery from './galery_menu.js'; 
-import Phaser from 'phaser'; 
+import Galery from './galery_menu.js';  
 import Nivel_1 from './nivel1.js'
 import Nivel_2 from './nivel2.js'
 import Nivel_3 from './nivel3.js'
