@@ -100,6 +100,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
       else if(!this.invecibilidad && !(o1.body.touching.down || o2.body.blocked.up))
         this.damagedIshi(o2.x,o2,y);         
     });
+
+    this.sonido_golpe= this.scene.sound.add("sonido_danio"); 
+    this.sonido_jump= this.scene.sound.add("sonido_jump"); 
   }
 
 
@@ -377,7 +380,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   damagedIshi(xEnemigo,y){
-    this.scene.sonido_golpe.play(); 
+    this.sonido_golpe.play(); 
     this.bloqueadoDr = false;
     this.bloqueadoIz = false;
     this.atacando = false;
@@ -794,6 +797,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.modo = "SALTANDO";
             this.isOnPlatform = false;
             this.currentPlatform = null;
+            this.sonido_jump.play(); 
           }
           this.movimientoSuelo();
           if(Phaser.Input.Keyboard.JustDown(this.keyP) && this.modo == "LEVANTADO") {

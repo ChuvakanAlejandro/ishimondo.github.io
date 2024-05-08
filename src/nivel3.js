@@ -15,8 +15,7 @@ export default class Nivel3 extends Phaser.Scene {
         this.image_data= datos.imagenes;
         this.nombre_escena= 'nivel3'; 
         this.enter_key= this.input.keyboard.addKey('Enter'); 
-        this.bso= this.sound.add("boss_theme", {mute: true}); 
-        this.sonido_golpe= this.sound.add("sonido_daño"); 
+        this.bso= this.sound.add("boss_theme", {mute: false}); 
         this.bso.play(); 
         this.bso.setLoop(true); 
     }
