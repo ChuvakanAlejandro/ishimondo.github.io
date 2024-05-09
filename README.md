@@ -1,27 +1,81 @@
-TITLE: ISHIMONDO
+# ISHIMONDO
 
-Context: A game where a criature (Ishi) will hunt a beast that caught its attention. Ishi will travel across different world, cross obstacles and fight other creatures in its way.
+**Concepto:** Videojuego de plataformas en 2D con gráficos donde controlas a un gato humanoide característico.
 
-Concept: 
+**Trama:** Ishi estaba durmiendo placenteramente sin saber muy bien dónde estaba ni hacia dónde ir, hasta que algo perturbó su sueño. Sus orejas de gato captaron un sonido fuerte. Salió de su temporal guarida y miró al cielo en dirección del ruido. De la nada, la bestia voló a ras de los árboles, dándole una clara vista de lo que era. Era una bestia alada enorme y Ishi quedó fascinado. Trepo al árbol más grande que había para ver hacia dónde se dirigía. Su rastro llevaba más allá de las montañas, así que no perdió ni un momento más e inició su viaje para cazar a la criatura.
 
-Core-loop: Parkour, new movements, character descovery, learn skills, timer, colectables.
+## Mecánicas
 
-Lore: Ishi dormía plácidamente sin saber muy bien donde estaba ni hacia donde ir, hasta que algo perturbo su sueño, Sus orejas de gato captaban un sonido fuerte. Salió de su temporal guarida y miró al cielo en dirección del ruido. De la nada la bestia voló a ras de los árboles, dandole una clara vista de lo que era. Era bestia alada enorme y Ishi quedó fascinad@. Trepó el árbol más grande que había para ver hacidonde se dirigía. Su rastro llevaba más allá de las montañas, así que no perdió ni un momento más y inició si viaje para cazar a la criatura. 
+- **Andar:** Camina en una dirección seleccionada por el jugador. Por defecto va en dos patas.
+  - **Izquierda**
+  - **Derecha**
 
-Mecánicas:
-  -Andar: anda en una dirección seleccionada por el jugador. A izquierda, D derecha.
-  -Esprintar: al andar si les a SHIFT correrá a 4 patas.
-  -Salto: salta 4x64 pixeles. Barra espaciadora.
-  -Interactuar:interactua con el entorno. E
-  -Trepar: en el aire, si vas andando y te pegas a una pared específica puedes treparla.
-  -Agacharse: se agacha, reduciendo su hitbox. S
+- **Agacharse:** Cambio a modo de 4 patas (Mayor velocidad y reducción de la hitbox).  <img src= "/img/keyShift.png" alt= "Tecla Shift"> 
 
-World: 2D world. Fantasy.
+- **Salto:** Salta un total de 192 pixeles en cualquier dirección. Sirve para tambien para aplastar a los enemigos <img src= "/img/keySpace.png" alt= "Tecla Space"> 
 
-Genre: game like Shovel Knight.
+- **Trepar:** Permite escalar paredes (únicamente en las que están marcadas).
+  - **Iniciar/Parar escalada**      <img src= "/img/keyShift.png" alt= "Tecla Shift"> 
+  - **Arriba**                <img src= "/img/keyW.png" alt= "Tecla W"> 
+  - **Abajo**                 <img src= "/img/keyS.png" alt= "Tecla S"> 
 
-Age renger: Familiar
+- **Arañazo:** Realiza dos cortes consecutivos (solo en modo de 2 patas) con sus garras. Si se encuentra en frente de un enemigo lo daña  <img src= "/img/keyP.png" alt= "Tecla P"> 
+- **Dash:** Solo disponible mientras se realiza un salto. Agiliza el recorrido del nivel <img src= "/img/keyO.png" alt= "Tecla O"> 
 
-PEGI Info: PEGI 7
 
-Target audience: Boys and girls.
+## Dinámicas
+
+ -**Coleccionables**: A lo largo del nivel se encuentran las llamadas  Monedas Ishi </span>. Al recogerlas y completar el nivel correspondiente se desbloquea un boceto
+                      exclusivo sobre el desarrollo del juego.
+                      
+  <img src= "/assets/sprites/esfera_vt.png" >
+
+
+-**Orbes de vida**: Al derrotar a los enemigos, estos sueltan orbes de vitalidad, que podrán salvar al jugador de una situación crítica. 
+
+<img src= "/assets/animations
+
+## Enemigos 
+| Nombre | Rango |
+|-----:|---------------|
+|     Seta venenosa |   Común  | 
+|     Cucaracha|   Común   |
+|     Flora  |  Jefe  |
+
+
+
+## Sprites 
+
+  ### Ishi
+  
+  <img src= "assets/animations/Ishi_sprites.png">
+    
+  ###  Seta venenosa
+  
+  <img src= "assets/animations/mushmi.png">
+
+  ### Cucaracha 
+
+  <img src= "assets/animations/bug.png">
+
+  ### Flora
+
+  <img src= "assets/animations/flora.png">
+
+
+## GÉNERO 
+   Similar a Shovel Knight o Flynn: Son of Crimson
+
+## PEGI 
+  ![pegi_img](https://github.com/ChuvakanAlejandro/ishimondo.github.io/assets/115991671/ce3a55d8-6c54-467e-a8d7-aadc8acd4b24)
+
+## Rango de edad 
+  Familiar
+
+## Audiencia objetivo
+  Tanto para chicos como para chicas
+
+## Proximamente...  
+
+![unamed_Pose_dramatica4](https://github.com/ChuvakanAlejandro/ishimondo.github.io/assets/115991671/b80e8218-c1d1-42fb-b935-5fad0c0bc147)
+
