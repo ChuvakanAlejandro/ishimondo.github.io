@@ -127,12 +127,20 @@ export default class Nivel1 extends Phaser.Scene{
 
 
         /*Fondo del nivel*/ 
-
-        this.background_image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background_world').setDepth(-1000);
-        let scaleX = this.cameras.main.width / this.background_image.width;
-        let scaleY = this.cameras.main.height / this.background_image.height;
+        
+        this.back_image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'back_w1').setDepth(-1000);
+        let scaleX = this.cameras.main.width / this.back_image.width;
+        let scaleY = this.cameras.main.height / this.back_image.height;
         let scale = Math.max(scaleX, scaleY);
-        this.background_image.setScale(scale).setScrollFactor(0);
+        this.back_image.setScale(scale).setScrollFactor(0);
+
+        this.middle_image = this.add.tileSprite(this.cameras.main.x, this.cameras.main.y, this.cameras.main.width, this.cameras.main.height, 'middle_w1')
+        scaleX = this.cameras.main.width / this.middle_image.width;
+        scaleY = this.cameras.main.height / this.middle_image.height;
+        scale = Math.max(scaleX, scaleY);
+        this.middle_image.setScale(scale);
+        this.middle_image.setScrollFactor(0);
+
         
         /*HUD de vida */
         this.scene.run('hudIshi',{target: this.player});

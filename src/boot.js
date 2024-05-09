@@ -19,6 +19,10 @@ import bug from '../assets/animations/bug.png'
 import proyectil from '../assets/animations/proyectil.png'
 import background_menu from '../assets/sprites/background_menu.png'
 import background_world from '../assets/sprites/background_world.png'
+
+import back_w1 from '../assets/sprites/fondo.png'
+import middle_w1 from '../assets/sprites/gordos.png'
+import front_w1 from '../assets/sprites/frente.png'
 import Button from '../assets/sprites/button.png'
 import Bosque from '../assets/maps/mundo1.png'
 
@@ -75,6 +79,9 @@ export default class Boot extends Phaser.Scene {
     
     this.load.image('background_menu', background_menu);
     this.load.image('background_world', background_world); 
+    this.load.image('back_w1', back_w1);
+    this.load.image('middle_w1', middle_w1);
+    this.load.image('front_w1', front_w1);
 
     this.load.image('button', Button); 
     this.load.image('platform', platform);
@@ -86,6 +93,7 @@ export default class Boot extends Phaser.Scene {
     this.load.image('barra', barra );
     this.load.image('full_screen', full_screen_img); 
     this.load.image('img_locked', img_locked); 
+    this.load.image('boceto1', boceto1);
     this.load.image('boceto2', boceto2); 
     this.load.image('boceto3', boceto3); 
 
