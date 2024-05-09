@@ -134,12 +134,19 @@ export default class Nivel1 extends Phaser.Scene{
         let scale = Math.max(scaleX, scaleY);
         this.back_image.setScale(scale).setScrollFactor(0);
 
-        this.middle_image = this.add.tileSprite(this.cameras.main.x, this.cameras.main.y, this.cameras.main.width, this.cameras.main.height, 'middle_w1')
+        this.middle_image = this.add.tileSprite(this.cameras.main.width / 2, this.cameras.main.height / 2, this.cameras.main.width, this.cameras.main.height, 'middle_w1').setDepth(-2);
         scaleX = this.cameras.main.width / this.middle_image.width;
         scaleY = this.cameras.main.height / this.middle_image.height;
         scale = Math.max(scaleX, scaleY);
         this.middle_image.setScale(scale);
         this.middle_image.setScrollFactor(0);
+
+        this.front_image = this.add.tileSprite(this.cameras.main.width / 2, this.cameras.main.height / 2, this.cameras.main.width, this.cameras.main.height, 'front_w1').setDepth(-1);
+        scaleX = this.cameras.main.width / this.middle_image.width;
+        scaleY = this.cameras.main.height / this.middle_image.height;
+        scale = Math.max(scaleX, scaleY);
+        this.front_image.setScale(scale);
+        this.front_image.setScrollFactor(0);
 
         
         /*HUD de vida */
@@ -152,8 +159,10 @@ export default class Nivel1 extends Phaser.Scene{
         if(Phaser.Input.Keyboard.JustDown(this.enter_key)){ //Si se pulsa la tecla enter  
             this.scene.pause();
             this.scene.launch('pause', {nombre_escena: this.nombre_escena, imagenes: this.image_data}).pause;  
-            this.scene.bringToTop('pause'); 
+            this.scene.bringToTop('pause');  
         }
+        this.middle_image.tilePositionX = this.cameras.main.scrollX * 0.3
+        this.front_image.tilePositionX = this.cameras.main.scrollX * 0.5
      
     }
 
