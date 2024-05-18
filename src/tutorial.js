@@ -97,12 +97,26 @@ export default class Tutorial extends Phaser.Scene{
 
 
         /*Fondo del nivel*/ 
-
-        let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background_world').setDepth(-1000);
-        let scaleX = this.cameras.main.width / image.width;
-        let scaleY = this.cameras.main.height / image.height;
+        
+        this.back_image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'back_w1').setDepth(-1000);
+        let scaleX = this.cameras.main.width / this.back_image.width;
+        let scaleY = this.cameras.main.height / this.back_image.height;
         let scale = Math.max(scaleX, scaleY);
-        image.setScale(scale).setScrollFactor(0);
+        this.back_image.setScale(scale).setScrollFactor(0);
+
+        this.middle_image = this.add.tileSprite(this.cameras.main.width / 2, this.cameras.main.height / 2, this.cameras.main.width, this.cameras.main.height, 'middle_w1').setDepth(-2);
+        scaleX = this.cameras.main.width / this.middle_image.width;
+        scaleY = this.cameras.main.height / this.middle_image.height;
+        scale = Math.max(scaleX, scaleY);
+        this.middle_image.setScale(scale);
+        this.middle_image.setScrollFactor(0);
+
+        this.front_image = this.add.tileSprite(this.cameras.main.width / 2, this.cameras.main.height / 2, this.cameras.main.width, this.cameras.main.height, 'front_w1').setDepth(-1);
+        scaleX = this.cameras.main.width / this.middle_image.width;
+        scaleY = this.cameras.main.height / this.middle_image.height;
+        scale = Math.max(scaleX, scaleY);
+        this.front_image.setScale(scale);
+        this.front_image.setScrollFactor(0);
         
         /*HUD de vida */
         this.scene.run('hudIshi',{target: this.player});
@@ -116,6 +130,8 @@ export default class Tutorial extends Phaser.Scene{
             this.scene.launch('pause', {nombre_escena: 'tutorial', imagenes: this.image_data}).pause;  
             this.scene.bringToTop('pause'); 
         }
+        this.middle_image.tilePositionX = this.cameras.main.scrollX * 0.3
+        this.front_image.tilePositionX = this.cameras.main.scrollX * 0.5
      
     }
 
