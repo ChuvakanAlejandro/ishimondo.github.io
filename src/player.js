@@ -848,7 +848,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           this.cambiaModo("AGACHADO");
           this.modo_ant = "LEVANTADO";
           this.bloqueadoDr = false;
-
+          this.trepable = false;
           this.bloqueadoIz = false;
           this.body.setAllowGravity(true);
         }

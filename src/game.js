@@ -1,3 +1,4 @@
+import Phaser from 'phaser';
 import Boot from './boot.js';
 import End from './end.js';
 import Level from './level.js';

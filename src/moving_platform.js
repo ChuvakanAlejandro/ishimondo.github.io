@@ -14,7 +14,7 @@ export default class Moving_Platform extends Phaser.GameObjects.Sprite {
         this.scene.physics.add.existing(this);
         this.body.setSize(100,10);
         this.body.setOffset(20, 20);  
-        this.setDepth(-5); 
+        this.setDepth(5); 
         this.body.setAllowGravity(false); 
         plataformas.add(this);
         
