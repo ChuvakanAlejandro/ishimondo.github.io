@@ -391,6 +391,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.ishiPushed(xEnemigo);
     this.restarVida();
     this.inPain = true;
+    this.dash = false;
   }
 
   ishiPushed(xEnemigo){
