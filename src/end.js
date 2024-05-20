@@ -24,7 +24,7 @@ export default class End extends Phaser.Scene {
    * Creación de la escena. Tan solo contiene el texto que indica que el juego se ha acabado
    */
   create() {
-    this.add.text(500, 250, 'Se acabo!\nPulsa cualquier tecla para volver a jugar', {fontFamily:  "RetroFont", fontSize: 30})
+    this.add.text(500, 250, 'Se acabo! Pulsa cualquier tecla para volver a jugar', {fontFamily:  "RetroFont", fontSize: 30})
         .setOrigin(0.5, 0.5)  // Colocamos el pivote en el centro de cuadro de texto 
         .setAlign('center');  // Centramos el texto dentro del cuadro de texto
 

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Boot from './boot.js';
 import End from './end.js';
+import Credits from './credits.js';
 import Level from './level.js';
 import Main from './main_menu.js';
 import Full_Screen  from './full_screen.js';
@@ -25,7 +26,7 @@ let config = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     pixelArt: true,
-    scene: [Boot, Main, Full_Screen, HudIshi, Pause, Galery, Tutorial, Nivel_1, Nivel_2, Nivel_3, End],
+    scene: [Boot, Main, Full_Screen, HudIshi, Pause, Galery, Tutorial, Nivel_1, Nivel_2, Nivel_3, End, Credits],
     physics: {
         default: 'arcade',
         arcade: {
